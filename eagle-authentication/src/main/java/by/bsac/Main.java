@@ -1,5 +1,6 @@
 package by.bsac;
 
+import by.bsac.conf.RootContextConfiguration;
 import by.bsac.webmvc.WebmvcConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,9 @@ public class Main implements WebApplicationInitializer {
     //Logger
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
+    //Spring profiles for development branch
+    private static final String[] DEFAULT_PROFILES = {"DEVELOPMENT"};
+
     public void onStartup(javax.servlet.ServletContext servletContext) throws ServletException {
 
         //Create root spring application context
@@ -23,6 +27,10 @@ public class Main implements WebApplicationInitializer {
         AnnotationConfigWebApplicationContext root_ctx = new AnnotationConfigWebApplicationContext();
 
         //Register configuration classes
+        root_ctx.register(RootContextConfiguration.class);
+
+        //Set default profiles
+        root_ctx.getEnvironment().setActiveProfiles(DEFAULT_PROFILES);
 
         //Add listener on load root context
         servletContext.addListener(new ContextLoaderListener(root_ctx));
