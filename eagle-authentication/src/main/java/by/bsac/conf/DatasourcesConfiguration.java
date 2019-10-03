@@ -1,6 +1,7 @@
 package by.bsac.conf;
 
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -26,6 +27,21 @@ public class DatasourcesConfiguration {
         //Credentials
         ds.setUsername("eagle-admin");
         ds.setPassword("12345678");
+
+        return ds;
+    }
+
+    @Bean("TestDataSource")
+    @Profile("TEST")
+    public DataSource testDataSource() {
+
+        BasicDataSource ds = new BasicDataSource();
+
+        final String DATABASE_URL = "jdbc:h2:mem:eagle_users;DB_CLOSE_DELAY=-1";
+        ds.setUrl(DATABASE_URL);
+        ds.setDriverClassName("org.h2.Driver");
+        ds.setUsername("sa");
+        ds.setPassword("sa");
 
         return ds;
     }
