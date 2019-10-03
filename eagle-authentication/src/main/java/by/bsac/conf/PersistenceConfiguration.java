@@ -31,7 +31,6 @@ public class PersistenceConfiguration {
     }
 
     @Bean
-    @Profile("DEVELOPMENT")
     @Autowired
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource a_datasource) {
 
