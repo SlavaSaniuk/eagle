@@ -24,7 +24,7 @@ public class DatasourcesConfiguration {
 
         ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
         //Credentials
-        ds.setUsername("admin");
+        ds.setUsername("eagle-admin");
         ds.setPassword("12345678");
 
         return ds;
