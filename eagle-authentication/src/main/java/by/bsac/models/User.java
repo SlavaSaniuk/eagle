@@ -13,9 +13,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    public Integer user_id;
+    private Integer user_id;
 
     @Column(name = "user_id_alias", unique = true, length = 30)
-    public String user_id_alias;
+    private String user_id_alias;
+
+    @OneToOne(mappedBy = "account_user", fetch = FetchType.LAZY)
+    private Account user_account;
 
 }
