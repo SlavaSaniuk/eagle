@@ -2,6 +2,7 @@ package service.accounts;
 
 import by.bsac.conf.DatasourcesConfiguration;
 import by.bsac.conf.PersistenceConfiguration;
+import by.bsac.exceptions.AccountNotRegisteredException;
 import by.bsac.exceptions.EmailAlreadyRegisteredException;
 import by.bsac.models.Account;
 import by.bsac.models.User;
@@ -51,7 +52,38 @@ class AccountManagementServiceIntegrationTest {
 
         Account account = new Account();
         account.setAccountEmail("test@test.com");
+        account.setAccountPassword("any-password");
 
         Assertions.assertThrows(EmailAlreadyRegisteredException.class, ()-> this.ams.register(account));
+    }
+
+    @Test
+    void login_accountNotRegistered_shouldThrowAccountNotRegisteredException() {
+        Account account = new Account();
+        account.setAccountEmail("not-registered-email");
+        account.setAccountPassword("any-password");
+
+        Assertions.assertThrows(AccountNotRegisteredException.class, ()-> this.ams.login(account));
+    }
+
+    @Test
+    void login_accountRegistered_passwordIsIncorrect_shouldReturnNull() {
+
+        Account account = new Account();
+        account.setAccountEmail("test@test.com");
+        account.setAccountPassword("incorrect-password");
+
+        Assertions.assertNull(this.ams.login(account));
+    }
+
+    @Test
+    void login_accountRegistered_passwordIsCorrect_shouldReturnAccountUser() {
+
+        Account account = new Account();
+        account.setAccountEmail("test@test.com");
+        account.setAccountPassword("account-password");
+
+        Assertions.assertNotNull(this.ams.login(account));
+
     }
 }

@@ -1,5 +1,6 @@
 package by.bsac.services.accounts;
 
+import by.bsac.exceptions.AccountNotRegisteredException;
 import by.bsac.exceptions.EmailAlreadyRegisteredException;
 import by.bsac.models.Account;
 import by.bsac.models.User;
@@ -36,12 +37,12 @@ public class AccountManager implements AccountManagementService, InitializingBea
     @Transactional
     public User register(Account account) {
 
-        if (account == null || account.getAccountEmail() == null) throw new NullPointerException("Account or account email object is null");
+        if (account == null || account.getAccountEmail() == null || account.getAccountPassword() == null) throw new NullPointerException("Account, password or email object is null");
         if (account.getAccountEmail().isEmpty()) throw new IllegalArgumentException("Account email string is empty.");
 
         //Check if account with same email already registered
         if (account_repository.foundByAccountEmail(account.getAccountEmail()) != null)
-            throw new EmailAlreadyRegisteredException("Email address [" +account.getAccountEmail() +"] already registered");
+            throw new EmailAlreadyRegisteredException("Account with email address [" +account.getAccountEmail() +"] already registered");
 
         //Generate password hash and salt
         byte[] password_salt = this.password_hasher.salt();
@@ -66,7 +67,24 @@ public class AccountManager implements AccountManagementService, InitializingBea
 
     @Override
     public User login(Account account) {
-        return null;
+
+        if (account == null || account.getAccountEmail() == null || account.getAccountPassword() == null) throw new NullPointerException("Account, password or email object is null");
+        if (account.getAccountEmail().isEmpty()) throw new IllegalArgumentException("Account email string is empty.");
+
+        //Found account in database
+        Account founded = this.account_repository.foundByAccountEmail(account.getAccountEmail());
+        if (founded == null) throw new AccountNotRegisteredException("Account with email address [" +account.getAccountEmail() +"] is not registered");
+
+        //hash account password
+        byte[] password_hash = this.password_hasher.hashPassword(account.getAccountPassword(), DatatypeConverter.parseHexBinary(founded.getAccountPasswordSalt()));
+
+        //Reset account password
+        account.setAccountPassword(null);
+
+        //Compare password hashes
+        if (!founded.getAccountPasswordHash().equals(DatatypeConverter.printHexBinary(password_hash))) return null; //If password hashes are not same
+        else return founded.getAccountUser(); //If password hashes are same
+
     }
 
 

@@ -1,5 +1,7 @@
 package service.hashing;
 
+import by.bsac.conf.DatasourcesConfiguration;
+import by.bsac.conf.PersistenceConfiguration;
 import by.bsac.services.ServicesConfiguration;
 import by.bsac.services.security.hashing.PasswordHash;
 import org.junit.jupiter.api.Assertions;
@@ -9,13 +11,15 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-@SpringJUnitConfig(classes = {ServicesConfiguration.class})
+@ActiveProfiles("TEST")
+@SpringJUnitConfig(classes = {ServicesConfiguration.class, PersistenceConfiguration.class, DatasourcesConfiguration.class})
 class PasswordHashIntegrationTest {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -71,7 +75,6 @@ class PasswordHashIntegrationTest {
         Assertions.assertArrayEquals(generated_with_hasher, manual_hash);
         Assertions.assertEquals(DatatypeConverter.printHexBinary(generated_with_hasher), DatatypeConverter.printHexBinary(manual_hash));
 
-
-
     }
+
 }
