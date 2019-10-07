@@ -18,7 +18,7 @@ public class AuthenticationController {
     //Spring beans
     private AccountManagementService ams; //Autowired via setter
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register", produces = {"application/json"})
     public @ResponseBody User register(@RequestBody Account account) {
 
         try{
@@ -29,7 +29,7 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login", headers = {"content-type=application/json"}, produces = {"application/json"})
     public User login(@RequestBody Account account) {
         try{
             return  this.ams.login(account);
