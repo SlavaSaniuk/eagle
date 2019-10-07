@@ -8,7 +8,6 @@ import by.bsac.services.accounts.AccountManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController("AuthenticationController")
@@ -20,7 +19,7 @@ public class AuthenticationController {
     private AccountManagementService ams; //Autowired via setter
 
     @PostMapping("/register")
-    public User register(@RequestBody Account account) {
+    public @ResponseBody User register(@RequestBody Account account) {
 
         try{
             return this.ams.register(account);
@@ -33,7 +32,7 @@ public class AuthenticationController {
     @PostMapping("/login")
     public User login(@RequestBody Account account) {
         try{
-            return this.ams.login(account);
+            return  this.ams.login(account);
         }catch (AccountNotRegisteredException exc) {
             LOGGER.debug(exc.getMessage());
             return null;
