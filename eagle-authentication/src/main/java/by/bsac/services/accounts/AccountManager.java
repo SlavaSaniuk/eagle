@@ -43,7 +43,7 @@ public class AccountManager implements AccountManagementService, InitializingBea
 
         //Check if account with same email already registered
         if (account_repository.foundByAccountEmail(account.getAccountEmail()) != null)
-            throw new EmailAlreadyRegisteredException("Account with email address [" +account.getAccountEmail() +"] already registered");
+            throw new EmailAlreadyRegisteredException(account.getAccountEmail());
 
         //Generate password hash and salt
         byte[] password_salt = this.password_hasher.salt();

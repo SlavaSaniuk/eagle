@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("TEST")
 @SpringJUnitWebConfig({WebmvcConfiguration.class, RootContextConfiguration.class, ServicesConfiguration.class, DatasourcesConfiguration.class, PersistenceConfiguration.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AuthenticationControllerIntegrationTest {
+class AuthenticationControllerIntegrationTest {
 
     private MockMvc mvc;
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationControllerIntegrationTest.class);
@@ -65,6 +65,24 @@ public class AuthenticationControllerIntegrationTest {
     }
 
     @Test
+    void register_registeredAccount_shouldThrowExceptionWithStatus431() throws Exception {
+
+        Account account  = new Account();
+        account.setAccountEmail("test@test.com");
+        account.setAccountPassword("12345678");
+
+        String response_body = this.mvc.perform(post("/register")
+            .contentType("application/json").characterEncoding("UTF-8")
+            .content(this.mapper.writeValueAsString(account)))
+                .andDo(print())
+                .andExpect(status().is(431))
+                .andExpect(content().contentType("application/json"))
+                .andReturn().getResponse().getContentAsString();
+
+        LOGGER.debug("Error message: " +response_body);
+    }
+
+    @Test
     void login_registeredAccount_shouldReturnAccountUser() throws Exception {
 
         Account account = new Account();
@@ -85,7 +103,7 @@ public class AuthenticationControllerIntegrationTest {
     }
 
     @Test
-    void login_incorrectPasswordAccount_shouldReturnNull() throws Exception {
+    void login_incorrectPasswordAccount_shouldReturnUserWithNegativeId() throws Exception {
 
         Account account = new Account();
         account.setAccountEmail("test@test.com");
@@ -99,7 +117,22 @@ public class AuthenticationControllerIntegrationTest {
         LOGGER.debug("Response body: " +response_body);
 
         User user = this.mapper.readValue(response_body, User.class);
-        Assertions.assertNull(user);
+        Assertions.assertNotNull(user);
+        Assertions.assertEquals(-1, user.getUserId());
+    }
 
+    @Test
+    void login_accountNotRegistered_shouldThrowExceptionWithStatus432() throws Exception {
+        Account account = new Account();
+        account.setAccountEmail("any-account-email");
+        account.setAccountPassword("12345678");
+
+        String response_body = this.mvc.perform(post("/login")
+                .contentType("application/json").characterEncoding("UTF-8").content(this.mapper.writeValueAsString(account)))
+                .andDo(print())
+                .andExpect(status().is(432))
+                .andReturn().getResponse().getContentAsString();
+
+        LOGGER.debug("Response exception body JSON: " +response_body);
     }
 }

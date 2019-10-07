@@ -5,9 +5,12 @@ import by.bsac.exceptions.EmailAlreadyRegisteredException;
 import by.bsac.models.Account;
 import by.bsac.models.User;
 import by.bsac.services.accounts.AccountManagementService;
+import by.bsac.webmvc.responses.ExceptionResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController("AuthenticationController")
@@ -17,26 +20,46 @@ public class AuthenticationController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
     //Spring beans
     private AccountManagementService ams; //Autowired via setter
+    //Controller fields
+    private static final int EMAIL_ALREADY_REGISTERED_EXCEPTION_STATUS_CODE = 431;
+    private static final int ACCOUNT_NOT_REGISTERED_EXCEPTION_STATUS_CODE = 432;
 
-    @PostMapping(value = "/register", produces = {"application/json"})
-    public @ResponseBody User register(@RequestBody Account account) {
-
-        try{
+    @PostMapping(value = "/register", headers = {"content-type=application/json"}, produces = {"application/json"})
+    public @ResponseBody User register(@RequestBody Account account) throws EmailAlreadyRegisteredException {
             return this.ams.register(account);
-        }catch (EmailAlreadyRegisteredException exc) {
-            LOGGER.debug(exc.getMessage());
-            return null;
-        }
     }
 
     @PostMapping(value = "/login", headers = {"content-type=application/json"}, produces = {"application/json"})
-    public User login(@RequestBody Account account) {
-        try{
-            return  this.ams.login(account);
-        }catch (AccountNotRegisteredException exc) {
-            LOGGER.debug(exc.getMessage());
-            return null;
-        }
+    public User login(@RequestBody Account account) throws AccountNotRegisteredException {
+
+            User user = this.ams.login(account);
+
+            if (!(user == null)) return user;
+            else {
+                final User INVALID_USER = new User();
+                INVALID_USER.setUserId(-1);
+                return INVALID_USER;
+            }
+    }
+
+    @ExceptionHandler(EmailAlreadyRegisteredException.class)
+    public ResponseEntity<ExceptionResponseBody> handleEmailNotRegisterException(EmailAlreadyRegisteredException exc) {
+
+        //Create exception body
+        ExceptionResponseBody exception_body = new ExceptionResponseBody(exc);
+        exception_body.setStatusCode(EMAIL_ALREADY_REGISTERED_EXCEPTION_STATUS_CODE);
+
+        return ResponseEntity.status(EMAIL_ALREADY_REGISTERED_EXCEPTION_STATUS_CODE).contentType(MediaType.APPLICATION_JSON).body(exception_body);
+    }
+
+    @ExceptionHandler(AccountNotRegisteredException.class)
+    public ResponseEntity<ExceptionResponseBody> handleAccountNotRegisteredException(AccountNotRegisteredException exc) {
+
+        //Create exception body
+        ExceptionResponseBody exception_body = new ExceptionResponseBody(exc);
+        exception_body.setStatusCode(ACCOUNT_NOT_REGISTERED_EXCEPTION_STATUS_CODE);
+
+        return ResponseEntity.status(ACCOUNT_NOT_REGISTERED_EXCEPTION_STATUS_CODE).contentType(MediaType.APPLICATION_JSON).body(exception_body);
     }
 
     @Autowired
