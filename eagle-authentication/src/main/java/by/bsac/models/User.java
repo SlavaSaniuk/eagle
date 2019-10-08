@@ -1,14 +1,31 @@
 package by.bsac.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "user")
+@Getter
 public class User {
 
-    private int user_id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    @Setter
+    private Integer user_id;
 
-    public Integer getUserId() {
-        return user_id;
-    }
+    @Column(name = "user_id_alias", unique = true, length = 30)
+    @Setter
+    private String user_id_alias;
 
-    public void setUserId(int user_id) {
-        this.user_id = user_id;
+    @OneToOne(mappedBy = "account_user", fetch = FetchType.LAZY)
+    private Account user_account;
+
+    @JsonIgnore
+    public void setUserAccount(Account user_account) {
+        this.user_account = user_account;
     }
 }
