@@ -1,5 +1,6 @@
 package by.bsac;
 
+import by.bsac.conf.RootContextConfiguration;
 import by.bsac.webmvc.WebmvcConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ public class Main implements WebApplicationInitializer {
         AnnotationConfigWebApplicationContext root_ctx = new AnnotationConfigWebApplicationContext();
 
         //Register configuration classes
+        root_ctx.register(RootContextConfiguration.class); //Main root context configuration class
 
         //Add listener on load root context
         servletContext.addListener(new ContextLoaderListener(root_ctx));
