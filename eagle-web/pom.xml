@@ -24,10 +24,10 @@
             <artifactId>spring-webmvc</artifactId>
             <version>5.2.0.RELEASE</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-openfeign-core -->
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-openfeign -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-openfeign-core</artifactId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
             <version>2.1.3.RELEASE</version>
             <exclusions>
                 <exclusion>
@@ -46,6 +46,22 @@
             <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
+        <!-- End of provided dependencies -->
+
+        <!-- REST dependencies -->
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.10.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.github.openfeign/feign-jackson -->
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-jackson</artifactId>
+            <version>10.5.1</version>
+        </dependency>
+        <!-- End of REST dependencies -->
 
         <!-- Logger dependencies -->
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
