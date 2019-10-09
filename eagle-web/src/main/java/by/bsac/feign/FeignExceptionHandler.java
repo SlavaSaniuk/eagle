@@ -1,5 +1,7 @@
 package by.bsac.feign;
 
+import by.bsac.exceptions.AccountAlreadyRegisteredException;
+import by.bsac.webmvc.responses.ExceptionResponseBody;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;
@@ -7,6 +9,8 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 @Component
 @Setter
@@ -19,13 +23,23 @@ public class FeignExceptionHandler implements ErrorDecoder {
 
     public Exception decode(String methodKey, Response response) {
 
+        //Get remote exception object
+        ExceptionResponseBody remote_exception = null;
+        try {
+            remote_exception = this.object_mapper.readValue(response.body().asReader(), ExceptionResponseBody.class);
+        } catch (IOException e) {
+            LOGGER.debug(e.getMessage());
+        }
+
         //Decode remote exception by response status:
         switch (response.status()) {
-            case 431:
-
+            case 431: //return AccountAlreadyRegisteredException
+                if (remote_exception != null) return new AccountAlreadyRegisteredException(remote_exception.getErrorMessage());
+                else return new AccountAlreadyRegisteredException("Account with same email already register.");
             case 432:
         }
 
         return null;
     }
+
 }

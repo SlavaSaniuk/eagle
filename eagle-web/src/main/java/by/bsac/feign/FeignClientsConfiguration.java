@@ -5,6 +5,7 @@ import by.bsac.feign.clients.AccountManagementService;
 import feign.Feign;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
+import feign.codec.ErrorDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,11 @@ public class FeignClientsConfiguration {
     //Autowired via constructor
     private Encoder encoder;
     private Decoder decoder;
+    private ErrorDecoder error_decoder;
 
     //Constructor
     @Autowired
-    public FeignClientsConfiguration(Encoder a_encoder, Decoder a_decoder) {
+    public FeignClientsConfiguration(Encoder a_encoder, Decoder a_decoder, ErrorDecoder a_error_decoder) {
 
         LOGGER.info(LoggerDefaultLogs.INITIALIZATION.initConfig(this.getClass()));
 
@@ -33,6 +35,9 @@ public class FeignClientsConfiguration {
 
         LOGGER.debug(LoggerDefaultLogs.AUTOWIRING.viaConstructor(a_decoder.getClass(), this.getClass()));
         this.decoder = a_decoder;
+
+        LOGGER.debug(LoggerDefaultLogs.AUTOWIRING.viaConstructor(a_error_decoder.getClass(), this.getClass()));
+        this.error_decoder = a_error_decoder;
 
     }
 
@@ -43,6 +48,7 @@ public class FeignClientsConfiguration {
         AccountManagementService ams = Feign.builder()
                 .encoder(this.encoder)
                 .decoder(this.decoder)
+                .errorDecoder(this.error_decoder)
                 .target(AccountManagementService.class, "http://10.8.8.20:36547/eagle-auth/");
 
         LOGGER.debug(String.format(LoggerDefaultLogs.CREATE_BEAN_FINISH, ams.getClass().getSimpleName()));

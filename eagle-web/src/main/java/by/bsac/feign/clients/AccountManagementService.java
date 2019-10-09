@@ -1,5 +1,6 @@
 package by.bsac.feign.clients;
 
+import by.bsac.exceptions.AccountAlreadyRegisteredException;
 import by.bsac.models.Account;
 import by.bsac.models.User;
 import feign.Headers;
@@ -10,7 +11,7 @@ public interface AccountManagementService {
 
     @Headers({"Content-Type: application/json","Charset: utf-8"})
     @RequestLine("POST /register")
-    User registerAccount(Account account);
+    User registerAccount(Account account) throws AccountAlreadyRegisteredException;
 
     @Headers({"Content-Type: application/json", "Charset: utf-8"})
     @RequestLine("POST /login")

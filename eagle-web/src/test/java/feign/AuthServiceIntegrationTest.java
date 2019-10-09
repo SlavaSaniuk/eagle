@@ -1,6 +1,8 @@
 package feign;
 
 import by.bsac.conf.RootContextConfiguration;
+import by.bsac.exceptions.AccountAlreadyRegisteredException;
+import by.bsac.feign.FeignClientsConfiguration;
 import by.bsac.feign.FeignConfiguration;
 import by.bsac.feign.clients.AccountManagementService;
 import by.bsac.models.Account;
@@ -11,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-@SpringJUnitConfig({RootContextConfiguration.class, FeignConfiguration.class})
+@SpringJUnitConfig({RootContextConfiguration.class, FeignConfiguration.class, FeignClientsConfiguration.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AuthServiceIntegrationTest {
 
@@ -23,7 +25,7 @@ class AuthServiceIntegrationTest {
 
     @Test
     @Order(1)
-    void register_newAccount_shouldReturnNewAccountUser() {
+    void register_newAccount_shouldReturnNewAccountUser() throws AccountAlreadyRegisteredException {
         Account account = new Account();
         account.setAccountEmail("test1@eagle-web.com");
         account.setAccountPassword("12345678");
@@ -34,6 +36,16 @@ class AuthServiceIntegrationTest {
         Assertions.assertNotNull(user.getUserId());
 
         LOGGER.debug(user.toString());
+    }
+
+    @Test
+    @Order(2)
+    void register_registerAccount_shouldThrowAccountAlreadyRegisteredException() {
+        Account account = new Account();
+        account.setAccountEmail("test1@eagle-web.com");
+        account.setAccountPassword("any-password");
+
+        Assertions.assertThrows(AccountAlreadyRegisteredException.class, ()-> this.ams.registerAccount(account));
     }
 
     @Test
