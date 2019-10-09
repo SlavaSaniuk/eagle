@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import feign.Feign;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
+import feign.codec.ErrorDecoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import org.slf4j.Logger;
@@ -14,9 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
 @EnableFeignClients(defaultConfiguration = FeignConfiguration.class)
+@Import(FeignClientsConfiguration.class) //Import feign clients beans
 public class FeignConfiguration {
 
     //logger
@@ -24,19 +27,6 @@ public class FeignConfiguration {
 
     public FeignConfiguration() {
         LOGGER.info(String.format(LoggerDefaultLogs.INITIALIZE_CONFIGURATION, this.getClass().getSimpleName()));
-    }
-
-    @Bean(name = "AccountManagementService")
-    public AccountManagementService accountManagementService() {
-        LOGGER.debug(String.format(LoggerDefaultLogs.CREATE_BEAN_START, AccountManagementService.class.getSimpleName()));
-
-        AccountManagementService ams = Feign.builder()
-                .encoder(this.jacksonEncoder())
-                .decoder(this.jacksonDecoder())
-                .target(AccountManagementService.class, "http://10.8.8.20:36547/eagle-auth/");
-
-        LOGGER.debug(String.format(LoggerDefaultLogs.CREATE_BEAN_FINISH, ams.getClass().getSimpleName()));
-        return ams;
     }
 
     @Bean("JacksonEncoder")
@@ -69,5 +59,16 @@ public class FeignConfiguration {
         return mapper;
     }
 
+    @Bean("FeignExceptionHandler")
+    public ErrorDecoder feignExceptionHandler() {
+
+        LOGGER.debug(String.format(LoggerDefaultLogs.CREATE_BEAN_START, ErrorDecoder.class.getSimpleName()));
+        FeignExceptionHandler handler = new FeignExceptionHandler();
+
+
+        handler.setObjectMapper(this.jacksonObjectMapper());
+
+        return handler;
+    }
 
 }
