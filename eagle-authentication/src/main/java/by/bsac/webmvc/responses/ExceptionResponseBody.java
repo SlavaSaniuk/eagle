@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class ExceptionResponseBody {
-    
+
     private final LocalDateTime exception_timestamp = LocalDateTime.now();
 
     @Setter
