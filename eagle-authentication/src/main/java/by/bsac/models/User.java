@@ -1,6 +1,8 @@
 package by.bsac.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user")
 @Getter
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class User {
 
     @Id
