@@ -2,6 +2,7 @@ package feign;
 
 import by.bsac.conf.RootContextConfiguration;
 import by.bsac.exceptions.AccountAlreadyRegisteredException;
+import by.bsac.exceptions.AccountNotRegisteredException;
 import by.bsac.feign.FeignClientsConfiguration;
 import by.bsac.feign.FeignConfiguration;
 import by.bsac.feign.clients.AccountManagementService;
@@ -80,6 +81,16 @@ class AuthServiceIntegrationTest {
 
         LOGGER.debug(user.toString());
         LOGGER.debug("User ID: " +user.getUserId().toString());
+    }
+
+    @Test
+    @Order(4)
+    void login_accountNotRegister_shouldThrowAccountNotRegisteredException() {
+        final Account account = new Account();
+        account.setAccountEmail("not-register-email");
+        account.setAccountPassword("any-password");
+
+        Assertions.assertThrows(AccountNotRegisteredException.class, ()-> this.ams.loginAccount(account));
     }
 
 }

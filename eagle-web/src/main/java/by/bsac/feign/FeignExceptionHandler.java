@@ -1,6 +1,7 @@
 package by.bsac.feign;
 
 import by.bsac.exceptions.AccountAlreadyRegisteredException;
+import by.bsac.exceptions.AccountNotRegisteredException;
 import by.bsac.webmvc.responses.ExceptionResponseBody;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
@@ -31,12 +32,20 @@ public class FeignExceptionHandler implements ErrorDecoder {
             LOGGER.debug(e.getMessage());
         }
 
+
+
         //Decode remote exception by response status:
         switch (response.status()) {
             case 431: //return AccountAlreadyRegisteredException
+                //Authentication microservice
+                //Handle account already registered exception
                 if (remote_exception != null) return new AccountAlreadyRegisteredException(remote_exception.getErrorMessage());
                 else return new AccountAlreadyRegisteredException("Account with same email already register.");
             case 432:
+                //Authentication microservice
+                //Handle account not registered exception
+                if (remote_exception != null) return new AccountNotRegisteredException(remote_exception.getErrorMessage()); //With detailed message
+                else return new AccountNotRegisteredException(); //With default message
         }
 
         return null;
