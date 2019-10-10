@@ -1,6 +1,6 @@
 package by.bsac.exceptions;
 
-public class AccountNotRegisteredException extends RuntimeException {
+public class AccountNotRegisteredException extends RemoteMicroserviceException {
 
 
     public AccountNotRegisteredException(String detailed_message) {
