@@ -1,0 +1,80 @@
+@font-face {
+	font-family: intro;
+	src: url(../fonts/Intro.woff);
+}
+
+@font-face {
+	font-family: comforta;
+	src: url(../fonts/comforta.woff);
+}
+
+.registration_block {
+
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	width: 300px;
+	height: 400px;
+
+	-webkit-box-shadow: 0px 0px 20px -10px rgba(0,0,0,1);
+	-moz-box-shadow: 0px 0px 20px -10px rgba(0,0,0,1);
+	box-shadow: 0px 0px 20px -10px rgba(0,0,0,1);
+
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+
+	text-align: center;
+}
+
+.registration_block_title {
+	font-family: intro;
+	color: #69b469;
+	font-size: 40px;
+}
+
+.registration_input {
+
+	font-family: comforta;
+	font-size: 20px;
+	text-align: center;
+	color: #979797;
+
+	border-width: 3px;
+	border-color: #448844;
+	border-style: solid;
+	width: 78%;
+
+	margin-bottom: 20px;
+	padding: 2%;
+}
+
+.registration_input:focus {
+
+	border-color: #224422;
+	color: #000;
+
+}
+
+.registration_submit {
+	background-color: #448844; 
+	width: 82%;
+	color: #000;
+}
+
+.registration_msg {
+	color: #979797;
+	font-family: comforta;
+}
+
+.login-link:link {
+	color: #69b469;
+}
+
+.login-link:visited {
+	color: #69b469;
+}
