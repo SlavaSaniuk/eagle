@@ -1,0 +1,129 @@
+@font-face {
+	font-family: intro;
+	src: url(../fonts/intro.woff);
+}
+
+@font-face {
+	font-family: comforta;
+	src: url(../fonts/comforta.woff);
+}
+
+/* Css animations */
+@keyframes swipeAndShow {
+	from{}
+	to{
+		transform: translateX(-100%);
+		opacity: 1;
+	}
+}
+
+@keyframes swipeAndHide {
+	from{}
+	to{
+		transform: translateX(-100%);
+		opacity: 0;
+	}
+}
+
+@keyframes submitEnter {
+	from{}
+	to{
+		background-color: #224422; 
+		color: #FFF;
+		border-color: #224422;
+	}
+}
+
+@keyframes submitLeave {
+	from{}
+	to{
+		background-color: #448844; 
+		color: #000;
+		border-color: #448844;
+	}
+}
+
+
+/* Common styles for sign page */
+
+.sign_content {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	transform: translate(-25%, -50%);
+
+	display: flex;
+	flex-direction: row;
+}
+
+.sign_block {
+
+	width: 300px;
+	height: 400px;
+
+	-webkit-box-shadow: 0px 0px 20px -10px rgba(0,0,0,1);
+	-moz-box-shadow: 0px 0px 20px -10px rgba(0,0,0,1);
+	box-shadow: 0px 0px 20px -10px rgba(0,0,0,1);
+
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+
+	text-align: center;
+}
+
+.sign_block_title {
+	font-family: intro;
+	color: #69b469;
+	font-size: 40px;
+}
+
+.sign_input {
+
+	font-family: comforta;
+	font-size: 20px;
+	text-align: center;
+	color: #979797;
+
+	border-width: 3px;
+	border-color: #448844;
+	border-style: solid;
+	width: 78%;
+
+	margin-bottom: 20px;
+	padding: 2%;
+}
+
+.sign_input:focus {
+
+	border-color: #224422;
+	color: #000;
+
+}
+
+.sign_submit {
+	background-color: #448844; 
+	width: 82%;
+	color: #000;
+}
+
+.sign_block_message {
+	display: block;
+	font-family: comforta;
+}
+
+.sign_msg {
+	color: #979797;
+	margin-bottom: 0px;
+}
+
+.sign-link-toggle:link {
+	color: #69b469;
+}
+
+.sign-link-toggle:visited {
+	color: #69b469;
+}
+

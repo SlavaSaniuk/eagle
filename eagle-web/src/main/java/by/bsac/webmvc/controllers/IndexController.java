@@ -15,7 +15,7 @@ public class IndexController {
         ModelAndView mav = new ModelAndView();
 
         //Redirect to login page
-        mav.setViewName("redirect:/login");
+        mav.setViewName("redirect:/sign");
         return mav;
     }
 

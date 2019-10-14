@@ -1,0 +1,23 @@
+a {
+	text-decoration: none;
+}
+
+.background {
+	background-color: #FFF;
+
+	-webkit-box-shadow: inset 0px 0px 100px -25px rgba(0,0,0,1);
+	-moz-box-shadow: inset 0px 0px 180px -25px rgba(0,0,0,1);
+	box-shadow: inset 0px 0px 50px -25px rgba(0,0,0,1);
+
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+}
+
+
+
+.test {
+	border: 1px solid red;
+}
