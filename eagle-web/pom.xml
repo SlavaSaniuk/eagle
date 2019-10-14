@@ -19,8 +19,11 @@
             </plugin>
         </plugins>
     </build>
+    <modules>
+        <module>../../eagle-users-microservice</module>
+    </modules>
 
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
 
     <dependencies>
         <!-- Spring framework dependencies -->
