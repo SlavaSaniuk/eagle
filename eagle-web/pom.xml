@@ -19,6 +19,9 @@
             </plugin>
         </plugins>
     </build>
+    <modules>
+        <module>../../eagle-users-microservice</module>
+    </modules>
 
     <packaging>pom</packaging>
 
