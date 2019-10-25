@@ -2,11 +2,11 @@ package by.bsac.configuration;
 
 public class LoggerDefaultLogs {
 
-    public static final String INITIALIZE_CONFIGURATION = "Start to initialize [%s] configuration class.";
 
     public static class INITIALIZATION {
 
         public static String initConfig(Class clazz) {
+            final String INITIALIZE_CONFIGURATION = "Start to initialize [%s] configuration class.";
             return String.format(INITIALIZE_CONFIGURATION, clazz.getSimpleName());
         }
     }
@@ -25,6 +25,7 @@ public class LoggerDefaultLogs {
 
     }
 
+    //Manual dependency management
     public static class DEPENDENCY {
 
         public static String viaSetter(Class dependent, Class to) {

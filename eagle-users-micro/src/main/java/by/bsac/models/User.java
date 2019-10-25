@@ -3,24 +3,24 @@ package by.bsac.models;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter @Setter
 @Entity
 @Table(name = "user")
 public class User {
 
-    @Setter
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Integer user_id;
 
-    @Setter
     @Column(name = "user_id_alias")
     private String user_id_alias;
+
+    @OneToOne(mappedBy = "details_user", fetch = FetchType.LAZY)
+    private UserDetails user_details;
 
 }

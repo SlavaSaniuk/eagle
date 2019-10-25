@@ -1,15 +1,16 @@
 package by.bsac.services;
 
-import by.bsac.configuration.LoggerDefaultLogs;
 import by.bsac.models.User;
 import by.bsac.models.UserDetails;
 import by.bsac.repositories.DetailsRepository;
-import by.bsac.repositories.UserRepository;
 import lombok.Getter;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static by.bsac.configuration.LoggerDefaultLogs.*;
 
@@ -21,21 +22,31 @@ public class UserDetailsManager implements DetailsManager, InitializingBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsManager.class);
     //Spring beans
     private DetailsRepository details_repository;
-    private UserRepository users_repository;
 
     public UserDetailsManager() {
         LOGGER.debug(CREATION.beanCreationStart(this.getClass()));
     }
 
     @Override
-    public UserDetails createDetails(User a_user, UserDetails a_details) {
-        return null;
+    @Transactional
+    public UserDetails createDetails(@NonNull User a_user, @NonNull UserDetails a_details) {
+
+        //Check if user persisted before (has a defined ID)
+        if (a_user.getUserId() == null) throw new IllegalArgumentException("[user_id] parameter cannot be null.");
+
+        //maps ID
+        //persist details
+        a_details.setDetailsUser(a_user);
+        a_user.setUserDetails(a_details);
+        return this.details_repository.save(a_details);
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
 
-        
+        if (this.details_repository == null)
+            throw new Exception(new BeanCreationException("[" +DetailsRepository.class.getCanonicalName() +"] parameter is null."));
+
         LOGGER.debug(CREATION.beanCreationFinish(this.getClass()));
     }
 
@@ -44,8 +55,4 @@ public class UserDetailsManager implements DetailsManager, InitializingBean {
         this.details_repository = details_repository;
     }
 
-    public void setUsersRepository(UserRepository users_repository) {
-        LOGGER.debug(DEPENDENCY.viaSetter(users_repository.getClass(), this.getClass()));
-        this.users_repository = users_repository;
-    }
 }

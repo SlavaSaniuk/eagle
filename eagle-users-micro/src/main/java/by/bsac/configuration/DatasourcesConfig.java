@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -26,6 +27,7 @@ public class DatasourcesConfig {
     }
 
     @Bean
+    @Profile("DEVELOPMENT")
     public DataSource devDataSource() {
 
         LOGGER.debug(CREATION.beanCreationStart(DataSource.class));
@@ -44,4 +46,5 @@ public class DatasourcesConfig {
         return ds;
 
     }
+
 }
