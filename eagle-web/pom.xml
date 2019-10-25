@@ -20,7 +20,7 @@
         </plugins>
     </build>
 
-    <packaging>pom</packaging>
+    <packaging>war</packaging>
 
     <dependencies>
         <!-- Spring framework dependencies -->
