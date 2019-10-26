@@ -13,8 +13,13 @@ public class UserDetails {
     @Id
     private Integer detail_id;
 
+    @Embedded
+    private UserName user_name;
+
     @OneToOne
     @JoinColumn(name = "detail_id", nullable = false)
     @MapsId
     private User details_user;
+
+
 }

@@ -1,0 +1,30 @@
+package by.bsac.models;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@Getter @Setter
+@NoArgsConstructor
+public class UserName {
+
+    @Column(name = "first_name")
+    private String first_name;
+
+    @Column(name = "last_name")
+    private String last_name;
+
+    public UserName(String fname, String lname) {
+        this.first_name = fname;
+        this.last_name = lname;
+    }
+
+    public String getFullName() {
+        return String.format("%S %S", this.first_name, this.last_name);
+    }
+
+}

@@ -17,7 +17,7 @@ public class User {
     @Column(name = "user_id")
     private Integer user_id;
 
-    @Column(name = "user_id_alias")
+    @Column(name = "user_id_alias", unique = true)
     private String user_id_alias;
 
     @OneToOne(mappedBy = "details_user", fetch = FetchType.LAZY)
