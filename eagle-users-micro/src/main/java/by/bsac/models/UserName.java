@@ -12,10 +12,10 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor
 public class UserName {
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String first_name;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String last_name;
 
     public UserName(String fname, String lname) {

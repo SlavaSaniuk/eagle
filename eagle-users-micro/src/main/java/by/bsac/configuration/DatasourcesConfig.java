@@ -2,6 +2,7 @@ package by.bsac.configuration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -17,6 +18,7 @@ import static by.bsac.configuration.LoggerDefaultLogs.*;
 @Configuration
 @EnableJpaRepositories("by.bsac.repositories")
 @EnableTransactionManagement
+@EntityScan("by.bsac.models")
 public class DatasourcesConfig {
 
     //Logger
