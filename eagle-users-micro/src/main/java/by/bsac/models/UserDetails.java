@@ -1,5 +1,6 @@
 package by.bsac.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +20,7 @@ public class UserDetails {
     @OneToOne
     @JoinColumn(name = "detail_id", nullable = false)
     @MapsId
+    @JsonManagedReference
     private User details_user;
 
 

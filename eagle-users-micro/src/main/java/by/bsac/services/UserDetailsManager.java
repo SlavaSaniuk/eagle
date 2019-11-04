@@ -3,7 +3,7 @@ package by.bsac.services;
 import by.bsac.models.User;
 import by.bsac.models.UserDetails;
 import by.bsac.repositories.DetailsRepository;
-import lombok.Getter;
+import by.bsac.repositories.UserRepository;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,17 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 import static by.bsac.configuration.LoggerDefaultLogs.*;
 
 @Service
-@Getter
 public class UserDetailsManager implements DetailsManager, InitializingBean {
 
     //Logger
     private static final Logger LOGGER = LoggerFactory.getLogger(UserDetailsManager.class);
     //Spring beans
     private DetailsRepository details_repository;
+    private UserRepository user_repository;
 
     public UserDetailsManager() {
         LOGGER.debug(CREATION.beanCreationStart(this.getClass()));
     }
+
 
     @Override
     @Transactional
@@ -33,6 +34,9 @@ public class UserDetailsManager implements DetailsManager, InitializingBean {
 
         //Check if user persisted before (has a defined ID)
         if (a_user.getUserId() == null) throw new IllegalArgumentException("[user_id] parameter cannot be null.");
+
+        //Get user from database
+        a_user = this.user_repository.findById(a_user.getUserId()).get();
 
         //maps ID
         //persist details
@@ -53,6 +57,11 @@ public class UserDetailsManager implements DetailsManager, InitializingBean {
     public void setDetailsRepository(DetailsRepository details_repository) {
         LOGGER.debug(DEPENDENCY.viaSetter(details_repository.getClass(), this.getClass()));
         this.details_repository = details_repository;
+    }
+
+    public void setUserRepository(UserRepository user_repository) {
+        LOGGER.debug(DEPENDENCY.viaSetter(user_repository.getClass(), this.getClass()));
+        this.user_repository = user_repository;
     }
 
 }
