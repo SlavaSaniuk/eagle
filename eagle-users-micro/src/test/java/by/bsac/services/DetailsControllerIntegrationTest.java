@@ -70,7 +70,7 @@ public class DetailsControllerIntegrationTest {
         //User user = this.user_repo.findByUserIdAlias(this.USER_ID_ALIAS);
         //Assertions.assertNotNull(user);
         User user = new User();
-        user.setUserId(4);
+        user.setUserId(3);
 
         final String FNAME = "Test";
         final String LNAME = "Admin";
