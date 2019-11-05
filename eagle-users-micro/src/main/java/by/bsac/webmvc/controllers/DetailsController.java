@@ -32,7 +32,7 @@ public class DetailsController {
 
     @PostMapping(path = "/details_create", headers = {"content-type=application/json"}, produces = {"application/json"})
     @ResponseBody
-    public UserDetails createDetails(@RequestBody UserWithDetailsDto dto) {
+    public UserWithDetailsDto createDetails(@RequestBody UserWithDetailsDto dto) {
 
         //Get entities from DTO
         User user = DEConverter.toEntity(dto, new User());
@@ -41,7 +41,11 @@ public class DetailsController {
         //Try to create user details
         details = this.details_manager.createDetails(user, details);
 
-        return details;
+        //Convert to dto
+        dto = DEConverter.toDto(details, dto);
+        dto = DEConverter.toDto(user, dto);
+
+        return dto;
     }
 
     //AUTOWIRING

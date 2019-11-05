@@ -12,6 +12,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static by.bsac.configuration.LoggerDefaultLogs.*;
 
 @Service
@@ -36,7 +38,9 @@ public class UserDetailsManager implements DetailsManager, InitializingBean {
         if (a_user.getUserId() == null) throw new IllegalArgumentException("[user_id] parameter cannot be null.");
 
         //Get user from database
-        a_user = this.user_repository.findById(a_user.getUserId()).get();
+        Optional<User> user_opt = this.user_repository.findById(a_user.getUserId());
+        if (!user_opt.isPresent()) throw new IllegalArgumentException("[user_id] parameter is in invalid value.");
+        a_user = user_opt.get();
 
         //maps ID
         //persist details

@@ -34,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class DetailsControllerIntegrationTest {
 
     //Test constants
-    private final String USER_ID_ALIAS = "details-controller-test";
     private final String CONTROLLER_URL = "/details_create";
     //Logger
     private static final Logger LOGGER = LoggerFactory.getLogger(DetailsControllerIntegrationTest.class);
@@ -58,7 +57,6 @@ public class DetailsControllerIntegrationTest {
     @Disabled
     public void setUpBeforeAll() {
         User user = new User();
-        user.setUserIdAlias(this.USER_ID_ALIAS);
 
         user_repo.save(user);
     }
@@ -72,7 +70,7 @@ public class DetailsControllerIntegrationTest {
         //User user = this.user_repo.findByUserIdAlias(this.USER_ID_ALIAS);
         //Assertions.assertNotNull(user);
         User user = new User();
-        user.setUserId(1);
+        user.setUserId(4);
 
         final String FNAME = "Test";
         final String LNAME = "Admin";
@@ -97,14 +95,13 @@ public class DetailsControllerIntegrationTest {
 
         LOGGER.debug("Response JSON: " +result_content);
 
-        UserDetails details_from_json = mapper.readValue(result_content, UserDetails.class);
+        UserWithDetailsDto dto_from_json = mapper.readValue(result_content, UserWithDetailsDto.class);
 
-        Assertions.assertNotNull(details_from_json);
-        Assertions.assertNotNull(details_from_json.getDetailId());
+        UserDetails details_from_dto = DEConverter.toEntity(dto_from_json, new UserDetails());
 
-        Assertions.assertEquals(details.getUserName().getFirstName(), details_from_json.getUserName().getFirstName());
+        Assertions.assertNotNull(details_from_dto.getUserName());
 
-
+        Assertions.assertEquals(details.getUserName().getFirstName(), details_from_dto.getUserName().getFirstName());
 
     }
 
