@@ -14,9 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@SessionAttributes({"common_user"})
 public class SignController {
 
     //Logger
@@ -72,7 +74,9 @@ public class SignController {
             mav.setViewName("sign");
             return mav;
         }
-        mav.setViewName("redirect://user_" +account_user.getUserId());
+
+        mav.getModel().put("common_user", account);
+        mav.setViewName("redirect://user-about");
         return mav;
     }
 
