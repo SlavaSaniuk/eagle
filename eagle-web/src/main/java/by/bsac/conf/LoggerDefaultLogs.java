@@ -2,21 +2,43 @@ package by.bsac.conf;
 
 public class LoggerDefaultLogs {
 
-    public static final String INITIALIZE_CONFIGURATION = "Start to initialize [%s] configuration class.";
 
     public static class INITIALIZATION {
 
         public static String initConfig(Class clazz) {
+            final String INITIALIZE_CONFIGURATION = "Start to initialize [%s] configuration class.";
             return String.format(INITIALIZE_CONFIGURATION, clazz.getSimpleName());
         }
     }
 
-    public static final String CREATE_BEAN_START = "Start to create [%s] bean.";
-    public static final String CREATE_BEAN_FINISH = "Bean [%s] successfully was created.";
+    public static class CREATION {
 
-    //Manually set spring beans
-    public static final String DEPENDENCY_VIA_SETTER = "Set [%s] bean to [%s] bean via setter method.";
-    public static final String DEPENDENCY_VIA_CONSTRUCTOR = "Set [%s] bean to [%s] bean via constructor.";
+        public static String beanCreationStart(Class bean_class) {
+            final String CREATE_BEAN_START = "Start to create [%s] bean.";
+            return String.format(CREATE_BEAN_START, bean_class.getCanonicalName());
+        }
+
+        public static String beanCreationFinish(Class bean_class) {
+            final String CREATE_BEAN_FINISH = "Bean [%s] successfully was created.";
+            return String.format(CREATE_BEAN_FINISH, bean_class.getCanonicalName());
+        }
+
+    }
+
+    //Manual dependency management
+    public static class DEPENDENCY {
+
+        public static String viaSetter(Class dependent, Class to) {
+            final String DEPENDENCY_VIA_SETTER = "Set [%s] bean to [%s] bean via setter method.";
+            return String.format(DEPENDENCY_VIA_SETTER, dependent.getCanonicalName(), to.getCanonicalName());
+        }
+
+        public static String viaConstructor(Class dependent, Class to) {
+            final String DEPENDENCY_VIA_CONSTRUCTOR = "Set [%s] bean to [%s] bean via constructor.";
+            return String.format(DEPENDENCY_VIA_CONSTRUCTOR, dependent.getCanonicalName(), to.getCanonicalName());
+        }
+
+    }
 
     //Autowire spring beans
     public static class AUTOWIRING {

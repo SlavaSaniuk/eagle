@@ -11,38 +11,27 @@
 <body onload="AboutScripts()">
 	<div class="background">
 
-
 		<div class="about_content">
 			<p class="about_block_title"> Tell us about yourself </p>
 
 				<div class="name_sex_block">
-					
-
-					<form>
+					<form th:action="@{/about-user-create}" method="post" th:object="${details_form}" >
 						<input type="text" name="details_fname" class="about_input"
-							placeholder="Your name" />
+							placeholder="Your name" th:field="*{userFname}" />
 						<input type="text" name="details_lname" class="about_input" 
-							placeholder="Your surname" />
-
+							placeholder="Your surname" th:field="*{userLname}" />
 						<div class="sex_block">
-
 							<label class="sex_label">
-								<input type="radio" name="sex" value="m" class="sex_radio" />
+								<input type="radio" name="sex" value="m" class="sex_radio" th:field="*{sex}"/>
 								<span class="radio_box"> <span> </span></span> <span> male </span>
 							</label>
-
 							<label class="sex_label">
-								<input type="radio" name="sex" value="f" class="sex_radio" />
+								<input type="radio" name="sex" value="f" class="sex_radio" th:field="*{sex}"/>
 								<span class="radio_box"> <span> </span></span> <span> female </span>
 							</label>
-
-
-						</div>	
-
+						</div>
 						<input type="submit" name="form_submit" class="about_input about_submit" id="about_submit" value="Enter" />
 					</form>
-
-
 
 				</div>
 

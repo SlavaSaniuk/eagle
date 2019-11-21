@@ -17,7 +17,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 @Configuration
-@Import(ThymeleafConfiguration.class)
+@Import({ThymeleafConfiguration.class, DtoConvertersConfiguration.class})
 @ComponentScan(basePackages = "by.bsac.webmvc.controllers") //Enable controllers scan
 @EnableWebMvc
 public class WebmvcConfiguration implements WebMvcConfigurer {

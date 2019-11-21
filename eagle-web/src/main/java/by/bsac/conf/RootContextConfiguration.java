@@ -14,6 +14,6 @@ public class RootContextConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(RootContextConfiguration.class);
 
     public RootContextConfiguration() {
-        LOGGER.info(String.format(LoggerDefaultLogs.INITIALIZE_CONFIGURATION, getClass().getSimpleName()));
+        LOGGER.info(String.format(LoggerDefaultLogs.INITIALIZATION.initConfig(this.getClass())));
     }
 }

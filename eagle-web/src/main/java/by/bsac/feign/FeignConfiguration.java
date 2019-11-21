@@ -1,10 +1,7 @@
 package by.bsac.feign;
 
-import by.bsac.conf.LoggerDefaultLogs;
-import by.bsac.feign.clients.AccountManagementService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import feign.Feign;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;
@@ -17,6 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import static by.bsac.conf.LoggerDefaultLogs.*;
+
 @Configuration
 @EnableFeignClients(defaultConfiguration = FeignConfiguration.class)
 @Import(FeignClientsConfiguration.class) //Import feign clients beans
@@ -26,48 +25,47 @@ public class FeignConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(FeignConfiguration.class);
 
     public FeignConfiguration() {
-        LOGGER.info(String.format(LoggerDefaultLogs.INITIALIZE_CONFIGURATION, this.getClass().getSimpleName()));
+        LOGGER.info(INITIALIZATION.initConfig(this.getClass()));
     }
 
     @Bean("JacksonEncoder")
     public Encoder jacksonEncoder() {
-        LOGGER.debug(String.format(LoggerDefaultLogs.CREATE_BEAN_START, JacksonEncoder.class.getSimpleName()));
+        LOGGER.debug(CREATION.beanCreationStart(JacksonEncoder.class));
         final JacksonEncoder encoder = new JacksonEncoder(this.jacksonObjectMapper());
 
-        LOGGER.debug(String.format(LoggerDefaultLogs.CREATE_BEAN_FINISH, encoder.getClass().getSimpleName()));
+        LOGGER.debug(CREATION.beanCreationFinish(encoder.getClass()));
         return encoder;
     }
 
     @Bean("jacksonDecoder")
     public Decoder jacksonDecoder() {
-        LOGGER.debug(String.format(LoggerDefaultLogs.CREATE_BEAN_START, JacksonDecoder.class.getSimpleName()));
+        LOGGER.info(CREATION.beanCreationStart(Decoder.class));
         JacksonDecoder decoder = new JacksonDecoder(this.jacksonObjectMapper());
 
-        LOGGER.debug(String.format(LoggerDefaultLogs.CREATE_BEAN_FINISH, decoder.getClass().getSimpleName()));
+        LOGGER.info(CREATION.beanCreationFinish(decoder.getClass()));
         return decoder;
     }
 
     @Bean("ObjectMapper")
     public ObjectMapper jacksonObjectMapper() {
-
-        LOGGER.debug(String.format(LoggerDefaultLogs.CREATE_BEAN_START, ObjectMapper.class.getSimpleName()));
+        LOGGER.info(CREATION.beanCreationFinish(ObjectMapper.class));
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
 
-        LOGGER.debug(String.format(LoggerDefaultLogs.CREATE_BEAN_FINISH, mapper.getClass().getSimpleName()));
+        LOGGER.info(CREATION.beanCreationFinish(mapper.getClass()));
         return mapper;
     }
 
     @Bean("FeignExceptionHandler")
     public ErrorDecoder feignExceptionHandler() {
 
-        LOGGER.debug(String.format(LoggerDefaultLogs.CREATE_BEAN_START, ErrorDecoder.class.getSimpleName()));
+        LOGGER.info(CREATION.beanCreationStart(ErrorDecoder.class));
         FeignExceptionHandler handler = new FeignExceptionHandler();
-
 
         handler.setObjectMapper(this.jacksonObjectMapper());
 
+        LOGGER.info(CREATION.beanCreationFinish(handler.getClass()));
         return handler;
     }
 
