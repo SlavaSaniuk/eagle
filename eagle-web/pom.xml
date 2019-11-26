@@ -132,6 +132,14 @@
         </dependency>
        <!-- End of test dependencies -->
 
+        <!-- Other dependencies -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>custom</version>
+        </dependency>
+        <!-- End of other dependencies -->
+
     </dependencies>
 
 </project>
