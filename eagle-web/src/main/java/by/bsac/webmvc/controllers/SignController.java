@@ -55,7 +55,7 @@ public class SignController {
             mav.setViewName("redirect://sign?form=signup");
             return mav;
         }
-        mav.setViewName("redirect://user_" +account_user.getUserId());
+        mav.setViewName("redirect:/user_" +account_user.getUserId());
         return mav;
     }
 
@@ -76,7 +76,7 @@ public class SignController {
         }
 
         mav.getModel().put("common_user", account);
-        mav.setViewName("redirect://user-about");
+        mav.setViewName("redirect:/about-user");
         return mav;
     }
 

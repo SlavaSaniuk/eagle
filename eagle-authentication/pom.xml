@@ -25,6 +25,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>eagle-auth</finalName>
     </build>
 
     <packaging>war</packaging>
