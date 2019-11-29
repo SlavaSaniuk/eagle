@@ -3,6 +3,7 @@ package by.bsac.webmvc;
 import by.bsac.core.beans.EmbeddedDeConverter;
 import by.bsac.core.beans.EmbeddedDtoEntityConverter;
 import by.bsac.core.exceptions.NoSupportedEntitiesException;
+import by.bsac.webmvc.dto.UserWithDetailsDto;
 import by.bsac.webmvc.forms.UserDetailsForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,24 @@ public class DtoConvertersConfiguration {
             return new EmbeddedDtoEntityConverter<>(UserDetailsForm.class);
         } catch (NoSupportedEntitiesException e) {
             throw new BeanCreationException(e.getMessage());
+        }
+    }
+
+    /**
+     * Create new {@link EmbeddedDeConverter} dto-entity converter for {@link UserWithDetailsDto} dto class.
+     * @return - {@link EmbeddedDeConverter} converter.
+     */
+    @Bean
+    public EmbeddedDeConverter<UserWithDetailsDto> getUserWithDetailsDto() {
+        LOGGER.info(CREATION.beanCreationStart(EmbeddedDeConverter.class));
+        try {
+            final EmbeddedDeConverter<UserWithDetailsDto> CONVERTER
+                    = new EmbeddedDtoEntityConverter<>(UserWithDetailsDto.class);
+            LOGGER.info(CREATION.beanCreationFinish(CONVERTER.getClass()));
+            return CONVERTER;
+        }catch (NoSupportedEntitiesException exc) {
+            LOGGER.error(CREATION.beanCreationFailed(EmbeddedDeConverter.class, exc));
+            throw new BeanCreationException(exc.getMessage());
         }
     }
 }

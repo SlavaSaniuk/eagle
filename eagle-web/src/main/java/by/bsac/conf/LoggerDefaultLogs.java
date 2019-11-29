@@ -23,6 +23,11 @@ public class LoggerDefaultLogs {
             return String.format(CREATE_BEAN_FINISH, bean_class.getCanonicalName());
         }
 
+        public static String beanCreationFailed(Class<?> bean_class, Exception exc) {
+            final String CREATE_BEAN_FAILED = "Create bean [%s] throws exception: {%s}";
+            return String.format(CREATE_BEAN_FAILED, bean_class.getCanonicalName(), exc.getMessage());
+        }
+
     }
 
     //Manual dependency management
