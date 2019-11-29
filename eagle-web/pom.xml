@@ -148,6 +148,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>eagle</finalName>
     </build>
 
 </project>

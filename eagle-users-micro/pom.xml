@@ -131,7 +131,7 @@
                 </configuration>
             </plugin>
         </plugins>
-        <finalName>details</finalName>
+        <finalName>eagle-users-details</finalName>
     </build>
 
 </project>
