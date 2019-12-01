@@ -8,5 +8,6 @@ public interface UserDetailsService {
 
     @Headers({"Content-Type: application/json","Charset: utf-8"})
     @RequestLine("POST /details_create")
-    public UserWithDetailsDto createDetails(UserWithDetailsDto dto);
+    UserWithDetailsDto createDetails(UserWithDetailsDto dto);
+
 }

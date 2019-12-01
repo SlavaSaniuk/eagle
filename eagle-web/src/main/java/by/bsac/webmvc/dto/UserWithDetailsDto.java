@@ -6,6 +6,8 @@ import by.bsac.annotations.DtoProperty;
 import by.bsac.models.User;
 import by.bsac.models.UserDetails;
 import by.bsac.models.UserName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,11 +19,7 @@ public class UserWithDetailsDto {
 
     private Integer user_id;
 
-    @DtoEmbedded(UserName.class)
-    @DtoProperty(entityProperty = "first_name")
-    private String user_fname;
+    private UserName user_name;
 
-    @DtoEmbedded(UserName.class)
-    @DtoProperty(entityProperty = "last_name")
-    private String user_lname;
+    private String user_id_alias;
 }

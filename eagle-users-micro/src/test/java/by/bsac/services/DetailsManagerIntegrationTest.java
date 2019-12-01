@@ -15,7 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
-@ActiveProfiles("TEST")
+@ActiveProfiles("DEVELOPMENT")
 @SpringBootTest(classes = {DatasourcesConfig.class, ServicesConfiguration.class})
 @EnableAutoConfiguration
 @EntityScan("by.bsac.models")
@@ -55,4 +55,19 @@ public class DetailsManagerIntegrationTest {
         Assertions.assertNotNull(details);
         Assertions.assertEquals(user.getUserId(), details.getDetailId());
     }
+
+    @Test
+    public void createDetails_notInPersistenceContext_shouldReturnCreatedDetails() {
+
+        User user = new User();
+        user.setUserId(3);
+
+        UserDetails details = new UserDetails();
+        details.setUserName(new UserName("Slava", "Saniuk"));
+        details = this.manager.createDetails(user, details);
+
+        Assertions.assertNotNull(details);
+        Assertions.assertEquals(user.getUserId(), details.getDetailId());
+    }
+
 }

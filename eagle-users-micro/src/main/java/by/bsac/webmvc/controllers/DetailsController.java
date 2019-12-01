@@ -1,8 +1,10 @@
 package by.bsac.webmvc.controllers;
 
 import by.bsac.core.DEConverter;
+import by.bsac.core.beans.EmbeddedDeConverter;
 import by.bsac.models.User;
 import by.bsac.models.UserDetails;
+import by.bsac.models.UserName;
 import by.bsac.services.DetailsManager;
 import by.bsac.webmvc.dto.UserWithDetailsDto;
 import org.slf4j.Logger;
@@ -23,6 +25,7 @@ public class DetailsController {
     private static final Logger LOGGER = LoggerFactory.getLogger(DetailsController.class);
     //Spring beans
     private DetailsManager details_manager;
+    private EmbeddedDeConverter<UserWithDetailsDto> converter;
 
     //Default constructor
     public DetailsController() {
@@ -35,17 +38,17 @@ public class DetailsController {
     public UserWithDetailsDto createDetails(@RequestBody UserWithDetailsDto dto) {
 
         //Get entities from DTO
-        User user = DEConverter.toEntity(dto, new User());
-        UserDetails details = DEConverter.toEntity(dto, new UserDetails());
+        User user = this.converter.toEntity(dto, new User());
+        UserDetails details = this.converter.toEntity(dto, new UserDetails(), new UserName());
 
         //Try to create user details
         details = this.details_manager.createDetails(user, details);
 
-        //Convert to dto
-        dto = DEConverter.toDto(details, dto);
-        dto = DEConverter.toDto(user, dto);
+        //Create response dto
+        UserWithDetailsDto response = this.converter.toDto(user, new UserWithDetailsDto());
+        this.converter.toDto(details, response);
 
-        return dto;
+        return response;
     }
 
     //AUTOWIRING
@@ -53,5 +56,11 @@ public class DetailsController {
     public void setDetailsManager(DetailsManager details_manager) {
         LOGGER.info(AUTOWIRING.viaSetter(details_manager.getClass(), this.getClass()));
         this.details_manager = details_manager;
+    }
+
+    @Autowired
+    public void setDeConverter(EmbeddedDeConverter<UserWithDetailsDto> a_converter) {
+        LOGGER.debug(AUTOWIRING.viaSetter(a_converter.getClass(), this.getClass()));
+        this.converter = a_converter;
     }
 }

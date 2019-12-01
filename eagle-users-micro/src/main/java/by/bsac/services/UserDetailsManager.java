@@ -40,12 +40,13 @@ public class UserDetailsManager implements DetailsManager, InitializingBean {
         //Get user from database
         Optional<User> user_opt = this.user_repository.findById(a_user.getUserId());
         if (!user_opt.isPresent()) throw new IllegalArgumentException("[user_id] parameter is in invalid value.");
-        a_user = user_opt.get();
+        User user = user_opt.get();
 
         //maps ID
         //persist details
-        a_details.setDetailsUser(a_user);
-        a_user.setUserDetails(a_details);
+        a_details.setDetailsUser(user);
+        user.setUserDetails(a_details);
+
         return this.details_repository.save(a_details);
     }
 

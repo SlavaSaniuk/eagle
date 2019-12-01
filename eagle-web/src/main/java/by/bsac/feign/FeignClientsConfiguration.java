@@ -1,6 +1,7 @@
 package by.bsac.feign;
 
 import by.bsac.feign.clients.AccountManagementService;
+import by.bsac.feign.clients.UserDetailsService;
 import feign.Feign;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
@@ -53,4 +54,18 @@ public class FeignClientsConfiguration {
         LOGGER.info(CREATION.beanCreationFinish(ams.getClass()));
         return ams;
     }
+
+    @Bean(name = "UsersDetailsService")
+    public UserDetailsService getUserDetailsService() {
+        LOGGER.info(CREATION.beanCreationStart(UserDetailsService.class));
+        UserDetailsService uds = Feign.builder()
+                .encoder(this.encoder)
+                .decoder(this.decoder)
+                .errorDecoder(this.error_decoder)
+                .target(UserDetailsService.class, "http://10.8.8.25:36547/eagle-users-details");
+
+        LOGGER.info(CREATION.beanCreationFinish(UserDetailsService.class));
+        return uds;
+    }
+
 }

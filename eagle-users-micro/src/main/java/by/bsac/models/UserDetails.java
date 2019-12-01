@@ -17,8 +17,8 @@ public class UserDetails {
     @Embedded
     private UserName user_name;
 
-    @OneToOne
-    @JoinColumn(name = "detail_id", nullable = false)
+    @OneToOne(optional = false)
+    @JoinColumn(name = "detail_id")
     @MapsId
     @JsonManagedReference
     private User details_user;

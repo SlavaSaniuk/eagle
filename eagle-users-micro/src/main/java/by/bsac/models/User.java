@@ -21,7 +21,7 @@ public class User {
     @Column(name = "user_id_alias", unique = true)
     private String user_id_alias;
 
-    @OneToOne(mappedBy = "details_user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "details_user", fetch = FetchType.EAGER)
     @JsonBackReference
     private UserDetails user_details;
 
