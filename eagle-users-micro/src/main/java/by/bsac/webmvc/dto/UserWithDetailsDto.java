@@ -12,7 +12,6 @@ import lombok.ToString;
 
 @Dto({User.class, UserDetails.class})
 @Getter @Setter
-@ToString
 public class UserWithDetailsDto {
 
     private Integer user_id;

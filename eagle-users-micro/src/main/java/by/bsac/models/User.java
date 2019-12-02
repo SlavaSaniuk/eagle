@@ -2,14 +2,12 @@ package by.bsac.models;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 
 @Getter @Setter
 @Entity
 @Table(name = "user")
-@ToString
 public class User {
 
     @Id

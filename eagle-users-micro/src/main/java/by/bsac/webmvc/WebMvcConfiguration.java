@@ -1,5 +1,6 @@
 package by.bsac.webmvc;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ public class WebMvcConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebMvcConfiguration.class);
 
     public WebMvcConfiguration() {
-        LOGGER.info(INITIALIZATION.initConfig(this.getClass()));;
+        LOGGER.info(INITIALIZATION.initConfig(WebMvcConfiguration.class));
     }
 
     @Bean
@@ -32,6 +33,7 @@ public class WebMvcConfiguration {
 
         //Customize jackson object mapper
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         LOGGER.debug(CREATION.beanCreationFinish(mapper.getClass()));
         LOGGER.info(CREATION.beanCreationFinish(ObjectMapper.class));

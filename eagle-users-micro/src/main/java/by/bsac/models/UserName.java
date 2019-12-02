@@ -11,7 +11,6 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Getter @Setter
 @NoArgsConstructor
-@ToString
 public class UserName {
 
     @Column(name = "first_name", nullable = false)

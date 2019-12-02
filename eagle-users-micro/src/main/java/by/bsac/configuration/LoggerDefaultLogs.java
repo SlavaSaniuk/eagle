@@ -23,6 +23,16 @@ public class LoggerDefaultLogs {
             return String.format(CREATE_BEAN_FINISH, bean_class.getCanonicalName());
         }
 
+        public static String beanCreationStartForProfile(Class bean_class, String profile) {
+            final String CREATE_BEAN_START = "Start to create [%s] bean for [%s] profile.";
+            return String.format(CREATE_BEAN_START, bean_class.getCanonicalName(), profile);
+        }
+
+        public static String beanCreationFinishForProfile(Class bean_class, String profile) {
+            final String CREATE_BEAN_START = "Bean [%s] for [%s] profile successfully was created.";
+            return String.format(CREATE_BEAN_START, bean_class.getCanonicalName(), profile);
+        }
+
     }
 
     //Manual dependency management

@@ -3,14 +3,12 @@ package by.bsac.models;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "user_detail")
 @Getter @Setter
-@ToString
 public class UserDetails {
 
     @Id

@@ -31,7 +31,6 @@ public class UserWithDetailsDtoConverterIntegrationTest {
         final String DETAILS_FNAME = "TEST-FNAME";
         final String DETAILS_LNAME = "TEST-LNAME";
 
-
         User user = new User();
         user.setUserId(USER_ID);
         user.setUserIdAlias(USER_ALIAS);
@@ -39,6 +38,9 @@ public class UserWithDetailsDtoConverterIntegrationTest {
         UserDetails details = new UserDetails();
         details.setDetailId(DETAILS_ID);
         details.setUserName(new UserName(DETAILS_FNAME, DETAILS_LNAME));
+
+        user.setUserDetails(details);
+        details.setDetailsUser(user);
 
         UserWithDetailsDto dto = new UserWithDetailsDto();
         dto = this.CONVERTER.toDto(user, dto);
