@@ -1,16 +1,15 @@
 package by.bsac.models;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Getter @Setter
 @Entity
 @Table(name = "user")
+@ToString
 public class User {
 
     @Id
@@ -22,7 +21,6 @@ public class User {
     private String user_id_alias;
 
     @OneToOne(mappedBy = "details_user", fetch = FetchType.EAGER)
-    @JsonBackReference
     private UserDetails user_details;
 
 }
