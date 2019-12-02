@@ -20,6 +20,11 @@ import javax.sql.DataSource;
 
 import static by.bsac.configuration.LoggerDefaultLogs.*;
 
+/**
+ * Spring {@link Configuration} configuration class.
+ * This class contains beans definition of {@link DataSource} beans
+ * for different profiles.
+ */
 @Configuration
 @EnableJpaRepositories("by.bsac.repositories")
 @EnableTransactionManagement
@@ -32,6 +37,10 @@ public class DatasourcesConfig {
     //Spring beans
     private DatasourcesProperties datasources_properties; //Autowired via constructor
 
+    /**
+     * Initialize new {@link DatasourcesConfig} configuration class.
+     * @param a_properties - {@link DatasourcesProperties} autowired by Spring.
+     */
     @Autowired
     public DatasourcesConfig(DatasourcesProperties a_properties) {
         LOGGER.info(INITIALIZATION.initConfig(DatasourcesConfig.class));
@@ -40,9 +49,14 @@ public class DatasourcesConfig {
         this.datasources_properties = a_properties;
     }
 
+    /**
+     * {@link DataSource} bean for "DEVELOPMENT" profile.
+     * Implementation of this bean is {@link DriverManagerDataSource} class.
+     * @return - configured {@link DataSource}.
+     */
     @Bean
     @Profile("DEVELOPMENT")
-    public DataSource devDataSource() {
+    public DataSource developmentDataSource() {
 
         final String PROFILE = "DEVELOPMENT";
         LOGGER.info(CREATION.beanCreationStartForProfile(DataSource.class, PROFILE));
@@ -59,6 +73,12 @@ public class DatasourcesConfig {
 
     }
 
+    /**
+     * {@link DataSource} bean for "PRODUCTION" profile.
+     * Implementation of this bean is external tomcat connection pooling datasource.
+     * Note: This beans creates by tomcat server. Application gets link via "JNDI" context.
+     * @return - configured {@link DataSource}.
+     */
     @Bean
     @Profile("PRODUCTION")
     public DataSource productionDataSource() throws NamingException {
