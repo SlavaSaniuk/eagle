@@ -14,6 +14,6 @@ public class NoCreatedDetailsException extends Exception {
      * @param user_id - {@link User#getUserId()} parameter.
      */
     public NoCreatedDetailsException(Integer user_id) {
-        super("User ["+user_id +"] not create details before.");
+        super("User ["+user_id +"] doesn't have created details.");
     }
 }

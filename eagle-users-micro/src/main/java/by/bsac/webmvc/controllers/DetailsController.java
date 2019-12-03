@@ -1,7 +1,7 @@
 package by.bsac.webmvc.controllers;
 
-import by.bsac.core.DEConverter;
 import by.bsac.core.beans.EmbeddedDeConverter;
+import by.bsac.exceptions.NoCreatedDetailsException;
 import by.bsac.models.User;
 import by.bsac.models.UserDetails;
 import by.bsac.models.UserName;
@@ -11,11 +11,9 @@ import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import static by.bsac.configuration.LoggerDefaultLogs.*;
 
@@ -27,6 +25,8 @@ public class DetailsController {
     //Spring beans
     private DetailsManager details_manager;
     private EmbeddedDeConverter<UserWithDetailsDto> converter;
+    //HTTP exception status codes
+    private static final int NO_CREATED_DETAILS_EXCEPTION_STATUS_CODE = 441;
 
     //Default constructor
     public DetailsController() {
@@ -54,10 +54,19 @@ public class DetailsController {
 
     @PostMapping(path = "/details_get", headers = {"content-type=application/json"}, produces = {"application/json"})
     @ResponseBody
-    public UserWithDetailsDto getDetails(@RequestBody @NonNull UserWithDetailsDto dto) {
+    public UserWithDetailsDto getDetails(@RequestBody @NonNull UserWithDetailsDto dto) throws NoCreatedDetailsException {
 
+        User user = this.converter.toEntity(dto, new User());
 
-        return null;
+        //Try to get details
+        UserDetails details = this.details_manager.getDetails(user);
+
+        return this.converter.toDto(details, dto);
+    }
+
+    @ExceptionHandler(NoCreatedDetailsException.class)
+    public ResponseEntity<NoCreatedDetailsException> handleNoCreatedDetailsException(NoCreatedDetailsException exc) {
+        return ResponseEntity.status(NO_CREATED_DETAILS_EXCEPTION_STATUS_CODE).contentType(MediaType.APPLICATION_JSON).body(exc);
     }
 
     //AUTOWIRING
