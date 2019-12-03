@@ -7,6 +7,7 @@ import by.bsac.models.UserDetails;
 import by.bsac.models.UserName;
 import by.bsac.services.DetailsManager;
 import by.bsac.webmvc.dto.UserWithDetailsDto;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,14 @@ public class DetailsController {
         this.converter.toDto(details, response);
 
         return response;
+    }
+
+    @PostMapping(path = "/details_get", headers = {"content-type=application/json"}, produces = {"application/json"})
+    @ResponseBody
+    public UserWithDetailsDto getDetails(@RequestBody @NonNull UserWithDetailsDto dto) {
+
+
+        return null;
     }
 
     //AUTOWIRING
