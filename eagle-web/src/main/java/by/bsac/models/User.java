@@ -8,10 +8,11 @@ import lombok.Setter;
 @Setter
 public class User {
 
-    @Setter
     private Integer user_id;
 
-    @Setter
     private String user_id_alias;
+
+    private UserDetails user_details;
+
 
 }

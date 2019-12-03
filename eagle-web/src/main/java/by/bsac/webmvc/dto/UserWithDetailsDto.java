@@ -19,7 +19,14 @@ public class UserWithDetailsDto {
 
     private Integer user_id;
 
-    private UserName user_name;
+    @DtoProperty(entityProperty = "user_id_alias")
+    private String user_alias;
 
-    private String user_id_alias;
+    private Integer detail_id;
+
+    @DtoEmbedded(UserName.class)
+    private String first_name;
+
+    @DtoEmbedded(UserName.class)
+    private String last_name;
 }
