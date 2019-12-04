@@ -6,11 +6,12 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class ExceptionResponseBody {
+public class ExceptionResponseBody implements Serializable {
 
     private final LocalDateTime exception_timestamp = LocalDateTime.now();
 
@@ -25,6 +26,10 @@ public class ExceptionResponseBody {
     public ExceptionResponseBody(Exception a_root_exception) {
         this.root_exception = a_root_exception;
         this.error_message = a_root_exception.getMessage();
+    }
+
+    private ExceptionResponseBody(String error_message) {
+        this.error_message = error_message;
     }
 
     @JsonIgnore

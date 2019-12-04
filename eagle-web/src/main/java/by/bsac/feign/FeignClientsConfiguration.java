@@ -3,6 +3,7 @@ package by.bsac.feign;
 import by.bsac.feign.clients.AccountManagementService;
 import by.bsac.feign.clients.UserDetailsService;
 import feign.Feign;
+import feign.Request;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;
@@ -62,6 +63,7 @@ public class FeignClientsConfiguration {
                 .encoder(this.encoder)
                 .decoder(this.decoder)
                 .errorDecoder(this.error_decoder)
+                .options(new Request.Options(10000, 10000))
                 .target(UserDetailsService.class, "http://10.8.8.25:36547/eagle-users-details");
 
         LOGGER.info(CREATION.beanCreationFinish(UserDetailsService.class));
