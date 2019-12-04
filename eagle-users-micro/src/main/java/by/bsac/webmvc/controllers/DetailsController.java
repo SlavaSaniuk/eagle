@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.*;
 
 import static by.bsac.configuration.LoggerDefaultLogs.*;
 
+/**
+ * Main controller od eagle-users-micro microservice.
+ * Controller has a GRUD methods for controlling {@link UserDetails} entities.
+ */
 @RestController
 public class DetailsController {
 
@@ -28,12 +32,21 @@ public class DetailsController {
     //HTTP exception status codes
     private static final int NO_CREATED_DETAILS_EXCEPTION_STATUS_CODE = 441;
 
+    /**
+     * Spring automatically construct new {@link DetailsController} controller bean.
+     */
     //Default constructor
     public DetailsController() {
         LOGGER.info(CREATION.beanCreationStart(this.getClass()));
         LOGGER.info(CREATION.beanCreationFinish(this.getClass()));
     }
 
+    /**
+     * Create new {@link UserDetails} entity and persist it in database.
+     * Associate it with {@link User} entity.
+     * @param dto - {@link UserWithDetailsDto} DTO object contains info about user and it's own details.
+     * @return - created {@link UserWithDetailsDto} DTO object.
+     */
     @PostMapping(path = "/details_create", headers = {"content-type=application/json"}, produces = {"application/json"})
     @ResponseBody
     public UserWithDetailsDto createDetails(@RequestBody UserWithDetailsDto dto) {
@@ -52,6 +65,14 @@ public class DetailsController {
         return response;
     }
 
+    /**
+     * Controller retrieve {@link UserDetails} entity object
+     * by {@link User} and convert it to DTO object.
+     * @param dto - {@link UserWithDetailsDto} DTO object contains info about user and it's own details.
+     * @return - Retriever {@link UserWithDetailsDto} dto object.
+     * @throws NoCreatedDetailsException - Exception throws if user already registered
+     * in database but hasn't it own {@link UserDetails}.
+     */
     @PostMapping(path = "/details_get", headers = {"content-type=application/json"}, produces = {"application/json"})
     @ResponseBody
     public UserWithDetailsDto getDetails(@RequestBody @NonNull UserWithDetailsDto dto) throws NoCreatedDetailsException {
@@ -64,6 +85,12 @@ public class DetailsController {
         return this.converter.toDto(details, dto);
     }
 
+    /**
+     * Controller method handle {@link NoCreatedDetailsException} exception and return response
+     * entity with error HTTP status 441.
+     * @param exc - {@link NoCreatedDetailsException} exception.
+     * @return - {@link ResponseEntity} with 441 error HTTP status code.
+     */
     @ExceptionHandler(NoCreatedDetailsException.class)
     public ResponseEntity<NoCreatedDetailsException> handleNoCreatedDetailsException(NoCreatedDetailsException exc) {
         return ResponseEntity.status(NO_CREATED_DETAILS_EXCEPTION_STATUS_CODE).contentType(MediaType.APPLICATION_JSON).body(exc);
