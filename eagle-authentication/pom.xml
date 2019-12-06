@@ -154,6 +154,12 @@
             <version>custom</version>
         </dependency>
 
+        <dependency>
+            <groupId>by.bsac</groupId>
+            <artifactId>dolly</artifactId>
+            <version>2.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
