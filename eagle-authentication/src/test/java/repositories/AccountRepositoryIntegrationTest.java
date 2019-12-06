@@ -13,6 +13,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,13 +22,11 @@ import java.util.List;
 @ActiveProfiles("TEST")
 @SpringJUnitConfig({DatasourcesConfiguration.class, PersistenceConfiguration.class, ServicesConfiguration.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Sql("account-imports.sql")
 class AccountRepositoryIntegrationTest {
 
     @Autowired
     private AccountRepository account_repository;
-
-    @Autowired
-    private AccountManagementService ams;
 
     @Autowired
     private AccountStatusRepository status_repository;
@@ -37,23 +36,6 @@ class AccountRepositoryIntegrationTest {
     @Commit
     @Order(1)
     public void foundAllByAccountStatus_createdStatus_shouldReturnAccounts() {
-
-        Account account1 = new Account();
-        account1.setAccountEmail("test1@mail");
-        account1.setAccountPassword("12345678");
-
-
-        Account account2 = new Account();
-        account2.setAccountEmail("test2@mail");
-        account2.setAccountPassword("12345678");
-
-        Account account3 = new Account();
-        account3.setAccountEmail("test3@mail");
-        account3.setAccountPassword("12345678");
-
-        this.ams.register(account1);
-        this.ams.register(account2);
-        this.ams.register(account3);
 
         List<Account> founded = this.account_repository.foundAllByAccountStatus(Status.CREATED);
 
@@ -83,12 +65,12 @@ class AccountRepositoryIntegrationTest {
 
     @Test
     @Order(3)
-    public void findAccountStatusByStatus_twoCreatedStatuses_shouldReturnThis() {
+    public void findAccountStatusByStatus_threeCreatedStatuses_shouldReturnThis() {
 
         List<AccountStatus> statuses = this.status_repository.findAccountStatusByStatus(Status.CREATED);
 
         Assertions.assertNotNull(statuses);
-        Assertions.assertEquals(2, statuses.size());
+        Assertions.assertEquals(3, statuses.size());
     }
 
 
