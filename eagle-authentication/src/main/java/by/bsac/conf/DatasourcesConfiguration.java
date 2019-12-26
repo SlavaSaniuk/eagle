@@ -37,11 +37,11 @@ public class DatasourcesConfiguration {
 
         BasicDataSource ds = new BasicDataSource();
 
-        final String DATABASE_URL = "jdbc:h2:mem:eagle_users;DB_CLOSE_DELAY=-1";
+        final String DATABASE_URL = "jdbc:mysql://10.8.8.110:3306/eagle_users";
         ds.setUrl(DATABASE_URL);
-        ds.setDriverClassName("org.h2.Driver");
-        ds.setUsername("sa");
-        ds.setPassword("sa");
+        ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        ds.setUsername("eagle-admin");
+        ds.setPassword("12345678");
 
         return ds;
     }

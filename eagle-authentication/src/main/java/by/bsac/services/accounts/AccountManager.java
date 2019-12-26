@@ -3,10 +3,14 @@ package by.bsac.services.accounts;
 import by.bsac.exceptions.AccountNotRegisteredException;
 import by.bsac.exceptions.EmailAlreadyRegisteredException;
 import by.bsac.models.Account;
+import by.bsac.models.AccountStatus;
+import by.bsac.models.Status;
 import by.bsac.models.User;
 import by.bsac.repositories.AccountRepository;
+import by.bsac.repositories.AccountStatusRepository;
 import by.bsac.repositories.UserRepository;
 import by.bsac.services.security.hashing.PasswordHash;
+import com.sun.istack.NotNull;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.bind.DatatypeConverter;
+import java.util.Optional;
 
 @Service
 @Setter
@@ -29,6 +34,7 @@ public class AccountManager implements AccountManagementService, InitializingBea
     private AccountRepository account_repository;
     private UserRepository user_repository;
     private PasswordHash password_hasher;
+    private AccountStatusRepository status_repository;
 
     public AccountManager() {
         LOGGER.info("Create " +getClass().getSimpleName() +" service bean.");
@@ -59,8 +65,15 @@ public class AccountManager implements AccountManagementService, InitializingBea
         user.setUserAccount(account);
         user = this.user_repository.save(user);
 
-        //Persist account entity
+
+        //Create new account status entity
+        AccountStatus account_status = new AccountStatus();
+        account_status.setAccount(account);
+
         account.setAccountUser(user);
+        account.setAccountStatus(account_status);
+        this.status_repository.save(account_status);
+
         this.account_repository.save(account);
 
         return user;
@@ -89,6 +102,20 @@ public class AccountManager implements AccountManagementService, InitializingBea
 
     }
 
+    @Override
+    @Transactional
+    public Account confirmAccount(@NotNull Account account) {
+
+        //Persist account
+        Optional<Account> account_opt = this.account_repository.findById(account.getAccountId());
+        if (!account_opt.isPresent()) throw new IllegalArgumentException("Account[account_id] parameter is in invalid value");
+        account = account_opt.get();
+
+        //Update status
+        this.status_repository.updateAccountStatusById(Status.CONFIRMED, account.getAccountId());
+        account.getAccountStatus().setStatus(Status.CONFIRMED);
+        return account;
+    }
 
     @Override
     public void afterPropertiesSet() throws Exception {

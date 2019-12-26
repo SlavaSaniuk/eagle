@@ -1,6 +1,7 @@
 package by.bsac.services;
 
 import by.bsac.repositories.AccountRepository;
+import by.bsac.repositories.AccountStatusRepository;
 import by.bsac.repositories.UserRepository;
 import by.bsac.services.accounts.AccountManagementService;
 import by.bsac.services.accounts.AccountManager;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static by.bsac.conf.LoggerDefaultLogs.*;
+
 @Configuration
 public class ServicesConfiguration {
 
@@ -21,6 +24,7 @@ public class ServicesConfiguration {
     //Spring beans
     private AccountRepository account_repository;
     private UserRepository user_repository;
+    private AccountStatusRepository status_repository;
 
     public ServicesConfiguration() {
         LOGGER.info("Start to initialize " +getClass().getSimpleName() +" configuration class.");
@@ -48,6 +52,7 @@ public class ServicesConfiguration {
         manager.setPasswordHasher(this.passwordHasher());
         manager.setAccountRepository(this.account_repository);
         manager.setUserRepository(this.user_repository);
+        manager.setStatusRepository(this.status_repository);
 
         return manager;
     }
@@ -63,5 +68,11 @@ public class ServicesConfiguration {
     public void setUserRepository(UserRepository user_repository) {
         LOGGER.debug("[AUTOWIRE] " +user_repository.getClass().getSimpleName() +" to " +getClass().getSimpleName() +" configuration.");
         this.user_repository = user_repository;
+    }
+
+    @Autowired
+    public void setAccountStatusRepository(AccountStatusRepository a_asr) {
+        LOGGER.info(AUTOWIRING.viaSetter(AccountStatusRepository.class, ServicesConfiguration.class));
+        this.status_repository = a_asr;
     }
 }

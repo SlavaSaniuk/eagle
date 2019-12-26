@@ -3,76 +3,77 @@ package repositories;
 import by.bsac.conf.DatasourcesConfiguration;
 import by.bsac.conf.PersistenceConfiguration;
 import by.bsac.models.Account;
-import by.bsac.models.User;
+import by.bsac.models.AccountStatus;
+import by.bsac.models.Status;
 import by.bsac.repositories.AccountRepository;
-import by.bsac.repositories.UserRepository;
+import by.bsac.repositories.AccountStatusRepository;
+import by.bsac.services.ServicesConfiguration;
+import by.bsac.services.accounts.AccountManagementService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @ActiveProfiles("TEST")
-@SpringJUnitConfig({DatasourcesConfiguration.class, PersistenceConfiguration.class})
+@SpringJUnitConfig({DatasourcesConfiguration.class, PersistenceConfiguration.class, ServicesConfiguration.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Sql("account-imports.sql")
 class AccountRepositoryIntegrationTest {
 
     @Autowired
     private AccountRepository account_repository;
 
     @Autowired
-    private UserRepository user_repository;
-
-    //Shared between tests
-    private String account_email = "test@test.com";
-    private final Integer generated_id = 1;
+    private AccountStatusRepository status_repository;
 
     @Test
     @Transactional
     @Commit
     @Order(1)
-    void save_accountWithUser_shouldReturnAccount() {
+    public void foundAllByAccountStatus_createdStatus_shouldReturnAccounts() {
 
-        //Create entities
-        User user = new User();
-        Account account = new Account();
+        List<Account> founded = this.account_repository.foundAllByAccountStatus(Status.CREATED);
 
-        account.setAccountEmail(account_email);
-        account.setAccountPasswordHash("account-password-hash");
-        account.setAccountPasswordSalt("account-password-salt");
-
-        //Persist user entity
-        user.setUserAccount(account);
-        account.setAccountUser(user);
-        user = this.user_repository.save(user);
-
-        Assertions.assertEquals(this.generated_id, user.getUserId());
-
-        //Save account
-        account = this.account_repository.save(account);
-
-        //Check maps ID
-        Assertions.assertEquals(this.generated_id, account.getAccountId());
+        Assertions.assertNotNull(founded);
+        Assertions.assertEquals(3, founded.size());
 
     }
 
     @Test
-    void findByAccountEmail_createdAccount_shouldReturnAccount() {
+    @Transactional
+    @Commit
+    @Order(2)
+    public void updateAccountStatusById_oneStatusForUpdate_shouldUpdateStatus() {
 
-        Account account = this.account_repository.foundByAccountEmail(this.account_email);
+        Account account = this.account_repository.foundByAccountEmail("test2@mail");
+        assert account != null;
 
-        Assertions.assertNotNull(account);
-        Assertions.assertEquals(this.generated_id, account.getAccountId());
-        Assertions.assertEquals(this.account_email, account.getAccountEmail());
+        this.status_repository.updateAccountStatusById(Status.CONFIRMED, account.getAccountId());
+
+        List<AccountStatus> updated_statuses = this.status_repository.findAccountStatusByStatus(Status.CONFIRMED);
+
+        Assertions.assertNotNull(updated_statuses);
+        Assertions.assertEquals(1, updated_statuses.size());
+        Assertions.assertEquals(account.getAccountId(), updated_statuses.get(0).getStatusId());
+
     }
 
     @Test
-    void findByAccountEmail_notCreatedAccount_shouldReturnNull() {
+    @Order(3)
+    public void findAccountStatusByStatus_threeCreatedStatuses_shouldReturnThis() {
 
-        Account account = this.account_repository.foundByAccountEmail("incorrect");
-        Assertions.assertNull(account);
+        List<AccountStatus> statuses = this.status_repository.findAccountStatusByStatus(Status.CREATED);
+
+        Assertions.assertNotNull(statuses);
+        Assertions.assertEquals(3, statuses.size());
     }
+
+
 
 
 

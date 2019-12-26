@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.internal.util.EntityPrinter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -37,6 +38,10 @@ public class Account implements Serializable {
     @MapsId
     private User account_user;
 
+    @OneToOne(mappedBy = "account")
+    @Setter
+    private AccountStatus account_status;
+
     @Transient
     @Setter
     private transient String account_password;
@@ -45,4 +50,5 @@ public class Account implements Serializable {
     public void setAccountUser(User account_user) {
         this.account_user = account_user;
     }
+
 }
