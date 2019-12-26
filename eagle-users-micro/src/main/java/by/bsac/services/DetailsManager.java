@@ -1,5 +1,6 @@
 package by.bsac.services;
 
+import by.bsac.exceptions.NoCreatedDetailsException;
 import by.bsac.models.User;
 import by.bsac.models.UserDetails;
 import org.springframework.stereotype.Service;
@@ -21,4 +22,13 @@ public interface DetailsManager {
      */
     @Transactional
     UserDetails createDetails(User a_user, UserDetails a_details);
+
+    /**
+     * Get {@link UserDetails} by it's
+     * {@link UserDetails#getDetailsUser()} user owner.
+     * @param a_user - {@link User} owner with it's ID.
+     * @return - {@link UserDetails} details.
+     */
+    UserDetails getDetails(User a_user) throws NoCreatedDetailsException;
+
 }

@@ -42,8 +42,6 @@ public class UserWithDetailsDtoConverterTestCase {
         dto = this.CONVERTER.toDto(details, dto);
 
         Assertions.assertEquals(user.getUserId(), dto.getUserId());
-        Assertions.assertEquals(details.getUserName().getFirstName(), dto.getUserFname());
-        Assertions.assertEquals(details.getUserName().getLastName(), dto.getUserLname());
 
         LOGGER.debug(dto.toString());
     }

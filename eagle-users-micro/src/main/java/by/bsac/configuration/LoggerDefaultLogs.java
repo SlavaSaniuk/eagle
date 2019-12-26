@@ -1,8 +1,13 @@
 package by.bsac.configuration;
 
+/**
+ * This class has has typed logs messages of log Spring beans management.
+ */
 public class LoggerDefaultLogs {
 
-
+    /**
+     * Logs for Spring initialization of configuration classes.
+     */
     public static class INITIALIZATION {
 
         public static String initConfig(Class clazz) {
@@ -11,6 +16,9 @@ public class LoggerDefaultLogs {
         }
     }
 
+    /**
+     * Logs for Spring beans creation processes.
+     */
     public static class CREATION {
 
         public static String beanCreationStart(Class bean_class) {
@@ -23,9 +31,21 @@ public class LoggerDefaultLogs {
             return String.format(CREATE_BEAN_FINISH, bean_class.getCanonicalName());
         }
 
+        public static String beanCreationStartForProfile(Class bean_class, String profile) {
+            final String CREATE_BEAN_START = "Start to create [%s] bean for [%s] profile.";
+            return String.format(CREATE_BEAN_START, bean_class.getCanonicalName(), profile);
+        }
+
+        public static String beanCreationFinishForProfile(Class bean_class, String profile) {
+            final String CREATE_BEAN_START = "Bean [%s] for [%s] profile successfully was created.";
+            return String.format(CREATE_BEAN_START, bean_class.getCanonicalName(), profile);
+        }
+
     }
 
-    //Manual dependency management
+    /**
+     * Logs for Spring dependency management processes (manual).
+     */
     public static class DEPENDENCY {
 
         public static String viaSetter(Class dependent, Class to) {
@@ -40,7 +60,9 @@ public class LoggerDefaultLogs {
 
     }
 
-    //Autowire spring beans
+    /**
+     * Logs for Spring dependency management via autowiring processes (automatic).
+     */
     public static class AUTOWIRING {
 
         public static String viaConstructor(Class c1, Class c2) {

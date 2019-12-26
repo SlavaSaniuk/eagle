@@ -15,8 +15,6 @@ import lombok.ToString;
 @ToString
 public class UserDetailsForm {
 
-    private Integer detailId;
-
     @DtoEmbedded(UserName.class)
     @DtoProperty(entityProperty = "first_name")
     private String userFname;
@@ -27,5 +25,4 @@ public class UserDetailsForm {
 
     private char sex;
 
-    private User detailsUser;
 }
