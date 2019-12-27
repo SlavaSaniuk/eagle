@@ -9,10 +9,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Dto({Account.class, AccountStatus.class})
 @Getter @Setter
 @ToString
-public class AccountWithStatusDto {
+public class AccountWithStatusDto implements Serializable {
 
     private Integer account_id;
 
