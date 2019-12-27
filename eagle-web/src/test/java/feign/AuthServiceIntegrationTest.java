@@ -28,7 +28,7 @@ class AuthServiceIntegrationTest {
     @Order(1)
     void register_newAccount_shouldReturnNewAccountUser() throws AccountAlreadyRegisteredException {
         Account account = new Account();
-        account.setAccountEmail("test1@eagle-web.com");
+        account.setAccountEmail("test24@eagle-web.com");
         account.setAccountPassword("12345678");
 
         User user = this.ams.registerAccount(account);

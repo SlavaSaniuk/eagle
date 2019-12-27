@@ -2,12 +2,17 @@ package by.bsac.services;
 
 import by.bsac.configuration.DatasourcesConfig;
 import by.bsac.core.DEConverter;
+import by.bsac.core.beans.DtoEntityConverter;
+import by.bsac.core.beans.EmbeddedDeConverter;
+import by.bsac.core.beans.EmbeddedDtoEntityConverter;
+import by.bsac.core.exceptions.NoSupportedEntitiesException;
 import by.bsac.models.User;
 import by.bsac.models.UserDetails;
 import by.bsac.models.UserName;
 import by.bsac.repositories.UserRepository;
 import by.bsac.webmvc.WebMvcConfiguration;
 import by.bsac.webmvc.dto.UserWithDetailsDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -27,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @ActiveProfiles("TEST")
-@SpringBootTest(classes = {DatasourcesConfig.class, ServicesConfiguration.class, WebMvcConfiguration.class})
+@SpringBootTest(classes = {DatasourcesConfig.class, ServicesConfiguration.class, WebMvcConfiguration.class,})
 @EnableAutoConfiguration
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @AutoConfigureMockMvc
@@ -102,6 +107,28 @@ public class DetailsControllerIntegrationTest {
         Assertions.assertNotNull(details_from_dto.getUserName());
 
         Assertions.assertEquals(details.getUserName().getFirstName(), details_from_dto.getUserName().getFirstName());
+
+    }
+
+    @Test
+    void sds() throws NoSupportedEntitiesException, JsonProcessingException {
+
+        EmbeddedDeConverter<UserWithDetailsDto> converter = new EmbeddedDtoEntityConverter<>(UserWithDetailsDto.class);
+
+        User user = new User();
+        UserDetails details = new UserDetails();
+
+        user.setUserId(3);
+        details.setUserName(new UserName("FNAME", "LNAME"));
+
+        UserWithDetailsDto dto = new UserWithDetailsDto();
+
+        dto = converter.toDto(user, dto);
+        dto = converter.toDto(details, dto);
+
+        String json = this.mapper.writeValueAsString(dto);
+
+        LOGGER.debug(String.format("JSON[%S];",json));
 
     }
 

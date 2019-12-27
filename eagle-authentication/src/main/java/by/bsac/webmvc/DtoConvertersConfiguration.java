@@ -4,6 +4,7 @@ import by.bsac.core.beans.BasicDtoEntityConverter;
 import by.bsac.core.beans.DtoEntityConverter;
 import by.bsac.core.beans.EmbeddedDeConverter;
 import by.bsac.core.exceptions.NoSupportedEntitiesException;
+import by.bsac.webmvc.dto.AccountWithStatusDto;
 import by.bsac.webmvc.dto.UserWithAccountDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,23 @@ public class DtoConvertersConfiguration {
 
         try {
             final DtoEntityConverter<UserWithAccountDto> CONVERTER = new BasicDtoEntityConverter<>(UserWithAccountDto.class);
-            LOGGER.info(CREATION.beanCreationFinish(EmbeddedDeConverter.class));
+            LOGGER.info(CREATION.beanCreationFinish(DtoEntityConverter.class));
+            return CONVERTER;
+        } catch (NoSupportedEntitiesException e) {
+            e.printStackTrace();
+            throw new BeanCreationException(e.getMessage());
+        }
+
+    }
+
+    @Bean(name = "AccountWithStatusDtoConverter")
+    public DtoEntityConverter<AccountWithStatusDto> getAccountWithStatusDtoConverter() {
+
+        LOGGER.info(CREATION.beanCreationStart(DtoEntityConverter.class));
+
+        try {
+            final DtoEntityConverter<AccountWithStatusDto> CONVERTER = new BasicDtoEntityConverter<>(AccountWithStatusDto.class);
+            LOGGER.info(CREATION.beanCreationFinish(DtoEntityConverter.class));
             return CONVERTER;
         } catch (NoSupportedEntitiesException e) {
             e.printStackTrace();
