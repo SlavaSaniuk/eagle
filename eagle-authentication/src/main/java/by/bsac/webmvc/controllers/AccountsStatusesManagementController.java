@@ -1,5 +1,7 @@
 package by.bsac.webmvc.controllers;
 
+import by.bsac.annotations.MethodCall;
+import by.bsac.annotations.MethodExecutionTime;
 import by.bsac.core.beans.DtoEntityConverter;
 import by.bsac.models.Account;
 import by.bsac.services.accounts.AccountManagementService;
@@ -31,6 +33,7 @@ public class AccountsStatusesManagementController {
         LOGGER.debug(CREATION.beanCreationFinish(AccountsStatusesManagementController.class));
     }
 
+    @MethodCall @MethodExecutionTime
     @GetMapping(value = "/confirm_account", headers = "content-type=application/json", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody public AccountWithStatusDto confirmAccount(@RequestBody AccountWithStatusDto dto) {
 
