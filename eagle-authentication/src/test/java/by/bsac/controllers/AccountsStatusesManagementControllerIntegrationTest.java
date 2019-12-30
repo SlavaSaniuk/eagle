@@ -1,5 +1,6 @@
 package by.bsac.controllers;
 
+import by.bsac.aspects.AspectsConfiguration;
 import by.bsac.conf.DatasourcesConfiguration;
 import by.bsac.conf.PersistenceConfiguration;
 import by.bsac.conf.RootContextConfiguration;
@@ -29,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @ActiveProfiles("TEST")
 @Sql("classpath:/repositories/account-imports.sql" )
-@SpringJUnitWebConfig(classes = {WebmvcConfiguration.class, DtoConvertersConfiguration.class, ServicesConfiguration.class,
+@SpringJUnitWebConfig(classes = {WebmvcConfiguration.class, AspectsConfiguration.class, DtoConvertersConfiguration.class, ServicesConfiguration.class,
         RootContextConfiguration.class, PersistenceConfiguration.class, DatasourcesConfiguration.class})
 public class AccountsStatusesManagementControllerIntegrationTest {
 
@@ -50,7 +51,7 @@ public class AccountsStatusesManagementControllerIntegrationTest {
         AccountWithStatusDto dto = new AccountWithStatusDto();
         dto.setAccountId(ACCOUNT_ID);
         LOGGER.debug("Account DTO: " +dto.toString());
-        System.out.println("LA-LA-LA");
+
         String account_dto_json = this.mapper.writeValueAsString(dto);
         LOGGER.debug("Account DTO JSON: " +account_dto_json);
 
