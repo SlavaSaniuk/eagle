@@ -33,7 +33,7 @@ public class AccountsStatusesManagementController {
         LOGGER.debug(CREATION.beanCreationFinish(AccountsStatusesManagementController.class));
     }
 
-    @MethodCall @MethodExecutionTime
+    @MethodCall(withArgs = true, withStartTime = true) @MethodExecutionTime(inMicros = true, inNanos = false, inMillis = true)
     @GetMapping(value = "/confirm_account", headers = "content-type=application/json", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody public AccountWithStatusDto confirmAccount(@RequestBody AccountWithStatusDto dto) {
 

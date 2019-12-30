@@ -50,7 +50,7 @@ public class AccountsStatusesManagementControllerIntegrationTest {
         AccountWithStatusDto dto = new AccountWithStatusDto();
         dto.setAccountId(ACCOUNT_ID);
         LOGGER.debug("Account DTO: " +dto.toString());
-
+        System.out.println("LA-LA-LA");
         String account_dto_json = this.mapper.writeValueAsString(dto);
         LOGGER.debug("Account DTO JSON: " +account_dto_json);
 
