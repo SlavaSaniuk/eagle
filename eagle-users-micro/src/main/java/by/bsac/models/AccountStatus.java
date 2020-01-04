@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Getter @Setter
 @NoArgsConstructor
 public class AccountStatus {
 
@@ -12,7 +13,9 @@ public class AccountStatus {
         CONFIRMED
     }
 
-    @Getter @Setter
+
+    private Account account;
+
     private AccountStatuses account_status;
 
 }

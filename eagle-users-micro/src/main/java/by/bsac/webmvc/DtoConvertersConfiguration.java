@@ -5,6 +5,7 @@ import by.bsac.core.beans.DtoEntityConverter;
 import by.bsac.core.beans.EmbeddedDeConverter;
 import by.bsac.core.beans.EmbeddedDtoEntityConverter;
 import by.bsac.core.exceptions.NoSupportedEntitiesException;
+import by.bsac.core.logging.SpringCommonLogging;
 import by.bsac.webmvc.dto.AccountWithStatusDto;
 import by.bsac.webmvc.dto.UserWithDetailsDto;
 import org.slf4j.Logger;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static by.bsac.configuration.LoggerDefaultLogs.*;
+import static by.bsac.core.logging.SpringCommonLogging.*;
 
 @Configuration
 public class DtoConvertersConfiguration {
@@ -22,37 +23,43 @@ public class DtoConvertersConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(DtoConvertersConfiguration.class);
 
     public DtoConvertersConfiguration() {
-        LOGGER.info(INITIALIZATION.initConfig(DtoConvertersConfiguration.class));
+        LOGGER.info(INITIALIZATION.startInitializeConfiguration(DtoConvertersConfiguration.class));
     }
 
-    @Bean
+    @Bean(name = "UserWithDetailsDtoConverter")
     public EmbeddedDeConverter<UserWithDetailsDto> getUserWithDetailsConverter() {
-        LOGGER.info(CREATION.beanCreationStart(EmbeddedDeConverter.class));
+
         EmbeddedDeConverter<UserWithDetailsDto> converter = null;
+
         try {
-             converter = new EmbeddedDtoEntityConverter<>(UserWithDetailsDto.class);
-            LOGGER.info(CREATION.beanCreationFinish(EmbeddedDeConverter.class));
+            LOGGER.info(SpringCommonLogging.CREATION.startCreateBean(BeanDefinition.of("UserWithDetailsDtoConverter").ofClass(EmbeddedDeConverter.class).forGenericType(UserWithDetailsDto.class)));
+            converter = new EmbeddedDtoEntityConverter<>(UserWithDetailsDto.class);
         } catch (NoSupportedEntitiesException e) {
-            e.printStackTrace();
+            LOGGER.warn(CREATION.creationThrowExceptionWithMessage(BeanDefinition.of("UserWithDetailsDtoConverter").ofClass(EmbeddedDeConverter.class).forGenericType(UserWithDetailsDto.class), e));
+            throw new BeanCreationException(e.getMessage());
         }
 
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of("UserWithDetailsDtoConverter").ofClass(EmbeddedDeConverter.class).forGenericType(UserWithDetailsDto.class)));
         return converter;
     }
 
     @Bean(name = "AccountWithStatusDtoConverter")
     public DtoEntityConverter<AccountWithStatusDto> getAccountWithStatusDtoConverter() {
 
+
         BasicDtoEntityConverter<AccountWithStatusDto> converter;
 
         try {
-            LOGGER.info(CREATION.beanCreationStart(DtoEntityConverter.class));
+
+            LOGGER.info(SpringCommonLogging.CREATION.startCreateBean(BeanDefinition.of("AccountWithStatusDtoConverter").ofClass(DtoEntityConverter.class).forGenericType(AccountWithStatusDto.class)));
             converter = new BasicDtoEntityConverter<>(AccountWithStatusDto.class);
+
         } catch (NoSupportedEntitiesException e) {
-            e.printStackTrace();
+            LOGGER.warn(SpringCommonLogging.CREATION.creationThrowExceptionWithMessage(BeanDefinition.of("AccountWithStatusDtoConverter").ofClass(DtoEntityConverter.class).forGenericType(AccountWithStatusDto.class), e));
             throw new BeanCreationException(e.getMessage());
         }
 
-        LOGGER.info(CREATION.beanCreationFinish(DtoEntityConverter.class));
+        LOGGER.info(SpringCommonLogging.CREATION.endCreateBean(BeanDefinition.of("AccountWithStatusDtoConverter").ofClass(DtoEntityConverter.class).forGenericType(AccountWithStatusDto.class)));
         return converter;
 
     }

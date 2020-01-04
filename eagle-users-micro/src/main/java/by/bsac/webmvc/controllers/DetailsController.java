@@ -58,6 +58,9 @@ public class DetailsController {
         //Try to create user details
         details = this.details_manager.createDetails(user, details);
 
+        //Confirm account status
+
+
         //Create response dto
         UserWithDetailsDto response = this.converter.toDto(user, new UserWithDetailsDto());
         this.converter.toDto(details, response);

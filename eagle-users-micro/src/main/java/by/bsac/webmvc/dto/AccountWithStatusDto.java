@@ -18,7 +18,7 @@ public class AccountWithStatusDto {
 
     private String account_email;
 
-    private AccountStatus account_status;
+    private AccountStatus.AccountStatuses account_status;
 
 
 }
