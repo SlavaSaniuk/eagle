@@ -28,7 +28,7 @@ public class FeignConfiguration {
     }
 
     //Feign clients
-    
+
 
     //Feign beans
     @Bean(name = "JacksonFeignEncoder")
