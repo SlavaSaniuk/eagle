@@ -55,7 +55,7 @@ public class ServicesConfiguration {
         LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("FeignServersModelXmlConverter").ofClass(XmlConverter.class).forGenericType(FeignServersModel.class)));
         File xml_file = new File(this.getClass().getClassLoader().getResource("feign-servers.xml").getPath());
 
-        XmlConverter<FeignServersModel> parser = null;
+        XmlConverter<FeignServersModel> parser;
         try {
             parser = new XmlConverterImpl<>(FeignServersModel.class, xml_file);
         } catch (JAXBException e) {
