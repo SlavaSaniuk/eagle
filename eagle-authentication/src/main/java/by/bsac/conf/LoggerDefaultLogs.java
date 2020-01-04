@@ -41,6 +41,13 @@ public class LoggerDefaultLogs {
             return String.format(CREATE_BEAN_START, bean_class.getCanonicalName(), profile);
         }
 
+        public static class FOR_TYPE {
+            public static String beanCreationStartForProfile(Class bean_class, String profile) {
+                final String CREATE_BEAN_START = "Start to create [%s] bean for [%s] profile.";
+                return String.format(CREATE_BEAN_START, bean_class.getCanonicalName(), profile);
+            }
+        }
+
     }
 
     /**
