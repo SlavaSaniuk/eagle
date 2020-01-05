@@ -1,5 +1,6 @@
 package by.bsac.services.xml;
 
+import by.bsac.core.logging.SpringCommonLogging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +9,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+
+import static by.bsac.core.logging.SpringCommonLogging.*;
 
 public class XmlConverterImpl<T> implements XmlConverter<T> {
 
@@ -23,7 +26,7 @@ public class XmlConverterImpl<T> implements XmlConverter<T> {
 
     //Constructor
     public XmlConverterImpl(Class<T> a_pojo_class, File a_xml_file) throws JAXBException {
-
+        LOGGER.debug(CREATION.startCreateBean(BeanDefinition.of(this.getClass()).forGenericType(a_pojo_class)));
         this.pojo_class = a_pojo_class;
         this.xml_file = a_xml_file;
 
@@ -31,6 +34,8 @@ public class XmlConverterImpl<T> implements XmlConverter<T> {
         this.context = JAXBContext.newInstance(this.pojo_class);
         this.unmarshaller = context.createUnmarshaller();
         this.marshaller = context.createMarshaller();
+
+        LOGGER.debug(CREATION.endCreateBean(BeanDefinition.of(this.getClass()).forGenericType(a_pojo_class)));
     }
 
     @Override

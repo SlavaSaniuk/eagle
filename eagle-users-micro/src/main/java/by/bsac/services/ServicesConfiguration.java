@@ -18,6 +18,7 @@ import java.io.File;
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
 
+@SuppressWarnings("AccessStaticViaInstance")
 @Configuration
 public class ServicesConfiguration {
 
@@ -61,6 +62,7 @@ public class ServicesConfiguration {
         } catch (JAXBException e) {
             LOGGER.info(CREATION.creationThrowExceptionWithMessage(
                     BeanDefinition.of("FeignServersModelXmlConverter").ofClass(XmlConverter.class).forGenericType(FeignServersModel.class), e));
+            e.printStackTrace();
             throw new BeanCreationException(e.getMessage());
         }
 

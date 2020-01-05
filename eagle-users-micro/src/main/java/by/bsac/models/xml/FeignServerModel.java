@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import javax.xml.bind.annotation.*;
 
-@XmlType(name = "server", propOrder = {"serverId", "serverName", "serverIp", "serverPort", "serverContext"})
+@XmlType(name = "server", propOrder = {"server_id", "server_name", "server_ip", "server_port", "server_context"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Getter @Setter
 @NoArgsConstructor
