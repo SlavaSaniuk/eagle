@@ -11,6 +11,7 @@
     <packaging>war</packaging>
 
     <properties>
+        <war.baseName>eagle-auth</war.baseName>
         <compiler.version>1.8</compiler.version>
     </properties>
 
@@ -185,6 +186,21 @@
 
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>EAGLE_AUTHENTICATION_TEST</id>
+            <build>
+                <finalName>${war.baseName}-tests</finalName>
+            </build>
+        </profile>
+        <profile>
+            <id>EAGLE_AUTHENTICATION_PRODUCTION</id>
+            <build>
+                <finalName>${war.baseName}</finalName>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -254,7 +270,6 @@
             </plugin>
 
         </plugins>
-        <finalName>eagle-auth</finalName>
     </build>
 
 </project>
