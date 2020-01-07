@@ -23,7 +23,7 @@ public class WebMvcConfiguration {
         LOGGER.info(INITIALIZATION.initConfig(WebMvcConfiguration.class));
     }
 
-    @Bean
+    @Bean(name = "jacksonObjectMapper")
     @Primary
     public ObjectMapper jacksonObjectMapper() {
 
