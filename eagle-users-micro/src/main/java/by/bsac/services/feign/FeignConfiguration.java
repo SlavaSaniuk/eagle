@@ -2,8 +2,10 @@ package by.bsac.services.feign;
 
 import by.bsac.configuration.properties.FeignServersProperties;
 import by.bsac.models.xml.FeignServersModel;
+import by.bsac.services.feign.clients.AccountsStatusesManager;
 import by.bsac.services.xml.XmlConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.Feign;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.jackson.JacksonDecoder;
@@ -37,7 +39,17 @@ public class FeignConfiguration {
     }
 
     //Feign clients
-
+    @SuppressWarnings({"DuplicatedCode", "ConstantConditions"})
+    @Bean(name = "AccountStatutesManager")
+    public AccountsStatusesManager getProductionAccountStatusesManager() {
+        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("AccountStatusesManager").ofClass(AccountsStatusesManager.class)));
+        final AccountsStatusesManager client = Feign.builder()
+                .encoder(this.getEncoder())
+                .decoder(this.getDecoder())
+                .target(AccountsStatusesManager.class, this.getFeignServerProperties().getServerByName("eagle-authentication-microservice").getFullServerPath());
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of("AccountStatusesManager").ofClass(AccountsStatusesManager.class)));
+        return client;
+    }
 
     //Feign beans
     @Bean(name = "JacksonFeignEncoder")
@@ -50,7 +62,7 @@ public class FeignConfiguration {
     }
 
     @Bean(name = "JacksonFeignDecoder")
-    public Decoder gerDecoder() {
+    public Decoder getDecoder() {
         LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("JacksonFeignDecoder").ofClass(Decoder.class)));
         final JacksonDecoder decoder = new JacksonDecoder(this.jacksonObjectMapper);
         LOGGER.debug(CREATION.endCreateBean(BeanDefinition.of("JacksonFeignDecoder").ofClass(Decoder.class)));
@@ -91,7 +103,7 @@ public class FeignConfiguration {
     }
 
     //Spring autowiring
-    @Autowired
+    @Autowired @Qualifier("jacksonObjectMapper")
     public void setObjectMapper(ObjectMapper jacksonObjectMapper) {
         LOGGER.info(DependencyManagement.autowireViaSetter(
                 BeanDefinition.of("JacksonObjectMapper").ofClass(ObjectMapper.class), FeignConfiguration.class));
