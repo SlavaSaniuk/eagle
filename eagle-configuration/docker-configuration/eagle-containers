@@ -6,6 +6,9 @@ docker run -d --name ms-web-eagle-users --ip 10.8.8.25 --network eagle-net debia
 
 docker run -d --name ms-db-eagle-users -e MYSQL_ADDRESS=10.8.8.100 --net eagle-net --ip 10.8.8.100 debian-mysql-image
 
+# Test web server
+docker run -d --name ms-web-eagle-users-test --ip 10.8.8.28 --network eagle-net debian-tomcat-image-aspects
+
 #   Test database server
 # eagle_users db
 docker run -d --name ms-db-eagle-users-test -e MYSQL_ADDRESS=10.8.8.110 --net eagle-net --ip 10.8.8.110 debian-mysql-image

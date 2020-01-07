@@ -58,7 +58,7 @@ public class FeignConfiguration {
     }
 
 
-
+    //Feign properties beans
     @Bean(name = "FeignServersProperties")
     public FeignServersProperties getFeignServerProperties() {
 
@@ -104,6 +104,5 @@ public class FeignConfiguration {
                 BeanDefinition.of("FeignServersModelXmlConverter").ofClass(XmlConverter.class).forGenericType(FeignServersModel.class), FeignConfiguration.class));
         this.feign_servers_xml_converter = a_converter;
     }
-
 
 }

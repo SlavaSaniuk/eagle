@@ -13,6 +13,7 @@ import java.util.List;
 
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
+@Component
 public class FeignServersProperties {
 
     //Logger
