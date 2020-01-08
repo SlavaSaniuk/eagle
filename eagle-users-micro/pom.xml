@@ -183,7 +183,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.20.1</version>
                 <configuration>
-                    <argLine>-javaagent:/home/user/.m2/repository/org/springframework/spring-instrument/5.2.2.RELEASE/spring-instrument-5.2.2.RELEASE.jar -javaagent:"${settings.localRepository}"/org/aspectj/aspectjweaver/1.9.5/aspectjweaver-1.9.5.jar</argLine>
+                    <argLine>-javaagent:${settings.localRepository}/org/springframework/spring-instrument/5.2.2.RELEASE/spring-instrument-5.2.2.RELEASE.jar -javaagent:"${settings.localRepository}"/org/aspectj/aspectjweaver/1.9.5/aspectjweaver-1.9.5.jar</argLine>
                     <useSystemClassLoader>true</useSystemClassLoader>
                     <forkMode>always</forkMode>
                 </configuration>

@@ -1,11 +1,14 @@
 package by.bsac.webmvc.controllers;
 
 import by.bsac.core.beans.EmbeddedDeConverter;
+import by.bsac.core.logging.SpringCommonLogging;
 import by.bsac.exceptions.NoCreatedDetailsException;
 import by.bsac.models.User;
 import by.bsac.models.UserDetails;
 import by.bsac.models.UserName;
 import by.bsac.services.DetailsManager;
+import by.bsac.services.feign.clients.AccountsStatusesManager;
+import by.bsac.webmvc.dto.AccountWithStatusDto;
 import by.bsac.webmvc.dto.UserWithDetailsDto;
 import lombok.NonNull;
 import org.slf4j.Logger;
@@ -15,7 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static by.bsac.configuration.LoggerDefaultLogs.*;
+
+import static by.bsac.core.logging.SpringCommonLogging.*;
 
 /**
  * Main controller od eagle-users-micro microservice.
@@ -29,6 +33,7 @@ public class DetailsController {
     //Spring beans
     private DetailsManager details_manager;
     private EmbeddedDeConverter<UserWithDetailsDto> converter;
+    private AccountsStatusesManager asm; //Autowired via setter
     //HTTP exception status codes
     private static final int NO_CREATED_DETAILS_EXCEPTION_STATUS_CODE = 441;
 
@@ -37,8 +42,7 @@ public class DetailsController {
      */
     //Default constructor
     public DetailsController() {
-        LOGGER.info(CREATION.beanCreationStart(this.getClass()));
-        LOGGER.info(CREATION.beanCreationFinish(this.getClass()));
+        LOGGER.info(SpringCommonLogging.CREATION.startCreateBean(BeanDefinition.of(DetailsController.class)));
     }
 
     /**
@@ -59,7 +63,9 @@ public class DetailsController {
         details = this.details_manager.createDetails(user, details);
 
         //Confirm account status
-
+        AccountWithStatusDto account_to_confirm = new AccountWithStatusDto();
+        account_to_confirm.setAccountId(details.getDetailId());
+        this.asm.confirmAccount(account_to_confirm);
 
         //Create response dto
         UserWithDetailsDto response = this.converter.toDto(user, new UserWithDetailsDto());
@@ -102,13 +108,18 @@ public class DetailsController {
     //AUTOWIRING
     @Autowired
     public void setDetailsManager(DetailsManager details_manager) {
-        LOGGER.info(AUTOWIRING.viaSetter(details_manager.getClass(), this.getClass()));
+        LOGGER.debug(DependencyManagement.autowireViaSetter(BeanDefinition.of("DetailsManager").ofClass(DetailsManager.class), this.getClass()));
         this.details_manager = details_manager;
     }
 
     @Autowired
     public void setDeConverter(EmbeddedDeConverter<UserWithDetailsDto> a_converter) {
-        LOGGER.debug(AUTOWIRING.viaSetter(a_converter.getClass(), this.getClass()));
+        LOGGER.debug(DependencyManagement.autowireViaSetter(BeanDefinition.of("UserWithDetailsDtoConverter").ofClass(EmbeddedDeConverter.class).forGenericType(UserWithDetailsDto.class), this.getClass()));
         this.converter = a_converter;
+    }
+
+    public void setAccountsStatusesManager(AccountsStatusesManager asm) {
+        LOGGER.debug(DependencyManagement.autowireViaSetter(BeanDefinition.of("AccountStatusesManager").ofClass(AccountsStatusesManager.class), this.getClass()));
+        this.asm = asm;
     }
 }
