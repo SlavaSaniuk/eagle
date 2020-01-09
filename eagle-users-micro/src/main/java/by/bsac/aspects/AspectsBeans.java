@@ -2,6 +2,7 @@ package by.bsac.aspects;
 
 import by.bsac.aspects.debug.MethodCallAspect;
 import by.bsac.aspects.debug.MethodExecutionTimeAspect;
+import by.bsac.aspects.validation.ParameterValidationAspect;
 import by.bsac.core.debugging.LoggerLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,4 +44,6 @@ public class AspectsBeans {
         LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("MethodExecutionTimeAspect").ofClass(MethodExecutionTimeAspect.class).forProfile("ASPECT_DEBUG")));
         return aspect;
     }
+
+
 }

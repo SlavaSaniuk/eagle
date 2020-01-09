@@ -1,5 +1,6 @@
 package by.bsac.services.feign;
 
+import by.bsac.annotations.debug.MethodExecutionTime;
 import by.bsac.aspects.TestAspectsConfiguration;
 import by.bsac.configuration.DatasourcesConfig;
 import by.bsac.models.AccountStatus;
@@ -32,6 +33,7 @@ public class AccountStatusesManagerIntegrationTests {
     private AccountsStatusesManager asm;
 
     @Test
+    @MethodExecutionTime(inMillis = true, inMicros = true)
     public void confirmAccount_accountWithId3_shouldConfirmAccount() {
         AccountWithStatusDto dto = new AccountWithStatusDto();
         final Integer ACCOUNT_ID = 3;

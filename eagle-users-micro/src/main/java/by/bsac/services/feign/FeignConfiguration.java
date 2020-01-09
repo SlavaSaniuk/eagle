@@ -41,7 +41,7 @@ public class FeignConfiguration {
     //Feign clients
     @SuppressWarnings({"DuplicatedCode", "ConstantConditions"})
     @Bean(name = "AccountStatutesManager")
-    public AccountsStatusesManager getProductionAccountStatusesManager() {
+    public AccountsStatusesManager getAccountStatusesManager() {
         LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("AccountStatusesManager").ofClass(AccountsStatusesManager.class)));
         final AccountsStatusesManager client = Feign.builder()
                 .encoder(this.getEncoder())
