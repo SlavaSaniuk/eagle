@@ -1,5 +1,9 @@
 package by.bsac.webmvc.controllers;
 
+import by.bsac.annotations.debug.MethodCall;
+import by.bsac.annotations.debug.MethodExecutionTime;
+import by.bsac.annotations.validation.ParameterValidation;
+import by.bsac.aspects.validators.UserWithDetailsDtoParameterValidator;
 import by.bsac.core.beans.EmbeddedDeConverter;
 import by.bsac.core.logging.SpringCommonLogging;
 import by.bsac.exceptions.NoCreatedDetailsException;
@@ -54,6 +58,10 @@ public class DetailsController {
      */
     @PostMapping(path = "/details_create", headers = {"content-type=application/json"}, produces = {"application/json"})
     @ResponseBody
+    @ParameterValidation(value = UserWithDetailsDtoParameterValidator.class,
+            parametersClasses = UserWithDetailsDto.class, errorMessage = "Parameter [user_id] is in invalid value.")
+    @MethodCall(withArgs = true, withReturnType = true, withStartTime = true)
+    @MethodExecutionTime(inMicros = true, inMillis = true)
     public UserWithDetailsDto createDetails(@RequestBody UserWithDetailsDto dto) {
 
         //Get entities from DTO
@@ -87,6 +95,10 @@ public class DetailsController {
      */
     @PostMapping(path = "/details_get", headers = {"content-type=application/json"}, produces = {"application/json"})
     @ResponseBody
+    @ParameterValidation(value = UserWithDetailsDtoParameterValidator.class,
+            parametersClasses = UserWithDetailsDto.class, errorMessage = "Parameter [user_id] is in invalid value.")
+    @MethodCall(withArgs = true, withReturnType = true, withStartTime = true)
+    @MethodExecutionTime(inMicros = true, inMillis = true)
     public UserWithDetailsDto getDetails(@RequestBody @NonNull UserWithDetailsDto dto) throws NoCreatedDetailsException {
 
         User user = this.converter.toEntity(dto, new User());

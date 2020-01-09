@@ -1,8 +1,10 @@
 package by.bsac.aspects;
 
+import by.bsac.annotations.validation.ParameterValidation;
 import by.bsac.aspects.debug.MethodCallAspect;
 import by.bsac.aspects.debug.MethodExecutionTimeAspect;
 import by.bsac.aspects.validation.ParameterValidationAspect;
+import by.bsac.aspects.validators.UserWithDetailsDtoParameterValidator;
 import by.bsac.core.debugging.LoggerLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +44,15 @@ public class AspectsBeans {
         MethodExecutionTimeAspect aspect = MethodExecutionTimeAspect.aspectOf();
         aspect.setLoggerLevel(LoggerLevel.INFO);
         LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("MethodExecutionTimeAspect").ofClass(MethodExecutionTimeAspect.class).forProfile("ASPECT_DEBUG")));
+        return aspect;
+    }
+
+    @Bean(name = "ParameterValidationAspect")
+    public ParameterValidationAspect getParameterValidationAspect() {
+        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("ParameterValidationAspect").ofClass(ParameterValidationAspect.class)));
+        ParameterValidationAspect aspect = ParameterValidationAspect.aspectOf();
+        aspect.addValidator(new UserWithDetailsDtoParameterValidator());
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of("ParameterValidationAspect").ofClass(ParameterValidationAspect.class)));
         return aspect;
     }
 

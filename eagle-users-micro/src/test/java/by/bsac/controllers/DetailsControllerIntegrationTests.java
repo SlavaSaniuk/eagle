@@ -35,7 +35,7 @@ import org.springframework.test.web.servlet.result.PrintingResultHandler;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ActiveProfiles("TEST")
+@ActiveProfiles({"TEST", "ASPECTS_DEBUG"})
 @SpringBootTest(classes = {ServicesConfiguration.class, DatasourcesConfig.class,
         WebMvcConfiguration.class, DtoConvertersConfiguration.class, FeignConfiguration.class,
         TestAspectsConfiguration.class, AspectsBeans.class})
@@ -124,7 +124,7 @@ public class DetailsControllerIntegrationTests {
     @Test
     public void createDetails_persistedUser_shouldCreateDetailsAndConfirmUserAccount() throws Exception {
 
-        User user = this.user_repository.findById(1).get();
+        User user = this.user_repository.findById(3).get();
         LOGGER.debug("Test user entity: " +user.toString());
 
         UserWithDetailsDto dto = new UserWithDetailsDto();
