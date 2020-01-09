@@ -100,7 +100,7 @@ public class DatasourcesConfig {
     }
 
     /**
-     * {@link DataSource} bean for "DEVELOPMENT" profile.
+     * {@link DataSource} bean for "TEST" profile.
      * Implementation of this bean is {@link DriverManagerDataSource} class.
      * @return - configured {@link DataSource}.
      */
