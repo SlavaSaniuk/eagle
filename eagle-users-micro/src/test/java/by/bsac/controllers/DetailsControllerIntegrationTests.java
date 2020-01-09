@@ -1,5 +1,7 @@
 package by.bsac.controllers;
 
+import by.bsac.aspects.AspectsBeans;
+import by.bsac.aspects.TestAspectsConfiguration;
 import by.bsac.configuration.DatasourcesConfig;
 import by.bsac.exceptions.NoCreatedDetailsException;
 import by.bsac.models.User;
@@ -8,10 +10,12 @@ import by.bsac.models.UserName;
 import by.bsac.repositories.UserRepository;
 import by.bsac.services.DetailsManager;
 import by.bsac.services.ServicesConfiguration;
+import by.bsac.services.feign.FeignConfiguration;
 import by.bsac.webmvc.DtoConvertersConfiguration;
 import by.bsac.webmvc.WebMvcConfiguration;
 
 import by.bsac.webmvc.dto.UserWithDetailsDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,7 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ActiveProfiles("TEST")
 @SpringBootTest(classes = {ServicesConfiguration.class, DatasourcesConfig.class,
-        WebMvcConfiguration.class, DtoConvertersConfiguration.class})
+        WebMvcConfiguration.class, DtoConvertersConfiguration.class, FeignConfiguration.class,
+        TestAspectsConfiguration.class, AspectsBeans.class})
 @EnableAutoConfiguration
 @AutoConfigureMockMvc
 @EntityScan("by.bsac.models")
@@ -112,6 +117,37 @@ public class DetailsControllerIntegrationTests {
 
         Exception exception = this.jackson_mapper.readValue(json_response, Exception.class);
         LOGGER.debug("Exception message: " +exception.getMessage());
+
+    }
+
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    @Test
+    public void createDetails_persistedUser_shouldCreateDetailsAndConfirmUserAccount() throws Exception {
+
+        User user = this.user_repository.findById(1).get();
+        LOGGER.debug("Test user entity: " +user.toString());
+
+        UserWithDetailsDto dto = new UserWithDetailsDto();
+        dto.setUserId(user.getUserId());
+        dto.setFirstName("FIRST-NAME");
+        dto.setLastName("LAST-NAME");
+
+        LOGGER.debug("Test UserWithDetailsDtoEntity: " +dto.toString());
+        String dto_json = this.jackson_mapper.writeValueAsString(dto);
+
+        String json_response = this.mock_mvc.perform(post("/details_create")
+            .contentType(MediaType.APPLICATION_JSON)
+            .characterEncoding("UTF-8")
+            .content(dto_json)
+        ).andExpect(status().is(200)
+        ).andDo(MockMvcResultHandlers.print(System.out)
+        ).andReturn().getResponse().getContentAsString();
+
+        UserWithDetailsDto result = this.jackson_mapper.readValue(json_response, UserWithDetailsDto.class);
+        LOGGER.debug("Dto result: " +result.toString());
+
+        Assertions.assertEquals(user.getUserId(), result.getUserId());
+
 
     }
 }

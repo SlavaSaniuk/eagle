@@ -1,11 +1,14 @@
 package by.bsac.webmvc.controllers;
 
 import by.bsac.core.beans.EmbeddedDeConverter;
+import by.bsac.core.logging.SpringCommonLogging;
 import by.bsac.exceptions.NoCreatedDetailsException;
 import by.bsac.models.User;
 import by.bsac.models.UserDetails;
 import by.bsac.models.UserName;
 import by.bsac.services.DetailsManager;
+import by.bsac.services.feign.clients.AccountsStatusesManager;
+import by.bsac.webmvc.dto.AccountWithStatusDto;
 import by.bsac.webmvc.dto.UserWithDetailsDto;
 import lombok.NonNull;
 import org.slf4j.Logger;
@@ -16,11 +19,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static by.bsac.configuration.LoggerDefaultLogs.*;
+import static by.bsac.core.logging.SpringCommonLogging.*;
 
 /**
  * Main controller od eagle-users-micro microservice.
  * Controller has a GRUD methods for controlling {@link UserDetails} entities.
  */
+@SuppressWarnings("AccessStaticViaInstance")
 @RestController
 public class DetailsController {
 
@@ -29,6 +34,7 @@ public class DetailsController {
     //Spring beans
     private DetailsManager details_manager;
     private EmbeddedDeConverter<UserWithDetailsDto> converter;
+    private AccountsStatusesManager asm; //Autowired via setter from FeignConfiguration.class
     //HTTP exception status codes
     private static final int NO_CREATED_DETAILS_EXCEPTION_STATUS_CODE = 441;
 
@@ -37,8 +43,7 @@ public class DetailsController {
      */
     //Default constructor
     public DetailsController() {
-        LOGGER.info(CREATION.beanCreationStart(this.getClass()));
-        LOGGER.info(CREATION.beanCreationFinish(this.getClass()));
+        LOGGER.info(SpringCommonLogging.CREATION.startCreateBean(BeanDefinition.of("DetailsController").ofClass(this.getClass())));
     }
 
     /**
@@ -59,7 +64,11 @@ public class DetailsController {
         details = this.details_manager.createDetails(user, details);
 
         //Confirm account status
-
+        AccountWithStatusDto status_dto = new AccountWithStatusDto();
+        status_dto.setAccountId(details.getDetailId());
+        LOGGER.debug("Account to confirm: " +status_dto.toString());
+        status_dto = this.asm.confirmAccount(status_dto);
+        LOGGER.debug("Confirmed account: " +status_dto.toString());
 
         //Create response dto
         UserWithDetailsDto response = this.converter.toDto(user, new UserWithDetailsDto());
@@ -110,5 +119,11 @@ public class DetailsController {
     public void setDeConverter(EmbeddedDeConverter<UserWithDetailsDto> a_converter) {
         LOGGER.debug(AUTOWIRING.viaSetter(a_converter.getClass(), this.getClass()));
         this.converter = a_converter;
+    }
+
+    @Autowired
+    public void setAccountsStatusesManager(AccountsStatusesManager a_asm) {
+        LOGGER.debug(DependencyManagement.autowireViaSetter(BeanDefinition.of("AccountStatusesManager").ofClass(AccountsStatusesManager.class), this.getClass()));
+        this.asm = a_asm;
     }
 }

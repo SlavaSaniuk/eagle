@@ -1,6 +1,7 @@
 package by.bsac.configuration;
 
 import by.bsac.configuration.properties.DatasourcesProperties;
+import by.bsac.core.logging.SpringCommonLogging;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import static by.bsac.configuration.LoggerDefaultLogs.*;
  * This class contains beans definition of {@link DataSource} beans
  * for different profiles.
  */
+@SuppressWarnings("AccessStaticViaInstance")
 @Configuration
 @EnableJpaRepositories("by.bsac.repositories")
 @EnableTransactionManagement
@@ -95,6 +97,29 @@ public class DatasourcesConfig {
 
         LOGGER.info(CREATION.beanCreationFinishForProfile(DataSource.class, PROFILE));
         return (DataSource) jndi.getObject();
+    }
+
+    /**
+     * {@link DataSource} bean for "DEVELOPMENT" profile.
+     * Implementation of this bean is {@link DriverManagerDataSource} class.
+     * @return - configured {@link DataSource}.
+     */
+    @Bean
+    @Profile("TEST")
+    public DataSource testDataSource() {
+
+        LOGGER.info(SpringCommonLogging.CREATION.startCreateBean(SpringCommonLogging.BeanDefinition.of(DataSource.class).forProfile("TEST")));
+        DriverManagerDataSource ds = new DriverManagerDataSource();
+
+        //Set database server URL
+        ds.setUrl(this.datasources_properties.getTest().getDatabaseUrl());
+        ds.setDriverClassName(this.datasources_properties.getTest().getDriverClassName());
+        ds.setUsername(this.datasources_properties.getTest().getUserName());
+        ds.setPassword(this.datasources_properties.getTest().getPassword());
+
+        LOGGER.info(SpringCommonLogging.CREATION.endCreateBean(SpringCommonLogging.BeanDefinition.of(DataSource.class).forProfile("TEST")));
+        return ds;
+
     }
 
 }
