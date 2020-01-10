@@ -17,6 +17,10 @@
             <version>2.2.1.RELEASE</version>
     </parent>
 
+    <properties>
+        <war.baseName>eagle-users-details</war.baseName>
+    </properties>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
         <dependency>
@@ -154,6 +158,25 @@
 
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>EAGLE_USERS_PRODUCTION</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <finalName>${war.baseName}</finalName>
+            </build>
+        </profile>
+
+        <profile>
+            <id>EAGLE_USERS_TESTS</id>
+            <build>
+                <finalName>${war.baseName}-tests</finalName>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -164,6 +187,7 @@
                     <target>8</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -188,9 +212,7 @@
                     <forkMode>always</forkMode>
                 </configuration>
             </plugin>
-
         </plugins>
-        <finalName>eagle-users-details</finalName>
     </build>
 
 </project>
