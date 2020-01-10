@@ -7,6 +7,13 @@
         <serverPort>36547</serverPort>
         <serverContext>/eagle-auth</serverContext>
     </server>
+    <server>
+        <serverId>2</serverId>
+        <serverName>eagle-authentication-microservice-test</serverName>
+        <serverIp>10.8.8.23</serverIp>
+        <serverPort>36547</serverPort>
+        <serverContext>/eagle-auth-tests</serverContext>
+    </server>
 </feignServers>
 
 

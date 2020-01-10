@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import javax.xml.bind.JAXBException;
 
@@ -39,15 +40,29 @@ public class FeignConfiguration {
     }
 
     //Feign clients
-    @SuppressWarnings({"DuplicatedCode", "ConstantConditions"})
+    @SuppressWarnings("ConstantConditions")
     @Bean(name = "AccountStatutesManager")
-    public AccountsStatusesManager getAccountStatusesManager() {
-        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("AccountStatusesManager").ofClass(AccountsStatusesManager.class)));
+    @Profile({"FEIGN_PRODUCTION", "FEIGN_DEVELOPMENT"})
+    public AccountsStatusesManager prodDevAccountStatusesManager() {
+        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("AccountStatusesManager").ofClass(AccountsStatusesManager.class).forProfile("FEIGN_PRODUCTION").forProfile("FEIGN_DEVELOPMENT")));
         final AccountsStatusesManager client = Feign.builder()
                 .encoder(this.getEncoder())
                 .decoder(this.getDecoder())
                 .target(AccountsStatusesManager.class, this.getFeignServerProperties().getServerByName("eagle-authentication-microservice").getFullServerPath());
-        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of("AccountStatusesManager").ofClass(AccountsStatusesManager.class)));
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of("AccountStatusesManager").ofClass(AccountsStatusesManager.class).forProfile("FEIGN_PRODUCTION").forProfile("FEIGN_DEVELOPMENT")));
+        return client;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Bean(name = "AccountStatutesManager")
+    @Profile("FEIGN_TEST")
+    public AccountsStatusesManager testAccountStatusesManager() {
+        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("AccountStatusesManager").ofClass(AccountsStatusesManager.class).forProfile("FEIGN_TEST")));
+        final AccountsStatusesManager client = Feign.builder()
+                .encoder(this.getEncoder())
+                .decoder(this.getDecoder())
+                .target(AccountsStatusesManager.class, this.getFeignServerProperties().getServerByName("eagle-authentication-microservice").getFullServerPath());
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of("AccountStatusesManager").ofClass(AccountsStatusesManager.class).forProfile("FEIGN_TEST")));
         return client;
     }
 

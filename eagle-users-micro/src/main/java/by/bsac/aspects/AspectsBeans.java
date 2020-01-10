@@ -1,6 +1,5 @@
 package by.bsac.aspects;
 
-import by.bsac.annotations.validation.ParameterValidation;
 import by.bsac.aspects.debug.MethodCallAspect;
 import by.bsac.aspects.debug.MethodExecutionTimeAspect;
 import by.bsac.aspects.validation.ParameterValidationAspect;
@@ -32,7 +31,7 @@ public class AspectsBeans {
     public MethodCallAspect getMethodCallAspect() {
         LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("MethodCallAspect").ofClass(MethodCallAspect.class).forProfile("ASPECT_DEBUG")));
         MethodCallAspect aspect = MethodCallAspect.aspectOf();
-        aspect.setLoggerLevel(LoggerLevel.INFO);
+        aspect.setLoggerLevel(LoggerLevel.DEBUG);
         LOGGER.info(CREATION.endCreateBean(BeanDefinition.of("MethodCallAspect").ofClass(MethodCallAspect.class).forProfile("ASPECT_DEBUG")));
         return aspect;
     }
@@ -42,7 +41,7 @@ public class AspectsBeans {
     public MethodExecutionTimeAspect getMethodExecutionTimeAspect() {
         LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("MethodExecutionTimeAspect").ofClass(MethodExecutionTimeAspect.class).forProfile("ASPECT_DEBUG")));
         MethodExecutionTimeAspect aspect = MethodExecutionTimeAspect.aspectOf();
-        aspect.setLoggerLevel(LoggerLevel.INFO);
+        aspect.setLoggerLevel(LoggerLevel.DEBUG);
         LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("MethodExecutionTimeAspect").ofClass(MethodExecutionTimeAspect.class).forProfile("ASPECT_DEBUG")));
         return aspect;
     }
