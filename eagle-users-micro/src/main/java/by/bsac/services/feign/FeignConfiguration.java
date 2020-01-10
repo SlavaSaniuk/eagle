@@ -61,7 +61,7 @@ public class FeignConfiguration {
         final AccountsStatusesManager client = Feign.builder()
                 .encoder(this.getEncoder())
                 .decoder(this.getDecoder())
-                .target(AccountsStatusesManager.class, this.getFeignServerProperties().getServerByName("eagle-authentication-microservice").getFullServerPath());
+                .target(AccountsStatusesManager.class, this.getFeignServerProperties().getServerByName("eagle-authentication-microservice-test").getFullServerPath());
         LOGGER.info(CREATION.endCreateBean(BeanDefinition.of("AccountStatusesManager").ofClass(AccountsStatusesManager.class).forProfile("FEIGN_TEST")));
         return client;
     }
