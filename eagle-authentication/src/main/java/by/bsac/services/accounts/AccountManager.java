@@ -2,6 +2,7 @@ package by.bsac.services.accounts;
 
 import by.bsac.exceptions.AccountNotRegisteredException;
 import by.bsac.exceptions.EmailAlreadyRegisteredException;
+import by.bsac.exceptions.NoConfirmedAccountException;
 import by.bsac.models.Account;
 import by.bsac.models.AccountStatus;
 import by.bsac.models.Status;
@@ -81,7 +82,7 @@ public class AccountManager implements AccountManagementService, InitializingBea
 
     @Override
     @Nullable
-    public User login(Account account) {
+    public User login(Account account) throws NoConfirmedAccountException {
 
         if (account == null || account.getAccountEmail() == null || account.getAccountPassword() == null) throw new NullPointerException("Account, password or email object is null");
         if (account.getAccountEmail().isEmpty()) throw new IllegalArgumentException("Account email string is empty.");
@@ -97,9 +98,13 @@ public class AccountManager implements AccountManagementService, InitializingBea
         account.setAccountPassword(null);
 
         //Compare password hashes
-        if (!founded.getAccountPasswordHash().equals(DatatypeConverter.printHexBinary(password_hash))) return null; //If password hashes are not same
-        else return founded.getAccountUser(); //If password hashes are same
+        if (!founded.getAccountPasswordHash().equals(DatatypeConverter.printHexBinary(password_hash))) return null; //If password hashes are not same - return null
 
+        //Check if account is confirmed
+        if (founded.getAccountStatus().getStatus() != Status.CONFIRMED)
+            throw new NoConfirmedAccountException(String.format("Account [%s] not confirmed.", founded.toString()));
+
+        return founded.getAccountUser();
     }
 
     @Override

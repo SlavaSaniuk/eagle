@@ -2,6 +2,7 @@ package by.bsac.webmvc.controllers;
 
 import by.bsac.exceptions.AccountNotRegisteredException;
 import by.bsac.exceptions.EmailAlreadyRegisteredException;
+import by.bsac.exceptions.NoConfirmedAccountException;
 import by.bsac.models.Account;
 import by.bsac.models.User;
 import by.bsac.services.accounts.AccountManagementService;
@@ -30,7 +31,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/login", headers = {"content-type=application/json"}, produces = {"application/json"})
-    public User login(@RequestBody Account account) throws AccountNotRegisteredException {
+    public User login(@RequestBody Account account) throws AccountNotRegisteredException, NoConfirmedAccountException {
 
             User user = this.ams.login(account);
 

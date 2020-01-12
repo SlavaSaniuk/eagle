@@ -1,5 +1,6 @@
 package by.bsac.services.accounts;
 
+import by.bsac.exceptions.NoConfirmedAccountException;
 import by.bsac.models.Account;
 import by.bsac.models.AccountStatus;
 import by.bsac.models.User;
@@ -11,7 +12,7 @@ public interface AccountManagementService {
     @Transactional
     User register(Account account);
 
-    @Nullable User login(Account account);
+    @Nullable User login(Account account) throws NoConfirmedAccountException;
 
     /**
      * Confirm user account. Method change {@link AccountStatus#getStatus()}

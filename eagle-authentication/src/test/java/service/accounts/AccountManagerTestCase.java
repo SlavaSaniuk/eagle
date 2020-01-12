@@ -2,6 +2,7 @@ package service.accounts;
 
 import by.bsac.exceptions.AccountNotRegisteredException;
 import by.bsac.exceptions.EmailAlreadyRegisteredException;
+import by.bsac.exceptions.NoConfirmedAccountException;
 import by.bsac.models.Account;
 import by.bsac.models.User;
 import by.bsac.repositories.AccountRepository;
@@ -143,7 +144,7 @@ class AccountManagerTestCase {
     }
 
     @Test
-    void login_accountPasswordIsIncorrect_shouldReturnNull() {
+    void login_accountPasswordIsIncorrect_shouldReturnNull() throws NoConfirmedAccountException {
 
         Account persisted = new Account();
         persisted.setAccountPasswordSalt("");
@@ -159,7 +160,7 @@ class AccountManagerTestCase {
     }
 
     @Test
-    void login_registeredAccountWithValidPassword_shouldReturnAccountUser() {
+    void login_registeredAccountWithValidPassword_shouldReturnAccountUser() throws NoConfirmedAccountException {
 
         Account persisted = new Account();
         persisted.setAccountUser(new User());
