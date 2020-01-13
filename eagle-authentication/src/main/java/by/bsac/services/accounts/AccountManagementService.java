@@ -12,6 +12,16 @@ public interface AccountManagementService {
     @Transactional
     User register(Account account);
 
+    /**
+     * Method retrieve account entity from database by account email {@link Account#getAccountEmail()},
+     * hash password and compare it's with retrieved entity password hash.
+     * Return {@link User} entity if passwords are same, or null in other wise.
+     * In cases when account entity has an account status {@link by.bsac.models.Status#CREATED}
+     * method throw new {@link NoConfirmedAccountException}.
+     * @param account - {@link Account} entity with email address.
+     * @return - link User} entity if passwords are same, or null in other wise.
+     * @throws NoConfirmedAccountException - If account entity has an account status {@link by.bsac.models.Status#CREATED}.
+     */
     @Nullable User login(Account account) throws NoConfirmedAccountException;
 
     /**
