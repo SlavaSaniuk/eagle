@@ -1,10 +1,13 @@
 package by.bsac.services;
 
+import by.bsac.core.logging.SpringCommonLogging;
 import by.bsac.repositories.AccountRepository;
 import by.bsac.repositories.AccountStatusRepository;
 import by.bsac.repositories.UserRepository;
 import by.bsac.services.accounts.AccountManagementService;
 import by.bsac.services.accounts.AccountManager;
+import by.bsac.services.accounts.AccountsCrudService;
+import by.bsac.services.accounts.AccountsCrudServiceImpl;
 import by.bsac.services.security.hashing.HashAlgorithm;
 import by.bsac.services.security.hashing.PasswordHash;
 import by.bsac.services.security.hashing.PasswordHasher;
@@ -55,6 +58,17 @@ public class ServicesConfiguration {
         manager.setStatusRepository(this.status_repository);
 
         return manager;
+    }
+
+    @Bean("AccountsCrudService")
+    public AccountsCrudService getAccountsCrudService() {
+        LOGGER.info(SpringCommonLogging.CREATION.startCreateBean(AccountsCrudService.DEFINITION));
+        AccountsCrudServiceImpl acs = new AccountsCrudServiceImpl();
+
+        acs.setAccountRepository(this.account_repository);
+
+        LOGGER.info(SpringCommonLogging.CREATION.endCreateBean(AccountsCrudService.DEFINITION));
+        return acs;
     }
 
     //Spring autowiring
