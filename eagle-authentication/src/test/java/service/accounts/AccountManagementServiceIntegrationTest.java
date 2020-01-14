@@ -4,6 +4,7 @@ import by.bsac.conf.DatasourcesConfiguration;
 import by.bsac.conf.PersistenceConfiguration;
 import by.bsac.exceptions.AccountNotRegisteredException;
 import by.bsac.exceptions.EmailAlreadyRegisteredException;
+import by.bsac.exceptions.NoConfirmedAccountException;
 import by.bsac.models.Account;
 import by.bsac.models.User;
 import by.bsac.services.ServicesConfiguration;
@@ -67,7 +68,7 @@ class AccountManagementServiceIntegrationTest {
     }
 
     @Test
-    void login_accountRegistered_passwordIsIncorrect_shouldReturnNull() {
+    void login_accountRegistered_passwordIsIncorrect_shouldReturnNull() throws NoConfirmedAccountException {
 
         Account account = new Account();
         account.setAccountEmail("test@test.com");
@@ -77,7 +78,7 @@ class AccountManagementServiceIntegrationTest {
     }
 
     @Test
-    void login_accountRegistered_passwordIsCorrect_shouldReturnAccountUser() {
+    void login_accountRegistered_passwordIsCorrect_shouldReturnAccountUser() throws NoConfirmedAccountException {
 
         Account account = new Account();
         account.setAccountEmail("test@test.com");

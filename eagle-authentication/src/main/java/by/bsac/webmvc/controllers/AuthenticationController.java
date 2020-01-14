@@ -2,6 +2,7 @@ package by.bsac.webmvc.controllers;
 
 import by.bsac.exceptions.AccountNotRegisteredException;
 import by.bsac.exceptions.EmailAlreadyRegisteredException;
+import by.bsac.exceptions.NoConfirmedAccountException;
 import by.bsac.models.Account;
 import by.bsac.models.User;
 import by.bsac.services.accounts.AccountManagementService;
@@ -23,6 +24,7 @@ public class AuthenticationController {
     //Controller fields
     private static final int EMAIL_ALREADY_REGISTERED_EXCEPTION_STATUS_CODE = 431;
     private static final int ACCOUNT_NOT_REGISTERED_EXCEPTION_STATUS_CODE = 432;
+    private static final int NO_CONFIRMED_ACCOUNT_EXCEPTION_STATUS_CODE = 433;
 
     @PostMapping(value = "/register", headers = {"content-type=application/json"}, produces = {"application/json"})
     public @ResponseBody User register(@RequestBody Account account) throws EmailAlreadyRegisteredException {
@@ -30,7 +32,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/login", headers = {"content-type=application/json"}, produces = {"application/json"})
-    public User login(@RequestBody Account account) throws AccountNotRegisteredException {
+    public User login(@RequestBody Account account) throws AccountNotRegisteredException, NoConfirmedAccountException {
 
             User user = this.ams.login(account);
 
@@ -60,6 +62,22 @@ public class AuthenticationController {
         exception_body.setStatusCode(ACCOUNT_NOT_REGISTERED_EXCEPTION_STATUS_CODE);
 
         return ResponseEntity.status(ACCOUNT_NOT_REGISTERED_EXCEPTION_STATUS_CODE).contentType(MediaType.APPLICATION_JSON).body(exception_body);
+    }
+
+    /**
+     * Controller method handle {@link NoConfirmedAccountException} exception in cases when
+     * user want to login co confirmed account.
+     * @param exc - {@link AccountNotRegisteredException} exception object.
+     * @return - {@link ResponseEntity} object.
+     */
+    @ExceptionHandler(NoConfirmedAccountException.class)
+    public ResponseEntity<ExceptionResponseBody> handleNoConfirmedAccountException(NoConfirmedAccountException exc) {
+
+        //Create exception body
+        ExceptionResponseBody exception_body = new ExceptionResponseBody(exc);
+        exception_body.setStatusCode(NO_CONFIRMED_ACCOUNT_EXCEPTION_STATUS_CODE);
+
+        return ResponseEntity.status(NO_CONFIRMED_ACCOUNT_EXCEPTION_STATUS_CODE).contentType(MediaType.APPLICATION_JSON).body(exception_body);
     }
 
     @Autowired

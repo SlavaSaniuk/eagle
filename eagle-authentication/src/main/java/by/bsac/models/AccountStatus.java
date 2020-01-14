@@ -1,5 +1,6 @@
 package by.bsac.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,14 +14,16 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "account_status")
-@Getter @Setter
+@Getter
 public class AccountStatus implements Serializable {
 
     @Id
+    @Setter
     private Integer status_id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 10)
+    @Setter
     private Status status;
 
     @OneToOne
@@ -36,4 +39,8 @@ public class AccountStatus implements Serializable {
         this.status = Status.CREATED;
     }
 
+    @JsonIgnore
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 }

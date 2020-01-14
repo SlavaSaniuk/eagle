@@ -39,7 +39,6 @@ public class Account implements Serializable {
     private User account_user;
 
     @OneToOne(mappedBy = "account")
-    @Setter
     private AccountStatus account_status;
 
     @Transient
@@ -49,6 +48,11 @@ public class Account implements Serializable {
     @JsonIgnore
     public void setAccountUser(User account_user) {
         this.account_user = account_user;
+    }
+
+    @JsonIgnore
+    public void setAccountStatus(AccountStatus status) {
+        this.account_status = status;
     }
 
 }

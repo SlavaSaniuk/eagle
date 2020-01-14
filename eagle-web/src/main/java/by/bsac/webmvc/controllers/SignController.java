@@ -98,7 +98,10 @@ public class SignController {
 
         //Put user attribute to session
         mav.getModel().put("common_user", account_user);
+        return redirectToCreateDetailsView(mav);
+    }
 
+    private ModelAndView redirectToCreateDetailsView(ModelAndView mav) {
         mav.setViewName("redirect:/about-user");
         return mav;
     }

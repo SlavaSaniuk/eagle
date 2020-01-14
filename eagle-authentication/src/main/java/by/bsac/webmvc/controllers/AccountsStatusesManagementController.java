@@ -1,7 +1,7 @@
 package by.bsac.webmvc.controllers;
 
-import by.bsac.annotations.MethodCall;
-import by.bsac.annotations.MethodExecutionTime;
+import by.bsac.annotations.debug.MethodCall;
+import by.bsac.annotations.debug.MethodExecutionTime;
 import by.bsac.core.beans.DtoEntityConverter;
 import by.bsac.models.Account;
 import by.bsac.services.accounts.AccountManagementService;

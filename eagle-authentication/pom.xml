@@ -175,7 +175,7 @@
         <dependency>
             <groupId>by.bsac</groupId>
             <artifactId>ltori</artifactId>
-            <version>0.2</version>
+            <version>0.4</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.aspectj</groupId>
@@ -219,54 +219,15 @@
                 </configuration>
             </plugin>
 
-            <!-- AspectJ compile time weaving maven plugin -->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <version>1.11</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.20.1</version>
                 <configuration>
-
-                    <source>${compiler.version}</source>
-                    <target>${compiler.version}</target>
-                    <complianceLevel>${compiler.version}</complianceLevel>
-
-                    <showWeaveInfo>true</showWeaveInfo>
-                    <verbose>true</verbose>
-
-                    <excludes>
-                        <exclude>**/*.java</exclude>
-                    </excludes>
-                    <forceAjcCompile>true</forceAjcCompile>
-                    <sources/>
-
-                    <weaveDirectories>
-                        <weaveDirectory>${project.build.directory}/classes</weaveDirectory>
-                        <weaveDirectory>${project.build.directory}/test-classes</weaveDirectory>
-                    </weaveDirectories>
-
-                    <aspectLibraries>
-                        <aspectLibrary>
-                            <groupId>by.bsac</groupId>
-                            <artifactId>ltori</artifactId>
-                        </aspectLibrary>
-                    </aspectLibraries>
+                    <argLine>-javaagent:${settings.localRepository}/org/springframework/spring-instrument/5.2.2.RELEASE/spring-instrument-5.2.2.RELEASE.jar -javaagent:"${settings.localRepository}"/org/aspectj/aspectjweaver/1.9.5/aspectjweaver-1.9.5.jar</argLine>
+                    <useSystemClassLoader>true</useSystemClassLoader>
+                    <forkMode>always</forkMode>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>test-compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjtools -->
-                    <dependency>
-                        <groupId>org.aspectj</groupId>
-                        <artifactId>aspectjtools</artifactId>
-                        <version>1.9.5</version>
-                    </dependency>
-                </dependencies>
             </plugin>
 
         </plugins>
