@@ -2,6 +2,7 @@ package by.bsac.services;
 
 import by.bsac.annotations.debug.MethodCall;
 import by.bsac.annotations.debug.MethodExecutionTime;
+import by.bsac.aspects.AspectsBeans;
 import by.bsac.aspects.TestsAspectsConfiguration;
 import by.bsac.conf.DatasourcesConfiguration;
 import by.bsac.conf.PersistenceConfiguration;
@@ -16,9 +17,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-@ActiveProfiles({"TEST", "ASPECTS_DEBUG"})
+@ActiveProfiles("TEST")
 @SpringJUnitConfig(classes = {DatasourcesConfiguration.class, PersistenceConfiguration.class,
-        ServicesConfiguration.class, TestsAspectsConfiguration.class})
+        ServicesConfiguration.class, TestsAspectsConfiguration.class, AspectsBeans.class})
 @Sql("classpath:/repositories/account-imports.sql")
 public class AccountCrudServiceIntegrationTest {
 
@@ -41,6 +42,18 @@ public class AccountCrudServiceIntegrationTest {
         Assertions.assertEquals(1, founded.getAccountId());
         Assertions.assertEquals(ACCOUNT_EMAIL, founded.getAccountEmail());
 
+        LOGGER.debug("Founded account: " +founded.toString());
+    }
+
+    @Test
+    @MethodCall(withStartTime = true, withArgs = true)
+    @MethodExecutionTime(inMicros = true)
+    void getById_accountIdIs1_shouldReturnAccountWithId1() {
+
+        final Integer ACCOUNT_ID = 1;
+        Account founded = this.acs.getById(1);
+
+        Assertions.assertEquals(ACCOUNT_ID, founded.getAccountId());
         LOGGER.debug("Founded account: " +founded.toString());
     }
 

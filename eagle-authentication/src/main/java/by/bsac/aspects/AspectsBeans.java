@@ -2,6 +2,8 @@ package by.bsac.aspects;
 
 import by.bsac.aspects.debug.MethodCallAspect;
 import by.bsac.aspects.debug.MethodExecutionTimeAspect;
+import by.bsac.aspects.validation.ParameterValidationAspect;
+import by.bsac.aspects.validators.IdParameterValidator;
 import by.bsac.core.debugging.LoggerLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,4 +48,16 @@ public class AspectsBeans {
         LOGGER.info(CREATION.endCreateBean(BeanDefinition.of("MethodExecutionTimeAspect").ofClass(MethodExecutionTimeAspect.class).forProfile("ASPECTS_DEBUG")));
         return aspect;
     }
+
+    @Bean(name = "ParameterValidationAspect")
+    public ParameterValidationAspect getParameterValidationAspect() {
+        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("ParameterValidationAspect").ofClass(ParameterValidationAspect.class)));
+        ParameterValidationAspect aspect = new ParameterValidationAspect();
+
+        aspect.addValidator(new IdParameterValidator()); //IdParameterValidator
+
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of("ParameterValidationAspect").ofClass(ParameterValidationAspect.class)));
+        return aspect;
+    }
+
 }

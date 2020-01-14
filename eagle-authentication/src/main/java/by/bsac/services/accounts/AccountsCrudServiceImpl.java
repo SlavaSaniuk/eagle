@@ -1,5 +1,7 @@
 package by.bsac.services.accounts;
 
+import by.bsac.annotations.validation.ParameterValidation;
+import by.bsac.aspects.validators.IdParameterValidator;
 import by.bsac.models.Account;
 import by.bsac.repositories.AccountRepository;
 import org.slf4j.Logger;
@@ -31,9 +33,11 @@ public class AccountsCrudServiceImpl implements AccountsCrudService, Initializin
         return null;
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
+    @ParameterValidation(value = IdParameterValidator.class, parametersClasses = Integer.class, errorMessage = "Account ID is in invalid value;")
     public Account getById(Integer id) {
-        return null;
+        return this.account_repository.findById(id).get();
     }
 
     @Override
@@ -47,7 +51,7 @@ public class AccountsCrudServiceImpl implements AccountsCrudService, Initializin
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         //Check dependencies
         if (this.account_repository == null)
             throw new BeanCreationException(String.format("Dependency of [%s] is null.", AccountRepository.class.getCanonicalName()));
