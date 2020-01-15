@@ -22,6 +22,10 @@ public class IdParameterValidator implements ParameterValidator {
         //Cast to Integer
          Integer ID =  (Integer) list.get(0);
 
+        return this.validate(ID);
+    }
+
+    public boolean validate(Integer ID) {
         //Check at null
         if (ID == null) {
             LOGGER.warn("ID of required entity is [null];");

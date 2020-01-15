@@ -6,6 +6,7 @@ import by.bsac.aspects.AspectsBeans;
 import by.bsac.aspects.TestsAspectsConfiguration;
 import by.bsac.conf.DatasourcesConfiguration;
 import by.bsac.conf.PersistenceConfiguration;
+import by.bsac.core.validation.exceptions.NoValidParameterException;
 import by.bsac.models.Account;
 import by.bsac.services.accounts.AccountsCrudService;
 import org.junit.jupiter.api.Assertions;
@@ -13,9 +14,13 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.security.InvalidParameterException;
 
 @ActiveProfiles("TEST")
 @SpringJUnitConfig(classes = {DatasourcesConfiguration.class, PersistenceConfiguration.class,
@@ -51,10 +56,30 @@ public class AccountCrudServiceIntegrationTest {
     void getById_accountIdIs1_shouldReturnAccountWithId1() {
 
         final Integer ACCOUNT_ID = 1;
-        Account founded = this.acs.getById(1);
+        Account founded = this.acs.getById(ACCOUNT_ID);
 
         Assertions.assertEquals(ACCOUNT_ID, founded.getAccountId());
         LOGGER.debug("Founded account: " +founded.toString());
     }
 
+    @Test
+    @MethodCall(withStartTime = true, withArgs = true)
+    @MethodExecutionTime(inMicros = true)
+    void getById_accountIdIsNegativeValue_shouldThrowInvalidParameterException() {
+        Assertions.assertThrows(NoValidParameterException.class, () -> this.acs.getById(-1));
+    }
+
+    @Test
+    @MethodCall(withStartTime = true, withArgs = true)
+    @MethodExecutionTime(inMicros = true)
+    @Transactional
+    @Commit
+    void delete_accountIdIs1_shouldDeleteAccountWithId1() {
+        final Integer ACCOUNT_ID = 1;
+
+        Account account = new Account();
+        account.setAccountId(ACCOUNT_ID);
+
+        this.acs.delete(account);
+    }
 }

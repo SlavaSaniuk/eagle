@@ -1,6 +1,7 @@
 package by.bsac.services.accounts;
 
 import by.bsac.annotations.validation.ParameterValidation;
+import by.bsac.aspects.validators.AccountIdParameterValidator;
 import by.bsac.aspects.validators.IdParameterValidator;
 import by.bsac.models.Account;
 import by.bsac.repositories.AccountRepository;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
@@ -40,9 +42,13 @@ public class AccountsCrudServiceImpl implements AccountsCrudService, Initializin
         return this.account_repository.findById(id).get();
     }
 
-    @Override
-    public void delete(Account entity) {
 
+    @Override
+    @Transactional
+    @ParameterValidation(value = AccountIdParameterValidator.class, parametersClasses = Account.class, errorMessage = "Account ID is in invalid value;")
+    public void delete(Account entity) {
+        LOGGER.debug(String.format("Delete account entity with id [%d].", entity.getAccountId()));
+        this.account_repository.deleteById(entity.getAccountId());
     }
 
     @Override

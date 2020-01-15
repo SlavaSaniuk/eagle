@@ -3,22 +3,30 @@ package by.bsac.aspects;
 import by.bsac.aspects.debug.MethodCallAspect;
 import by.bsac.aspects.debug.MethodExecutionTimeAspect;
 import by.bsac.aspects.validation.ParameterValidationAspect;
+import by.bsac.aspects.validators.AccountIdParameterValidator;
 import by.bsac.aspects.validators.IdParameterValidator;
 import by.bsac.core.debugging.LoggerLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
 @SuppressWarnings("AccessStaticViaInstance")
 @Configuration("AspectsBeans")
+@Import(ParametersValidatorsConfiguration.class)
 public class AspectsBeans {
 
     //Logger
     private static final Logger LOGGER = LoggerFactory.getLogger(AspectsBeans.class);
+    //Spring beans
+    private IdParameterValidator id_validator; //Autowired for ParametersValidatorsConfiguration class
+    private AccountIdParameterValidator account_id_validator; //Autowired for ParametersValidatorsConfiguration class
 
     public AspectsBeans() {
         LOGGER.info(INITIALIZATION.startInitializeConfiguration(AspectsBeans.class));
@@ -52,12 +60,27 @@ public class AspectsBeans {
     @Bean(name = "ParameterValidationAspect")
     public ParameterValidationAspect getParameterValidationAspect() {
         LOGGER.info(CREATION.startCreateBean(BeanDefinition.of("ParameterValidationAspect").ofClass(ParameterValidationAspect.class)));
-        ParameterValidationAspect aspect = new ParameterValidationAspect();
+        ParameterValidationAspect aspect = ParameterValidationAspect.aspectOf();
 
-        aspect.addValidator(new IdParameterValidator()); //IdParameterValidator
+        aspect.addValidator(this.id_validator); //IdParameterValidator
+        aspect.addValidator(this.account_id_validator); //AccountIdParameterValidator
 
         LOGGER.info(CREATION.endCreateBean(BeanDefinition.of("ParameterValidationAspect").ofClass(ParameterValidationAspect.class)));
         return aspect;
+    }
+
+    //Spring autowiring
+
+    @Autowired @Qualifier("IdParameterValidator")
+    public void setIdValidator(IdParameterValidator validator) {
+        LOGGER.info(DependencyManagement.autowireViaSetter(BeanDefinition.of("IdParameterValidator").ofClass(IdParameterValidator.class), AspectsBeans.class));
+        this.id_validator = validator;
+    }
+
+    @Autowired @Qualifier("AccountIdParameterValidator")
+    public void setAccountIdValidator(AccountIdParameterValidator validator) {
+        LOGGER.info(DependencyManagement.autowireViaSetter(BeanDefinition.of("AccountIdParameterValidator").ofClass(AccountIdParameterValidator.class), AspectsBeans.class));
+        this.account_id_validator = validator;
     }
 
 }
