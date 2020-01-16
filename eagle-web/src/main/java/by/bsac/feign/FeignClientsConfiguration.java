@@ -3,6 +3,7 @@ package by.bsac.feign;
 import by.bsac.conf.properties.FeignServersProperties;
 import by.bsac.core.logging.SpringCommonLogging;
 import by.bsac.feign.clients.AccountManagementService;
+import by.bsac.feign.clients.AccountsCrudService;
 import by.bsac.feign.clients.UserDetailsService;
 import feign.Feign;
 import feign.Request;
@@ -12,14 +13,13 @@ import feign.codec.ErrorDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import static by.bsac.conf.LoggerDefaultLogs.*;
 
-@SuppressWarnings("AccessStaticViaInstance")
+@SuppressWarnings({"AccessStaticViaInstance", "DuplicatedCode", "ConstantConditions"})
 @Configuration
 public class FeignClientsConfiguration {
 
@@ -82,8 +82,43 @@ public class FeignClientsConfiguration {
         return ams;
     }
 
-    @Bean(name = "UsersDetailsService")
+    @Bean
     @Profile({"FEIGN_PRODUCTION", "FEIGN_DEVELOPMENT"})
+    public AccountsCrudService getProdDevAccountsCrudService() {
+        LOGGER.info(SpringCommonLogging.CREATION.startCreateBean(SpringCommonLogging.BeanDefinition.of(AccountManagementService.class).forProfile("FEIGN_PRODUCTION_DEVELOPMENT")));
+
+        String URL = this.feign_properties.getServerByName("eagle-authentication-microservice").getFullServerPath();
+        assert URL != null;
+
+        AccountsCrudService ams = Feign.builder()
+                .encoder(this.encoder)
+                .decoder(this.decoder)
+                .errorDecoder(this.error_decoder)
+                .target(AccountsCrudService.class, URL);
+
+        LOGGER.info(SpringCommonLogging.CREATION.endCreateBean(SpringCommonLogging.BeanDefinition.of(AccountManagementService.class).forProfile("FEIGN_PRODUCTION_DEVELOPMENT")));
+        return ams;
+    }
+
+    @Bean
+    @Profile({"FEIGN_TEST"})
+    public AccountsCrudService getTestAccountsCrudService() {
+        LOGGER.info(SpringCommonLogging.CREATION.startCreateBean(SpringCommonLogging.BeanDefinition.of(AccountManagementService.class).forProfile("FEIGN_TEST")));
+
+        String URL = this.feign_properties.getServerByName("eagle-authentication-microservice-test").getFullServerPath();
+        assert URL != null;
+
+        AccountsCrudService ams = Feign.builder()
+                .encoder(this.encoder)
+                .decoder(this.decoder)
+                .errorDecoder(this.error_decoder)
+                .target(AccountsCrudService.class, URL);
+
+        LOGGER.info(SpringCommonLogging.CREATION.endCreateBean(SpringCommonLogging.BeanDefinition.of(AccountManagementService.class).forProfile("FEIGN_TEST")));
+        return ams;
+    }
+
+    @Bean(name = "UsersDetailsService")
     public UserDetailsService getUserDetailsService() {
         LOGGER.info(CREATION.beanCreationStart(UserDetailsService.class));
         UserDetailsService uds = Feign.builder()

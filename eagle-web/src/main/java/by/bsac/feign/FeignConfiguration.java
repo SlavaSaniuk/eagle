@@ -4,6 +4,7 @@ import by.bsac.conf.properties.FeignServersProperties;
 import by.bsac.core.logging.SpringCommonLogging;
 import by.bsac.models.xml.FeignServersModel;
 import by.bsac.services.xml.XmlConverter;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import feign.codec.Decoder;
@@ -63,6 +64,9 @@ public class FeignConfiguration {
     public ObjectMapper jacksonObjectMapper() {
         LOGGER.info(CREATION.beanCreationFinish(ObjectMapper.class));
         ObjectMapper mapper = new ObjectMapper();
+
+        mapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
 
