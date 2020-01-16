@@ -23,11 +23,11 @@ public class UserWithAccountDto implements Serializable {
     private Integer account_id;
     private Integer status_id;
 
-    @DtoProperty(entityProperty = "user_id_alias")
-    private String user_alias;
-
     @DtoProperty(entityProperty = "account_email")
     private String account_email;
+
+    @DtoProperty(entityProperty = "account_password")
+    private String account_password;
 
     @DtoProperty(entityProperty = "status")
     private Status account_status;

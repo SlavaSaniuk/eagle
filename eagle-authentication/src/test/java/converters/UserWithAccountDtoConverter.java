@@ -49,7 +49,6 @@ public class UserWithAccountDtoConverter {
         Assertions.assertEquals(SHARED_ID, dto.getAccountId());
         Assertions.assertEquals(SHARED_ID, dto.getStatusId());
 
-        Assertions.assertEquals(user.getUserIdAlias(), dto.getUserAlias());
         Assertions.assertEquals(account.getAccountEmail(), dto.getAccountEmail());
         Assertions.assertEquals(status.getStatus(), dto.getAccountStatus());
 
@@ -66,14 +65,12 @@ public class UserWithAccountDtoConverter {
         dto.setStatusId(SHARED_ID);
         dto.setAccountEmail("ACCOUNT-EMAIL");
         dto.setAccountStatus(Status.CONFIRMED);
-        dto.setUserAlias("USER-ALIAS");
 
         User user = this.CONVERTER.toEntity(dto, new User());
         Account account = this.CONVERTER.toEntity(dto, new Account());
         AccountStatus status = this.CONVERTER.toEntity(dto, new AccountStatus());
 
         Assertions.assertEquals(SHARED_ID, user.getUserId());
-        Assertions.assertEquals(dto.getUserAlias(), user.getUserIdAlias());
 
         Assertions.assertEquals(SHARED_ID, account.getAccountId());
         Assertions.assertEquals(dto.getAccountEmail(), account.getAccountEmail());

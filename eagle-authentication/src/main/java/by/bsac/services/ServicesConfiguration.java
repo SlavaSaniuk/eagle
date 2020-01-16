@@ -62,13 +62,13 @@ public class ServicesConfiguration {
 
     @Bean("AccountsCrudService")
     public AccountsCrudService getAccountsCrudService() {
-        LOGGER.info(SpringCommonLogging.CREATION.startCreateBean(AccountsCrudService.DEFINITION));
+        LOGGER.info(SpringCommonLogging.CREATION.startCreateBean(SpringCommonLogging.BeanDefinition.of("AccountsCrudService").ofClass(AccountsCrudServiceImpl.class)));
         AccountsCrudServiceImpl acs = new AccountsCrudServiceImpl();
 
         acs.setAccountRepository(this.account_repository);
         acs.setAccountManagementService(this.accountManager());
 
-        LOGGER.info(SpringCommonLogging.CREATION.endCreateBean(AccountsCrudService.DEFINITION));
+        LOGGER.info(SpringCommonLogging.CREATION.endCreateBean(SpringCommonLogging.BeanDefinition.of("AccountsCrudService").ofClass(AccountsCrudServiceImpl.class)));
         return acs;
     }
 
