@@ -3,6 +3,7 @@ package by.bsac.webmvc.controllers;
 import by.bsac.core.beans.EmbeddedDeConverter;
 import by.bsac.exceptions.AccountAlreadyRegisteredException;
 import by.bsac.exceptions.AccountNotRegisteredException;
+import by.bsac.exceptions.NoConfirmedAccountException;
 import by.bsac.exceptions.NoCreatedDetailsException;
 import by.bsac.feign.clients.AccountManagementService;
 import by.bsac.feign.clients.UserDetailsService;
@@ -62,6 +63,11 @@ public class SignController {
         }catch (AccountNotRegisteredException exc) {
             LOGGER.debug(exc.getMessage());
             mav.setViewName("redirect://sign?form=signup");
+            return mav;
+        }catch (NoConfirmedAccountException exc) {
+            LOGGER.warn(exc.getMessage());
+
+
             return mav;
         }
 

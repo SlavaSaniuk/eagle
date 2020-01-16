@@ -2,6 +2,7 @@ package by.bsac.feign;
 
 import by.bsac.exceptions.AccountAlreadyRegisteredException;
 import by.bsac.exceptions.AccountNotRegisteredException;
+import by.bsac.exceptions.NoConfirmedAccountException;
 import by.bsac.exceptions.NoCreatedDetailsException;
 import by.bsac.webmvc.responses.ExceptionResponseBody;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,6 +46,11 @@ public class FeignExceptionHandler implements ErrorDecoder {
                 //Handle account not registered exception
                 if (remote_exception != null) return new AccountNotRegisteredException(remote_exception.getErrorMessage()); //With detailed message
                 else return new AccountNotRegisteredException(); //With default message
+            case 433:
+                //Authentication microservice
+                //Handle NoConfirmed account exception
+                if (remote_exception != null) return new NoConfirmedAccountException(remote_exception.getErrorMessage());
+                else return new NoConfirmedAccountException("Target account no confirmed.");
             case 441: // NoCreatedDetailsException
                 //Users microservice
                 if (remote_exception != null) return new NoCreatedDetailsException(remote_exception.getErrorMessage()); //With detailed message

@@ -2,6 +2,7 @@ package feign;
 
 import by.bsac.conf.RootContextConfiguration;
 import by.bsac.core.beans.EmbeddedDeConverter;
+import by.bsac.exceptions.NoConfirmedAccountException;
 import by.bsac.exceptions.NoCreatedDetailsException;
 import by.bsac.feign.FeignClientsConfiguration;
 import by.bsac.feign.FeignConfiguration;
@@ -58,7 +59,7 @@ public class UserDetailsServiceIntegrationTest {
 
     @Test
     @Order(2)
-    public void getDetails_registeredUser_shouldReturnUserWithDetailsDto() throws NoCreatedDetailsException {
+    public void getDetails_registeredUser_shouldReturnUserWithDetailsDto() throws NoCreatedDetailsException, NoConfirmedAccountException {
 
         Account account = new Account();
         account.setAccountEmail("ACCOUNT-EMAIL");

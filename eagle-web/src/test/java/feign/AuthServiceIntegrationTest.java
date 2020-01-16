@@ -3,6 +3,7 @@ package feign;
 import by.bsac.conf.RootContextConfiguration;
 import by.bsac.exceptions.AccountAlreadyRegisteredException;
 import by.bsac.exceptions.AccountNotRegisteredException;
+import by.bsac.exceptions.NoConfirmedAccountException;
 import by.bsac.feign.FeignClientsConfiguration;
 import by.bsac.feign.FeignConfiguration;
 import by.bsac.feign.clients.AccountManagementService;
@@ -51,7 +52,7 @@ class AuthServiceIntegrationTest {
 
     @Test
     @Order(2)
-    void login_registeredAccount_shouldReturnUserAccount() {
+    void login_registeredAccount_shouldReturnUserAccount() throws NoConfirmedAccountException {
         Account account = new Account();
         account.setAccountEmail("test1@eagle-web.com");
         account.setAccountPassword("12345678");
@@ -68,7 +69,7 @@ class AuthServiceIntegrationTest {
 
     @Test
     @Order(3)
-    void login_incorrectPassword_shouldReturnInvalidUserEntity() {
+    void login_incorrectPassword_shouldReturnInvalidUserEntity() throws NoConfirmedAccountException {
         Account account = new Account();
         account.setAccountEmail("test1@eagle-web.com");
         account.setAccountPassword("invalid-password");

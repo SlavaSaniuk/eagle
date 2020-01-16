@@ -10,21 +10,6 @@
 
     <packaging>war</packaging>
 
-    <profiles>
-        <profile>
-            <id> DEVELOPMENT </id>
-            <build>
-                <finalName>eagle-development</finalName>
-            </build>
-        </profile>
-        <profile>
-            <id> PRODUCTION </id>
-            <build>
-                <finalName>eagle</finalName>
-            </build>
-        </profile>
-    </profiles>
-
     <dependencies>
         <!-- Spring framework dependencies -->
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
@@ -141,7 +126,22 @@
             <artifactId>lombok</artifactId>
             <version>custom</version>
         </dependency>
+
+        <dependency>
+            <groupId>by.bsac</groupId>
+            <artifactId>ltori</artifactId>
+            <version>0.4</version>
+        </dependency>
         <!-- End of other dependencies -->
+
+        <!-- XML dependencies -->
+        <!-- https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime -->
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>2.4.0-b180830.0438</version>
+        </dependency>
+        <!-- End of XML dependencies -->
 
     </dependencies>
 

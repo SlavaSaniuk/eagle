@@ -1,5 +1,7 @@
 package by.bsac.feign;
 
+import by.bsac.conf.properties.FeignServersProperties;
+import by.bsac.core.logging.SpringCommonLogging;
 import by.bsac.feign.clients.AccountManagementService;
 import by.bsac.feign.clients.UserDetailsService;
 import feign.Feign;
@@ -10,11 +12,14 @@ import feign.codec.ErrorDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import static by.bsac.conf.LoggerDefaultLogs.*;
 
+@SuppressWarnings("AccessStaticViaInstance")
 @Configuration
 public class FeignClientsConfiguration {
 
@@ -26,6 +31,8 @@ public class FeignClientsConfiguration {
     private Encoder encoder;
     private Decoder decoder;
     private ErrorDecoder error_decoder;
+    //Autowired via setter
+    private FeignServersProperties feign_properties;
 
     //Constructor
     @Autowired
@@ -45,7 +52,8 @@ public class FeignClientsConfiguration {
     }
 
     @Bean(name = "AccountManagementService")
-    public AccountManagementService accountManagementService() {
+    @Profile({"FEIGN_PRODUCTION", "FEIGN_DEVELOPMENT"})
+    public AccountManagementService getProdDevAccountManagementService() {
         LOGGER.info(CREATION.beanCreationStart(AccountManagementService.class));
         AccountManagementService ams = Feign.builder()
                 .encoder(this.encoder)
@@ -56,7 +64,26 @@ public class FeignClientsConfiguration {
         return ams;
     }
 
+    @SuppressWarnings("ConstantConditions")
+    @Bean(name = "AccountManagementService")
+    @Profile({"FEIGN_TEST"})
+    public AccountManagementService getTestAccountManagementService() {
+        LOGGER.info(SpringCommonLogging.CREATION.startCreateBean(SpringCommonLogging.BeanDefinition.of("AccountManagementService").ofClass(AccountManagementService.class).forProfile("FEIGN_TEST")));
+
+        String URL = this.feign_properties.getServerByName("eagle-authentication-microservice-test").getFullServerPath();
+        assert URL != null;
+
+        AccountManagementService ams = Feign.builder()
+                .encoder(this.encoder)
+                .decoder(this.decoder)
+                .errorDecoder(this.error_decoder)
+                .target(AccountManagementService.class, URL);
+        LOGGER.info(SpringCommonLogging.CREATION.endCreateBean(SpringCommonLogging.BeanDefinition.of("AccountManagementService").ofClass(AccountManagementService.class).forProfile("FEIGN_TEST")));
+        return ams;
+    }
+
     @Bean(name = "UsersDetailsService")
+    @Profile({"FEIGN_PRODUCTION", "FEIGN_DEVELOPMENT"})
     public UserDetailsService getUserDetailsService() {
         LOGGER.info(CREATION.beanCreationStart(UserDetailsService.class));
         UserDetailsService uds = Feign.builder()
@@ -68,6 +95,14 @@ public class FeignClientsConfiguration {
 
         LOGGER.info(CREATION.beanCreationFinish(UserDetailsService.class));
         return uds;
+    }
+
+    //Spring autowiring
+    @Autowired
+    public void setFeignServersProperties(FeignServersProperties a_props) {
+        LOGGER.info(SpringCommonLogging.DependencyManagement.autowireViaSetter(
+                SpringCommonLogging.BeanDefinition.of("FeignServersProperties").ofClass(FeignServersProperties.class), FeignClientsConfiguration.class));
+        this.feign_properties = a_props;
     }
 
 }
