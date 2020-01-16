@@ -1,9 +1,12 @@
 package by.bsac.services.accounts;
 
 import by.bsac.annotations.validation.ParameterValidation;
+import by.bsac.aspects.validators.AccountCredentialsParameterValidator;
+import by.bsac.aspects.validators.AccountEmailParameterValidator;
 import by.bsac.aspects.validators.AccountIdParameterValidator;
 import by.bsac.aspects.validators.IdParameterValidator;
 import by.bsac.models.Account;
+import by.bsac.models.User;
 import by.bsac.repositories.AccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,17 +25,20 @@ public class AccountsCrudServiceImpl implements AccountsCrudService, Initializin
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountsCrudServiceImpl.class);
     //Spring beans
     private AccountRepository account_repository; //From persistence configuration class
-    //Class fields
-    @SuppressWarnings("AccessStaticViaInstance")
-    private static final BeanDefinition THIS_DEFINITION = BeanDefinition.of("AccountsCrudService").ofClass(AccountsCrudServiceImpl.class);
+    private AccountManagementService ams;
+
 
     public AccountsCrudServiceImpl() {
-        LOGGER.debug(CREATION.startCreateBean(THIS_DEFINITION));
+        LOGGER.debug(CREATION.startCreateBean(BeanDefinition.of("AccountsCrudService").ofClass(AccountsCrudServiceImpl.class)));
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     @Override
+    @Transactional
+    @ParameterValidation(value = AccountCredentialsParameterValidator.class, parametersClasses = Account.class, errorMessage = "Account credentials is in invalid value;")
     public Account create(Account entity) {
-        return null;
+        User user = this.ams.register(entity);
+        return this.account_repository.findById(user.getUserId()).get();
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -52,8 +58,15 @@ public class AccountsCrudServiceImpl implements AccountsCrudService, Initializin
     }
 
     @Override
-    public Account getAccountByEmail(String account_email) {
+        public Account getAccountByEmail(String account_email) {
+        LOGGER.debug(String.format("Get account entity by account email [%s].", account_email));
         return this.account_repository.foundByAccountEmail(account_email);
+    }
+
+    @Override
+    @ParameterValidation(value = AccountEmailParameterValidator.class, parametersClasses = Account.class, errorMessage = "Account email is in invalid value;")
+    public Account getAccountByEmail(Account account) {
+        return this.getAccountByEmail(account.getAccountEmail());
     }
 
     @Override
@@ -62,7 +75,10 @@ public class AccountsCrudServiceImpl implements AccountsCrudService, Initializin
         if (this.account_repository == null)
             throw new BeanCreationException(String.format("Dependency of [%s] is null.", AccountRepository.class.getCanonicalName()));
 
-        LOGGER.debug(CREATION.endCreateBean(THIS_DEFINITION));
+        if (this.ams == null)
+            throw new BeanCreationException(String.format("Dependency of [%s] is null.", AccountManagementService.class.getCanonicalName()));
+
+        LOGGER.debug(CREATION.endCreateBean(BeanDefinition.of("AccountsCrudService").ofClass(AccountsCrudServiceImpl.class)));
     }
 
     //Spring autowiring
@@ -70,6 +86,12 @@ public class AccountsCrudServiceImpl implements AccountsCrudService, Initializin
     public void setAccountRepository(AccountRepository a_account_repository) {
         LOGGER.debug(DependencyManagement.setViaSetter(BeanDefinition.of(AccountRepository.class), this.getClass()));
         this.account_repository = a_account_repository;
+    }
+
+    //Dependency management
+    public void setAccountManagementService(AccountManagementService a_ams) {
+        LOGGER.debug(DependencyManagement.setViaSetter(BeanDefinition.of(AccountManagementService.class), this.getClass()));
+        this.ams = a_ams;
     }
 
 

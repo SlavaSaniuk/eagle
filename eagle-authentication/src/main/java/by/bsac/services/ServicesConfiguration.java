@@ -66,6 +66,7 @@ public class ServicesConfiguration {
         AccountsCrudServiceImpl acs = new AccountsCrudServiceImpl();
 
         acs.setAccountRepository(this.account_repository);
+        acs.setAccountManagementService(this.accountManager());
 
         LOGGER.info(SpringCommonLogging.CREATION.endCreateBean(AccountsCrudService.DEFINITION));
         return acs;

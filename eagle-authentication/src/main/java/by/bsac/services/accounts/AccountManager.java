@@ -1,5 +1,8 @@
 package by.bsac.services.accounts;
 
+import by.bsac.annotations.validation.ParameterValidation;
+import by.bsac.aspects.validators.AccountCredentialsParameterValidator;
+import by.bsac.aspects.validators.AccountIdParameterValidator;
 import by.bsac.exceptions.AccountNotRegisteredException;
 import by.bsac.exceptions.EmailAlreadyRegisteredException;
 import by.bsac.exceptions.NoConfirmedAccountException;
@@ -12,6 +15,7 @@ import by.bsac.repositories.AccountStatusRepository;
 import by.bsac.repositories.UserRepository;
 import by.bsac.services.security.hashing.PasswordHash;
 import com.sun.istack.NotNull;
+import lombok.NonNull;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,10 +47,11 @@ public class AccountManager implements AccountManagementService, InitializingBea
 
     @Override
     @Transactional
-    public User register(Account account) {
+    @ParameterValidation(value = AccountCredentialsParameterValidator.class, parametersClasses = Account.class, errorMessage = "Account credentials is in invalid value;")
+    public User register(@NonNull Account account) {
 
-        if (account == null || account.getAccountEmail() == null || account.getAccountPassword() == null) throw new NullPointerException("Account, password or email object is null");
-        if (account.getAccountEmail().isEmpty()) throw new IllegalArgumentException("Account email string is empty.");
+        //if (account == null || account.getAccountEmail() == null || account.getAccountPassword() == null) throw new NullPointerException("Account, password or email object is null");
+        //if (account.getAccountEmail().isEmpty()) throw new IllegalArgumentException("Account email string is empty.");
 
         //Check if account with same email already registered
         if (account_repository.foundByAccountEmail(account.getAccountEmail()) != null)
@@ -82,10 +87,11 @@ public class AccountManager implements AccountManagementService, InitializingBea
 
     @Override
     @Nullable
-    public User login(Account account) throws NoConfirmedAccountException {
+    @ParameterValidation(value = AccountCredentialsParameterValidator.class, parametersClasses = Account.class, errorMessage = "Account credentials is in invalid value;")
+    public User login(@NonNull Account account) throws NoConfirmedAccountException {
 
-        if (account == null || account.getAccountEmail() == null || account.getAccountPassword() == null) throw new NullPointerException("Account, password or email object is null");
-        if (account.getAccountEmail().isEmpty()) throw new IllegalArgumentException("Account email string is empty.");
+        //if (account == null || account.getAccountEmail() == null || account.getAccountPassword() == null) throw new NullPointerException("Account, password or email object is null");
+        //if (account.getAccountEmail().isEmpty()) throw new IllegalArgumentException("Account email string is empty.");
 
         //Found account in database
         Account founded = this.account_repository.foundByAccountEmail(account.getAccountEmail());
@@ -109,6 +115,7 @@ public class AccountManager implements AccountManagementService, InitializingBea
 
     @Override
     @Transactional
+    @ParameterValidation(value = AccountIdParameterValidator.class, parametersClasses = Account.class, errorMessage = "Account ID is in invalid value;")
     public Account confirmAccount(@NotNull Account account) {
 
         //Persist account

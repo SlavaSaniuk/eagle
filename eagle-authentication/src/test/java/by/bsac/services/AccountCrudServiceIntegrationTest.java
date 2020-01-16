@@ -10,6 +10,7 @@ import by.bsac.core.validation.exceptions.NoValidParameterException;
 import by.bsac.models.Account;
 import by.bsac.services.accounts.AccountsCrudService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,25 @@ public class AccountCrudServiceIntegrationTest {
     }
 
     @Test
+    @MethodCall(withStartTime = true)
+    @MethodExecutionTime(inMicros = true, inMillis = true)
+    void getAccountByEmail_accountWithEmailAlreadyRegistered2_shouldReturnAccountEntity() {
+
+        final String ACCOUNT_EMAIL = "test1@mail";
+        Account account = new Account();
+        account.setAccountEmail(ACCOUNT_EMAIL);
+
+        Account founded = this.acs.getAccountByEmail(account);
+
+        Assertions.assertNotNull(founded);
+        Assertions.assertEquals(1, founded.getAccountId());
+        Assertions.assertEquals(ACCOUNT_EMAIL, founded.getAccountEmail());
+
+        LOGGER.debug("Founded account: " +founded.toString());
+    }
+
+
+    @Test
     @MethodCall(withStartTime = true, withArgs = true)
     @MethodExecutionTime(inMicros = true)
     void getById_accountIdIs1_shouldReturnAccountWithId1() {
@@ -82,4 +102,30 @@ public class AccountCrudServiceIntegrationTest {
 
         this.acs.delete(account);
     }
+
+    @Test
+    @MethodCall(withStartTime = true, withArgs = true)
+    @MethodExecutionTime(inMicros = true)
+    @Transactional
+    @Commit
+    @Disabled
+    void create_accountEmailAndPasswordAreSet_shouldReturnCreatedAccountEntity() {
+
+        final String ACCOUNT_EMAIL = "ACCOUNT@EMAIL";
+
+        Account account = new Account();
+        account.setAccountEmail(ACCOUNT_EMAIL);
+        account.setAccountPassword("12345678");
+
+        Account created = this.acs.create(account);
+
+        Assertions.assertNotNull(created);
+        Assertions.assertNotNull(created.getAccountId());
+        Assertions.assertEquals(ACCOUNT_EMAIL, created.getAccountEmail());
+
+        LOGGER.debug("Created account entity: " +created.toString());
+
+    }
+
+
 }

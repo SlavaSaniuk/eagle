@@ -11,4 +11,6 @@ public interface AccountsCrudService extends CrudService<Account, Integer> {
 
     Account getAccountByEmail(String account_email);
 
+    Account getAccountByEmail(Account account);
+
 }
