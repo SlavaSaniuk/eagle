@@ -50,16 +50,12 @@ public class UserWithDetailsDtoConverterTestCase {
     public void toEntity_newUserWithDetailsDto_shouldReturnUserAndDetailsEntities() {
 
         final UserWithDetailsDto dto = new UserWithDetailsDto();
-        dto.setUserFname("FIRST NAME");
-        dto.setUserLname("LAST NAME");
         dto.setUserId(24);
 
         User user = this.CONVERTER.toEntity(dto, new User());
         UserDetails details = this.CONVERTER.toEntity(dto, new UserDetails(), new UserName());
 
         Assertions.assertEquals(dto.getUserId(), user.getUserId());
-        Assertions.assertEquals(dto.getUserFname(), details.getUserName().getFirstName());
-        Assertions.assertEquals(dto.getUserLname(), details.getUserName().getLastName());
 
         LOGGER.debug(user.toString());
         LOGGER.debug(details.toString());

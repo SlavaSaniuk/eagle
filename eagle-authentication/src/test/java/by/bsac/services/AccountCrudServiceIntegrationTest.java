@@ -10,7 +10,6 @@ import by.bsac.core.validation.exceptions.NoValidParameterException;
 import by.bsac.models.Account;
 import by.bsac.services.accounts.AccountsCrudService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +19,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.security.InvalidParameterException;
 
 @ActiveProfiles("TEST")
 @SpringJUnitConfig(classes = {DatasourcesConfiguration.class, PersistenceConfiguration.class,
@@ -108,7 +105,6 @@ public class AccountCrudServiceIntegrationTest {
     @MethodExecutionTime(inMicros = true)
     @Transactional
     @Commit
-    @Disabled
     void create_accountEmailAndPasswordAreSet_shouldReturnCreatedAccountEntity() {
 
         final String ACCOUNT_EMAIL = "ACCOUNT@EMAIL";
