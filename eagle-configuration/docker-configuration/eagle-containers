@@ -1,15 +1,17 @@
+
+# Production web servers
 docker run -d --name ms-web-eagle-web -p 127.0.0.1:80:36547 --network eagle-net --ip 10.8.8.10 debian-tomcat-image
-
 docker run -d --name ms-web-eagle-authentication --ip 10.8.8.20 --network eagle-net debian-tomcat-image
-
 docker run -d --name ms-web-eagle-users --ip 10.8.8.25 --network eagle-net debian-tomcat-image
 
+# Production database servers
 docker run -d --name ms-db-eagle-users -e MYSQL_ADDRESS=10.8.8.100 --net eagle-net --ip 10.8.8.100 debian-mysql-image
 
 # Tests web servers
+docker run -d --name ms-web-eagle-web-tests --network eagle-net --ip 10.8.8.13 debian-tomcat-image
 docker run -d --name ms-web-eagle-authentication-tests --ip 10.8.8.23 --network eagle-net debian-tomcat-image-aspects
 docker run -d --name ms-web-eagle-users-tests --ip 10.8.8.28 --network eagle-net debian-tomcat-image-aspects
 
-#   Test database server
+# Test database servers
 # eagle_users db
 docker run -d --name ms-db-eagle-users-test -e MYSQL_ADDRESS=10.8.8.110 --net eagle-net --ip 10.8.8.110 debian-mysql-image
