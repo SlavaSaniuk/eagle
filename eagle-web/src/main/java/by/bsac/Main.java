@@ -1,5 +1,6 @@
 package by.bsac;
 
+import by.bsac.conf.ApplicationContextConfiguration;
 import by.bsac.conf.RootContextConfiguration;
 import by.bsac.webmvc.WebmvcConfiguration;
 import org.slf4j.Logger;
@@ -22,6 +23,9 @@ public class Main implements WebApplicationInitializer {
         //Create root spring application context
         LOGGER.info("Create spring \"Root application context\".");
         AnnotationConfigWebApplicationContext root_ctx = new AnnotationConfigWebApplicationContext();
+
+        //Set active profiles
+        ApplicationContextConfiguration.getInstance().setActiveProfiles(root_ctx.getEnvironment());
 
         //Register configuration classes
         root_ctx.register(RootContextConfiguration.class); //Main root context configuration class

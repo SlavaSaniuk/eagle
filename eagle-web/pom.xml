@@ -152,6 +152,25 @@
 
     </dependencies>
 
+    <properties>
+        <war.baseName>eagle-web</war.baseName>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>EAGLE_WEB_PRODUCTION</id>
+            <build>
+                <finalName>${war.baseName}</finalName>
+            </build>
+        </profile>
+        <profile>
+            <id>EAGLE_WEB_TEST</id>
+            <build>
+                <finalName>${war.baseName}-tests</finalName>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -170,7 +189,6 @@
                 </configuration>
             </plugin>
         </plugins>
-        <finalName>eagle</finalName>
     </build>
 
 </project>
