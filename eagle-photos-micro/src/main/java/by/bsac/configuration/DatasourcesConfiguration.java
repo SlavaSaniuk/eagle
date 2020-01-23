@@ -24,6 +24,7 @@ import static by.bsac.core.logging.SpringCommonLogging.*;
  * Configuration class for JDBC/Spring Data configuration. Class define {@link DataSource} beans definitions
  * and {@link DatasourcesProperties} configuration properties.
  */
+@SuppressWarnings("AccessStaticViaInstance")
 @Configuration("DatasourcesConfiguration")
 @EnableConfigurationProperties(DatasourcesProperties.class)
 @EntityScan("by.bsac.domain.models")
@@ -96,7 +97,6 @@ public class DatasourcesConfiguration implements InitializingBean {
         LOGGER.info(INITIALIZATION.endInitializeConfiguration(DatasourcesConfiguration.class));
     }
 
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     public void setDatasourceProperties(DatasourcesProperties properties) {
         LOGGER.info(DependencyManagement.autowireViaSetter(BeanDefinition.of(DatasourcesProperties.class), DatasourcesConfiguration.class));
