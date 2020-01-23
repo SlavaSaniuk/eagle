@@ -53,7 +53,7 @@ public class UserImagesContextCrudServiceImpl implements UserImagesContextCrudSe
     public void afterPropertiesSet() {
 
         if (this.context_repository == null)
-            throw new BeanCreationException(String.format("Spring bean dependency of [%s] bean is null.", UserImagesContextCrudRepository.class));
+            throw new BeanCreationException(DependencyManagement.Exceptions.nullProperty(UserImagesContextCrudRepository.class));
 
         LOGGER.debug(CREATION.endCreateBean(BeanDefinition.of(UserImagesContextCrudServiceImpl.class)));
     }

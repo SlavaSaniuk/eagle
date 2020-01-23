@@ -5,6 +5,8 @@ import by.bsac.services.images.UserImagesContextCrudService;
 import by.bsac.services.images.UserImagesContextCrudServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
 @Configuration("ServicesConfiguration")
-public class ServicesConfiguration {
+public class ServicesConfiguration implements InitializingBean {
 
     //Logger
     private static final Logger LOGGER = LoggerFactory.getLogger(ServicesConfiguration.class);
@@ -36,10 +38,19 @@ public class ServicesConfiguration {
         return service;
     }
 
+    //Spring autowiring
     @Autowired
     public void setUserImagesContextCrudRepository(UserImagesContextCrudRepository a_context_repository) {
         LOGGER.info(DependencyManagement.autowireViaSetter(
                 BeanDefinition.of(UserImagesContextCrudRepository.class), ServicesConfiguration.class));
         this.context_repository = a_context_repository;
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        if (this.context_repository == null)
+            throw new BeanCreationException(DependencyManagement.Exceptions.nullProperty(UserImagesContextCrudRepository.class));
+
+        LOGGER.info(INITIALIZATION.endInitializeConfiguration(ServicesConfiguration.class));
     }
 }
