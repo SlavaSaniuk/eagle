@@ -22,4 +22,12 @@ public class UserImagesContext {
     @OneToMany(mappedBy = "images_context")
     private Set<ImageFile> user_images;
 
+    @Override
+    public String toString() {
+        return "UserImagesContext{" +
+                "context_id=" + context_id +
+                ", images_owner_id=" + images_owner.getUserId() +
+                ", user_images=" + user_images +
+                '}';
+    }
 }
