@@ -1,6 +1,7 @@
 package by.bsac.configuration;
 
 import by.bsac.configuration.properties.DatasourcesProperties;
+import by.bsac.repositories.UserCrudRepository;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ import static by.bsac.core.logging.SpringCommonLogging.*;
 @Configuration("DatasourcesConfiguration")
 @EnableConfigurationProperties(DatasourcesProperties.class)
 @EntityScan("by.bsac.domain.models")
-@EnableJpaRepositories("by.bsac.repositories")
+@EnableJpaRepositories(basePackageClasses = UserCrudRepository.class)
 @EnableTransactionManagement
 public class DatasourcesConfiguration implements InitializingBean {
 
