@@ -11,31 +11,38 @@ import org.springframework.stereotype.Component;
 
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
+
 /**
- * Configuration properties bean for {@link javax.sql.DataSource} configuration for various profiles.
- * Bean has three section for various datasources
- * beans (DATASOURCE_DEVELOPMENT, DATASOURCE_TEST, DATASOURCE_PRODUCTION).
+ * All datasource properties defined in application.properties file
+ * under "src/main/resources" directory with prefix "eagle.datasource.*".
  */
 @Component("DatasourcesProperties")
-@ConfigurationProperties("eagle.datasource")
+@ConfigurationProperties(prefix = "eagle.datasource")
+@Getter
 public class DatasourcesProperties implements InitializingBean {
 
     //Logger
     private static final Logger LOGGER = LoggerFactory.getLogger(DatasourcesProperties.class);
+    private Development development = new Development();
+    private Production production = new Production();
+    private Test test = new Test();
 
     /**
-     * Construct new {@link DatasourcesProperties} bean.
+     * Construct new {@link DatasourcesProperties} object
+     * with defined datasources properties.
      */
     public DatasourcesProperties() {
-        LOGGER.debug(CREATION.startCreateBean(BeanDefinition.of(this.getClass())));
+        LOGGER.debug(CREATION.startCreateBean(BeanDefinition.of(DatasourcesProperties.class)));
     }
 
-    //Spring properties for profiles
-    private Development development = new Development(); //For DATASOURCE_DEVELOPMENT profile
+    @Override
+    public void afterPropertiesSet() {
+        LOGGER.debug(CREATION.endCreateBean(BeanDefinition.of(DatasourcesProperties.class)));
+    }
 
     /**
-     * Configuration properties {@link DatasourcesConfiguration#getDevDataSource()}
-     * DATASOURCE_DEVELOPMENT bean.
+     * Datasource configuration properties for "DATASOURCE_DEVELOPMENT" profile
+     * and {@link DatasourcesConfiguration#getDevDataSource()} bean.
      */
     @Getter @Setter
     public static class Development {
@@ -45,18 +52,43 @@ public class DatasourcesProperties implements InitializingBean {
         private String user_name;
         private String password;
 
+        @Override
+        public String toString() {
+            return String.format("Datasource {profile [DATASOURCE_DEVELOPMENT], url [%s], driver_class [%s], user_name [%s]};",
+                    this.database_url, this.driver_class_name, this.user_name);
+        }
+    }
+
+
+    @Getter @Setter
+    public static class Production {
+
+        private  String jndi_name;
+
+        @Override
+        public String toString() {
+            return String.format("Datasource {profile [DATASOURCE_PRODUCTION], jndi_name [%s]};",
+                    this.jndi_name);
+        }
     }
 
     /**
-     * Method return {@link Development} configuration properties.
-     * @return - {@link Development} configuration properties.
+     * Datasource configuration properties for "DATASOURCE_TESTS" profile
+     * and {@link DatasourcesConfiguration#getTestDataSource()} bean.
      */
-    public Development forDevelopmentProfile() {
-        return this.development;
+    @Getter @Setter
+    public static class Test {
+
+        private String database_url;
+        private String driver_class_name;
+        private String user_name;
+        private String password;
+
+        @Override
+        public String toString() {
+            return String.format("Datasource {profile [DATASOURCE_TESTS], url [%s], driver_class [%s], user_name [%s]};",
+                    this.database_url, this.driver_class_name, this.user_name);
+        }
     }
 
-    @Override
-    public void afterPropertiesSet() {
-        LOGGER.debug(CREATION.endCreateBean(BeanDefinition.of(this.getClass())));
-    }
 }
