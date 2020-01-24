@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,7 @@ import static by.bsac.core.logging.SpringCommonLogging.*;
 @EntityScan("by.bsac.domain.models")
 @EnableJpaRepositories(basePackageClasses = UserCrudRepository.class)
 @EnableTransactionManagement
+@EnableAutoConfiguration
 public class DatasourcesConfiguration implements InitializingBean {
 
     //Logger

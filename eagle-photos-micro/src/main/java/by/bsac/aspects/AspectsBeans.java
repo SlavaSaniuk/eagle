@@ -2,6 +2,7 @@ package by.bsac.aspects;
 
 import by.bsac.aspects.debug.MethodCallAspect;
 import by.bsac.aspects.debug.MethodExecutionTimeAspect;
+import by.bsac.aspects.logging.BeforeLogAspect;
 import by.bsac.core.debugging.LoggerLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ public class AspectsBeans implements InitializingBean {
         MethodCallAspect aspect = MethodCallAspect.aspectOf();
 
         aspect.setLoggerLevel(LoggerLevel.DEBUG);
+        aspect.enable();
 
         LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(MethodCallAspect.class)));
         return aspect;
@@ -43,10 +45,24 @@ public class AspectsBeans implements InitializingBean {
         MethodExecutionTimeAspect aspect = MethodExecutionTimeAspect.aspectOf();
 
         aspect.setLoggerLevel(LoggerLevel.DEBUG);
+        aspect.enable();
 
         LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(MethodExecutionTimeAspect.class)));
         return aspect;
     }
+
+    @Bean(name = "BeforeLogAspect")
+    public BeforeLogAspect getBeforeLogAspect() {
+        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of(BeforeLogAspect.class)));
+        BeforeLogAspect aspect = BeforeLogAspect.aspectOf();
+
+        aspect.setLoggerLevel(LoggerLevel.INFO);
+        aspect.enable();
+
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(BeforeLogAspect.class)));
+        return aspect;
+    }
+
 
     @Override
     public void afterPropertiesSet() {

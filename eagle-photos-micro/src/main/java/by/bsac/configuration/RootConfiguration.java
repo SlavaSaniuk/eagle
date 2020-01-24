@@ -1,11 +1,9 @@
 package by.bsac.configuration;
 
-import by.bsac.aspects.AspectsBeans;
 import by.bsac.services.ServicesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -13,7 +11,6 @@ import static by.bsac.core.logging.SpringCommonLogging.*;
 
 @Configuration("RootContextConfiguration")
 @Import({DatasourcesConfiguration.class, ServicesConfiguration.class})
-@EnableAutoConfiguration
 public class RootConfiguration implements InitializingBean {
 
     //Logger

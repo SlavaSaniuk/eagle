@@ -15,12 +15,12 @@ import static by.bsac.core.logging.SpringCommonLogging.*;
 @Configuration
 @EnableLoadTimeWeaving(aspectjWeaving = EnableLoadTimeWeaving.AspectJWeaving.ENABLED)
 @Import(AspectsBeans.class)
-public class AspectsConfiguration implements LoadTimeWeavingConfigurer {
+public class TestsAspectsConfiguration implements LoadTimeWeavingConfigurer {
 
     //Logger
-    private static final Logger LOGGER = LoggerFactory.getLogger(AspectsConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestsAspectsConfiguration.class);
 
-    public AspectsConfiguration() {
+    public TestsAspectsConfiguration() {
         LOGGER.debug(INITIALIZATION.startInitializeConfiguration(this.getClass()));
     }
 

@@ -2,12 +2,14 @@ package by.bsac.services.images;
 
 import by.bsac.annotations.debug.MethodCall;
 import by.bsac.annotations.debug.MethodExecutionTime;
+import by.bsac.annotations.logging.BeforeLog;
 import by.bsac.domain.models.UserImagesContext;
 import by.bsac.repositories.UserImagesContextCrudRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import static by.bsac.core.logging.SpringCommonLogging.*;
@@ -27,19 +29,25 @@ public class UserImagesContextCrudServiceImpl implements UserImagesContextCrudSe
     @Override
     @MethodCall(withArgs = true, withStartTime = true)
     @MethodExecutionTime(inMicros = true)
+    @BeforeLog(value = "Save UserImagesContext entity[%s];", argsClasses = UserImagesContext.class)
     public UserImagesContext create(UserImagesContext entity) {
-        LOGGER.debug("Save userImageContext: " +entity);
         return this.context_repository.save(entity);
     }
 
     @Override
-    public UserImagesContext get(Integer entity_id) {
-        return null;
+    @MethodCall(withArgs = true, withStartTime = true)
+    @MethodExecutionTime(inMicros = true)
+    @BeforeLog(value = "Get UserImagesContext entity with ID[%d];", argsClasses = Integer.class)
+    @Nullable public UserImagesContext get(Integer entity_id) {
+        return this.context_repository.findById(entity_id).orElse(null);
     }
 
     @Override
+    @MethodCall(withArgs = true, withStartTime = true)
+    @MethodExecutionTime(inMicros = true)
+    @BeforeLog(value = "Delete UserImagesContext entity[%s];", argsClasses = UserImagesContext.class)
     public void delete(UserImagesContext entity) {
-
+        this.context_repository.delete(entity);
     }
 
     //Spring dependencies
