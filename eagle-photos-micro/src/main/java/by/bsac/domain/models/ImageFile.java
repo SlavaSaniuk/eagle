@@ -24,6 +24,15 @@ public class ImageFile {
     private String image_path;
 
     @Override
+    public String toString() {
+        return "ImageFile{" +
+                "image_id=" + image_id +
+                ", images_context_id=" + images_context.getContextId() +
+                ", image_path='" + image_path + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
