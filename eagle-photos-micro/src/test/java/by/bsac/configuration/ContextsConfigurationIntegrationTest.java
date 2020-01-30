@@ -1,6 +1,7 @@
 package by.bsac.configuration;
 
 import by.bsac.configuration.properties.DatasourcesProperties;
+import by.bsac.configuration.properties.SystemStorageProperties;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -41,5 +42,15 @@ public class ContextsConfigurationIntegrationTest{
 
         LOGGER.debug("Datasource: " +ds);
 
+    }
+
+    @Test
+    void getSystemStorageProperties_enableConfigurationPropertiesAnnotation_shouldReturnSystemStorageServiceBean() {
+
+        SystemStorageProperties props = this.CONTEXT.getBean(SystemStorageProperties.class);
+
+        Assertions.assertNotNull(props);
+
+        LOGGER.debug("SystemStorageProperties: " +props);
     }
 }
