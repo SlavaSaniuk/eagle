@@ -30,4 +30,8 @@ public class UserImagesContext {
                 ", user_images=" + user_images +
                 '}';
     }
+
+    public boolean addImageFile(ImageFile a_file) {
+        return this.user_images.add(a_file);
+    }
 }

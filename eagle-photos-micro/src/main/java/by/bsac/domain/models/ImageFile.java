@@ -23,6 +23,8 @@ public class ImageFile {
     @Column(name = "image_path")
     private String image_path;
 
+    private transient Image image;
+
     @Override
     public String toString() {
         return "ImageFile{" +
