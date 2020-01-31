@@ -9,6 +9,10 @@ import org.springframework.context.annotation.PropertySource;
 
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
+/**
+ * External configuration properties bean. Properties defined in "application.properties"
+ * file and starts with "eagle.storage" prefix.
+ */
 @PropertySource("classpath:application.properties")
 @ConfigurationProperties(prefix = "eagle.storage")
 @Getter
@@ -19,11 +23,15 @@ public class SystemStorageProperties {
     //Properties
     private Images images = new Images();
 
+    //Constructor
     public SystemStorageProperties() {
         LOGGER.debug(CREATION.startCreateBean(BeanDefinition.of(SystemStorageProperties.class)));
     }
 
-
+    /**
+     * Inner class define external configuration properties for images section.
+     * Properties starts with "eagle.storage.images" prefix.
+     */
     @Getter @Setter
     public static class Images {
 
@@ -36,7 +44,6 @@ public class SystemStorageProperties {
                     '}';
         }
     }
-
 
     @Override
     public String toString() {

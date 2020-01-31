@@ -11,6 +11,11 @@ import org.springframework.context.annotation.Import;
 
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
+/**
+ * Main Root Spring Application Context configuration class.
+ * Class import other configuration classes for root application context
+ * via {@link Import} annotation.
+ */
 @Configuration("RootContextConfiguration")
 @Import({DatasourcesConfiguration.class, ServicesConfiguration.class})
 public class RootConfiguration implements InitializingBean {
@@ -27,10 +32,16 @@ public class RootConfiguration implements InitializingBean {
         LOGGER.info(INITIALIZATION.endInitializeConfiguration(RootConfiguration.class));
     }
 
+    /**
+     * External configuration properties bean. Properties start with "eagle.storage" prefix.
+     * @return - Configuration properties storage bean.
+     */
     @Bean("SystemStorageProperties")
     public SystemStorageProperties getSystemStorageProperties() {
         LOGGER.info(CREATION.startCreateBean(BeanDefinition.of(SystemStorageProperties.class)));
         SystemStorageProperties props = new SystemStorageProperties();
+
+        LOGGER.info("Configuration properties for Images section: " +props.getImages());
 
         LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(SystemStorageProperties.class)));
         return props;
