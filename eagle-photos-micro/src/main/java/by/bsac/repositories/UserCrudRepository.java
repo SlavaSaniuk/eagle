@@ -4,7 +4,7 @@ import by.bsac.domain.models.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository("UserRepository")
+@Repository("UserCrudRepository")
 public interface UserCrudRepository extends CrudRepository<User, Integer> {
 
 }
