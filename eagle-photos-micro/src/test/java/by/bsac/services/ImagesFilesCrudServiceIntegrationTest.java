@@ -17,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import testconfiguration.TestsAspectsConfiguration;
 
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @ActiveProfiles({"DATASOURCE_TESTS", "ASPECT_DEBUG"})
 @SpringBootTest(classes = {DatasourcesConfiguration.class, ServicesConfiguration.class, TestsAspectsConfiguration.class})
 public class ImagesFilesCrudServiceIntegrationTest {

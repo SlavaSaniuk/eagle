@@ -1,11 +1,14 @@
 package by.bsac.services;
 
+import by.bsac.configuration.properties.SystemStorageProperties;
 import by.bsac.repositories.ImagesFilesJpaRepository;
 import by.bsac.repositories.UserImagesContextCrudRepository;
 import by.bsac.services.images.ImagesFilesCrudService;
 import by.bsac.services.images.ImagesFilesCrudServiceImpl;
 import by.bsac.services.images.UserImagesContextCrudService;
 import by.bsac.services.images.UserImagesContextCrudServiceImpl;
+import by.bsac.services.images.storage.StorageService;
+import by.bsac.services.images.storage.SystemStorageServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
@@ -25,6 +28,7 @@ public class ServicesConfiguration implements InitializingBean {
     //Autowired via setter
     private UserImagesContextCrudRepository context_repository; //From DatasourceConfiguration
     private ImagesFilesJpaRepository images_files_repository; //From DatasourceConfiguration
+    private SystemStorageProperties system_storage_properties; //From RootConfiguration
 
     public ServicesConfiguration() {
         LOGGER.info(INITIALIZATION.startInitializeConfiguration(ServicesConfiguration.class));
@@ -54,6 +58,24 @@ public class ServicesConfiguration implements InitializingBean {
         return service;
     }
 
+    /**
+     * Images {@link StorageService}. Commonly used implementation is {@link SystemStorageServiceImpl} bean.
+     * @return - {@link StorageService} bean.
+     */
+    @Bean("StorageService")
+    public StorageService getStorageService() {
+
+        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of(StorageService.class)));
+        SystemStorageServiceImpl service = new SystemStorageServiceImpl();
+
+        service.setImagesFilesCrudService(this.getImagesFilesCrudService());
+        service.setUserImagesContextCrudService(this.getUserImagesContextCrudRepository());
+        service.setSystemStorageProperties(this.system_storage_properties);
+
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(StorageService.class)));
+        return service;
+    }
+
     //Spring autowiring
     @Autowired
     public void setUserImagesContextCrudRepository(UserImagesContextCrudRepository a_context_repository) {
@@ -69,8 +91,14 @@ public class ServicesConfiguration implements InitializingBean {
         this.images_files_repository = a_repository;
     }
 
+    @Autowired
+    public void setSystemStorageProperties(SystemStorageProperties a_props) {
+        LOGGER.info(DependencyManagement.autowireViaSetter(BeanDefinition.of(SystemStorageProperties.class), ServicesConfiguration.class));
+        this.system_storage_properties = a_props;
+    }
+
     @Override
-    public void afterPropertiesSet() {
+    public void afterPropertiesSet() throws Exception {
 
         if (this.context_repository == null)
             throw new BeanCreationException(DependencyManagement.Exceptions.nullProperty(UserImagesContextCrudRepository.class));
@@ -78,6 +106,10 @@ public class ServicesConfiguration implements InitializingBean {
         if (this.images_files_repository == null)
             throw new BeanCreationException(DependencyManagement.Exceptions.nullProperty(ImagesFilesJpaRepository.class));
 
+        if (this.system_storage_properties.getImages() == null)
+            throw new Exception(new BeanCreationException(DependencyManagement.Exceptions.nullProperty(SystemStorageProperties.Images.class)));
+
         LOGGER.info(INITIALIZATION.endInitializeConfiguration(ServicesConfiguration.class));
+
     }
 }

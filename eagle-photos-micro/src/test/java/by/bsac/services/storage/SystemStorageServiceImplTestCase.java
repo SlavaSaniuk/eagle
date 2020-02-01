@@ -1,4 +1,4 @@
-package by.bsac.services.system;
+package by.bsac.services.storage;
 
 import by.bsac.Main;
 import by.bsac.configuration.properties.SystemStorageProperties;

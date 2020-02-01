@@ -1,5 +1,8 @@
 package by.bsac.services.images.storage;
 
+import by.bsac.annotations.debug.MethodCall;
+import by.bsac.annotations.debug.MethodExecutionTime;
+import by.bsac.annotations.logging.BeforeLog;
 import by.bsac.configuration.properties.SystemStorageProperties;
 import by.bsac.domain.models.Image;
 import by.bsac.domain.models.ImageFile;
@@ -42,6 +45,10 @@ public class SystemStorageServiceImpl implements StorageService, InitializingBea
 
 
     @Override
+    @MethodCall(withArgs = true, withStartTime = true, withReturnType = true)
+    @MethodExecutionTime(inMicros = true, inMillis = true)
+    @BeforeLog(value = "Save image file[%s] with UserImagesContext[%s] to filesystem;",
+            argsClasses = {Image.class, ImageFile.class, UserImagesContext.class})
     @Transactional
     public ImageFile saveImage(UserImagesContext a_context, ImageFile a_image_file, Image a_image) throws IOException {
 
@@ -67,6 +74,7 @@ public class SystemStorageServiceImpl implements StorageService, InitializingBea
         //Update image path
         this.files_crud_service.updateImagePath(created, image_path.toString());
         created.setImagePath(image_path.toString());
+        created.setImage(a_image);
 
         return created;
     }
@@ -91,20 +99,6 @@ public class SystemStorageServiceImpl implements StorageService, InitializingBea
             this.USED_STORAGE_PATH = this.storage_properties.getImages().getStoragePath();
         else this.USED_STORAGE_PATH = this.images_storage_path;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     //Dependency management
     public void setUserImagesContextCrudService(UserImagesContextCrudService a_service) {

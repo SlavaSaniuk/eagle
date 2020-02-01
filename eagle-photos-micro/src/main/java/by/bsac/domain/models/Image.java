@@ -5,6 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.nio.file.Path;
+
 
 @NoArgsConstructor
 @Getter @Setter
@@ -15,6 +19,10 @@ public class Image {
     private ContextWithImageDto.Extension image_extension;
 
     private byte[] image_data;
+
+    private Path image_path;
+
+    private ImageFile image_file;
 
     /**
      * Return image name with extension. For example: "image.jpg";
