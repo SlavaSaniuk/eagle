@@ -15,7 +15,7 @@ import static by.bsac.core.logging.SpringCommonLogging.*;
  */
 @PropertySource("classpath:application.properties")
 @ConfigurationProperties(prefix = "eagle.storage")
-@Getter
+@Getter @Setter
 public class SystemStorageProperties {
 
     //Logger

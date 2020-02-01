@@ -1,11 +1,13 @@
-package by.bsac.services.images.system;
+package by.bsac.services.images.storage;
 
 import by.bsac.domain.models.Image;
 import by.bsac.domain.models.ImageFile;
 import by.bsac.domain.models.UserImagesContext;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface SystemStorageService {
+import java.io.IOException;
+
+public interface StorageService {
 
     /**
      * Save new image to filesystem. Method get {@link UserImagesContext} entity from database by id.
@@ -15,9 +17,10 @@ public interface SystemStorageService {
      * @param a_context - {@link UserImagesContext} entity.
      * @param a_image_file - {@link ImageFile} entity.
      * @param a_image - {@link Image} model.
-     * @return
+     * @return - Saved {@link ImageFile} entity.
+     * @throws IOException - Throws if IO exception occurs.
      */
     @Transactional
-    ImageFile saveImage(UserImagesContext a_context, ImageFile a_image_file, Image a_image);
+    ImageFile saveImage(UserImagesContext a_context, ImageFile a_image_file, Image a_image) throws IOException;
 
 }

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
@@ -29,6 +30,7 @@ public class ImagesFilesCrudServiceImpl implements ImagesFilesCrudService, Initi
     @MethodCall(withArgs = true, withStartTime = true)
     @MethodExecutionTime(inMicros = true)
     @BeforeLog(value = "Save ImageFile entity[%s];", argsClasses = ImageFile.class)
+    @Transactional
     public ImageFile create(ImageFile entity) {
         return this.images_files_repository.save(entity);
     }
@@ -45,8 +47,18 @@ public class ImagesFilesCrudServiceImpl implements ImagesFilesCrudService, Initi
     @MethodCall(withArgs = true, withStartTime = true)
     @MethodExecutionTime(inMicros = true)
     @BeforeLog(value = "Delete ImageFile entity[%s];", argsClasses = ImageFile.class)
+    @Transactional
     public void delete(ImageFile entity) {
         this.images_files_repository.delete(entity);
+    }
+
+    @Override
+    @MethodCall(withArgs = true, withStartTime = true)
+    @MethodExecutionTime(inMicros = true)
+    @BeforeLog(value = "Update image_path property in ImageFile entity[%s] with value [%s];", argsClasses = {ImageFile.class, String.class})
+    @Transactional
+    public void updateImagePath(ImageFile entity, String image_path) {
+        this.images_files_repository.updateImagePath(entity.getImageId(), image_path);
     }
 
     //Spring dependency management
