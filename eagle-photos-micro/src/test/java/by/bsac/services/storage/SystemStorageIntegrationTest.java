@@ -8,7 +8,7 @@ import by.bsac.domain.models.Image;
 import by.bsac.domain.models.ImageFile;
 import by.bsac.domain.models.UserImagesContext;
 import by.bsac.repositories.UserCrudRepository;
-import by.bsac.services.images.UserImagesContextCrudService;
+import by.bsac.services.images.context.UserImagesContextCrudService;
 import by.bsac.services.images.storage.StorageService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

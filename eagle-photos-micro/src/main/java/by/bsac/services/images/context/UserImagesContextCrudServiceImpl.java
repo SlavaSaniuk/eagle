@@ -1,4 +1,4 @@
-package by.bsac.services.images;
+package by.bsac.services.images.context;
 
 import by.bsac.annotations.debug.MethodCall;
 import by.bsac.annotations.debug.MethodExecutionTime;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
@@ -30,6 +31,7 @@ public class UserImagesContextCrudServiceImpl implements UserImagesContextCrudSe
     @MethodCall(withArgs = true, withStartTime = true)
     @MethodExecutionTime(inMicros = true)
     @BeforeLog(value = "Save UserImagesContext entity[%s];", argsClasses = UserImagesContext.class)
+    @Transactional
     public UserImagesContext create(UserImagesContext entity) {
         return this.context_repository.save(entity);
     }

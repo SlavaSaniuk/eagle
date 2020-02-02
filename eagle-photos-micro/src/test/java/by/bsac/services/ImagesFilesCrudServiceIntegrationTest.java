@@ -6,7 +6,7 @@ import by.bsac.domain.models.User;
 import by.bsac.domain.models.UserImagesContext;
 import by.bsac.repositories.UserCrudRepository;
 import by.bsac.services.images.ImagesFilesCrudService;
-import by.bsac.services.images.UserImagesContextCrudService;
+import by.bsac.services.images.context.UserImagesContextCrudService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

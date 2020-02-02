@@ -1,10 +1,11 @@
 package by.bsac.services;
 
 import by.bsac.configuration.DatasourcesConfiguration;
+import by.bsac.configuration.RootConfiguration;
 import by.bsac.domain.models.User;
 import by.bsac.domain.models.UserImagesContext;
 import by.bsac.repositories.UserCrudRepository;
-import by.bsac.services.images.UserImagesContextCrudService;
+import by.bsac.services.images.context.UserImagesContextCrudService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ import testconfiguration.TestsAspectsConfiguration;
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 @ActiveProfiles({"DATASOURCE_TESTS"})
-@SpringBootTest(classes = {ServicesConfiguration.class, DatasourcesConfiguration.class, TestsAspectsConfiguration.class})
+@SpringBootTest(classes = {ServicesConfiguration.class, DatasourcesConfiguration.class, TestsAspectsConfiguration.class, RootConfiguration.class})
 public class UserImagesContextCrudServiceIntegrationTest {
 
     //Logger

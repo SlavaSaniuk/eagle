@@ -8,7 +8,7 @@ import by.bsac.domain.models.Image;
 import by.bsac.domain.models.ImageFile;
 import by.bsac.domain.models.UserImagesContext;
 import by.bsac.services.images.ImagesFilesCrudService;
-import by.bsac.services.images.UserImagesContextCrudService;
+import by.bsac.services.images.context.UserImagesContextCrudService;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
