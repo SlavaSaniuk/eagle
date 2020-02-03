@@ -27,8 +27,6 @@ public class UserImagesContext {
     public String toString() {
         return "UserImagesContext{" +
                 "context_id=" + context_id +
-                ", images_owner_id=" + images_owner.getUserId() +
-                ", user_images=" + user_images +
                 '}';
     }
 
