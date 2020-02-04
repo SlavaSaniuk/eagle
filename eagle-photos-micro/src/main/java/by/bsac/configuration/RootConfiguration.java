@@ -1,5 +1,6 @@
 package by.bsac.configuration;
 
+import by.bsac.configuration.properties.DatasourcesProperties;
 import by.bsac.configuration.properties.SystemStorageProperties;
 import by.bsac.services.ServicesConfiguration;
 import org.slf4j.Logger;
@@ -33,8 +34,24 @@ public class RootConfiguration implements InitializingBean {
     }
 
     /**
+     * External configuration properties bean. Properties start with "eagle.datasource" prefix.
+     * @return - Configuration properties for {@link javax.sql.DataSource} bean.
+     */
+    @Bean("DatasourcesProperties")
+    public DatasourcesProperties getDatasourcesProperties() {
+        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of(DatasourcesProperties.class)));
+        DatasourcesProperties props = new DatasourcesProperties();
+
+        LOGGER.info("Datasources properties: " +props);
+
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(DatasourcesProperties.class)));
+        return props;
+
+    }
+
+    /**
      * External configuration properties bean. Properties start with "eagle.storage" prefix.
-     * @return - Configuration properties storage bean.
+     * @return - Configuration properties for {@link by.bsac.services.images.storage.StorageService} service bean.
      */
     @Bean("SystemStorageProperties")
     public SystemStorageProperties getSystemStorageProperties() {

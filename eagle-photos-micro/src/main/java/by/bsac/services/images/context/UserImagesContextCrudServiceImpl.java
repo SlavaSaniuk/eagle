@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
-@Component("UserImagesContextCrudService")
 public class UserImagesContextCrudServiceImpl implements UserImagesContextCrudService, InitializingBean {
 
     //Logger

@@ -16,7 +16,6 @@ import static by.bsac.core.logging.SpringCommonLogging.*;
  * All datasource properties defined in application.properties file
  * under "src/main/resources" directory with prefix "eagle.datasource.*".
  */
-@Component("DatasourcesProperties")
 @ConfigurationProperties(prefix = "eagle.datasource")
 @Getter
 public class DatasourcesProperties implements InitializingBean {

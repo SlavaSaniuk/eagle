@@ -3,7 +3,6 @@ package by.bsac.controllers;
 import by.bsac.configuration.RootConfiguration;
 import by.bsac.domain.dto.UserWithContextDto;
 import by.bsac.webmvc.WebmvcConfiguration;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,14 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import testconfiguration.TestsAspectsConfiguration;
@@ -56,7 +52,8 @@ public class ImagesContextsControllerIntegrationTest {
         String src_json = this.mapper.writeValueAsString(src_dto);
         LOGGER.debug("Source JSON: " +src_json);
 
-        String TEST_JSON = this.mock_mvc.perform(get("/context_create")
+        String TEST_JSON =
+                this.mock_mvc.perform(get("/context_create")
             .contentType(MediaType.APPLICATION_JSON)
             .content(src_json)
         ).andExpect(status().is(200)

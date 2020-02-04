@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -24,7 +23,6 @@ import java.nio.file.Paths;
 
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
-@Component("SystemStorageServiceImpl")
 public class SystemStorageServiceImpl implements StorageService, InitializingBean {
 
     //Logger
