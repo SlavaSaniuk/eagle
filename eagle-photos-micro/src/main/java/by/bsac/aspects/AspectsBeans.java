@@ -3,6 +3,9 @@ package by.bsac.aspects;
 import by.bsac.aspects.debug.MethodCallAspect;
 import by.bsac.aspects.debug.MethodExecutionTimeAspect;
 import by.bsac.aspects.logging.BeforeLogAspect;
+import by.bsac.aspects.validation.ParameterValidationAspect;
+import by.bsac.aspects.validators.IntegerIdParameterValidator;
+import by.bsac.aspects.validators.UserIdParameterValidator;
 import by.bsac.core.debugging.LoggerLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +64,41 @@ public class AspectsBeans implements InitializingBean {
 
         LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(BeforeLogAspect.class)));
         return aspect;
+    }
+
+    @Bean(name = "ParameterValidationAspect")
+    public ParameterValidationAspect getParameterValidationAspect() {
+        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of(ParameterValidationAspect.class)));
+        ParameterValidationAspect aspect = ParameterValidationAspect.aspectOf();
+
+        //Add validators
+        aspect.addValidator(this.getIntegerIdParameterValidator());
+        aspect.addValidator(this.getUserIdParameterValidator());
+
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(ParameterValidationAspect.class)));
+        return aspect;
+    }
+
+
+    //Parameters validators
+    @Bean("IntegerIdParameterValidator")
+    public IntegerIdParameterValidator getIntegerIdParameterValidator() {
+        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of(IntegerIdParameterValidator.class)));
+        IntegerIdParameterValidator validator = new IntegerIdParameterValidator();
+
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(IntegerIdParameterValidator.class)));
+        return validator;
+    }
+
+    @Bean("UserIdParameterValidator")
+    public UserIdParameterValidator getUserIdParameterValidator() {
+        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of(UserIdParameterValidator.class)));
+        UserIdParameterValidator validator = new UserIdParameterValidator();
+
+        validator.setIntegerIdParameterValidator(this.getIntegerIdParameterValidator());
+
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(UserIdParameterValidator.class)));
+        return validator;
     }
 
 

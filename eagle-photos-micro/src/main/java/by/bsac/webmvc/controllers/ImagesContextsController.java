@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static by.bsac.core.logging.SpringCommonLogging.*;
 
+@SuppressWarnings("AccessStaticViaInstance")
 @RestController("ImagesContextsController")
 public class ImagesContextsController implements InitializingBean {
 

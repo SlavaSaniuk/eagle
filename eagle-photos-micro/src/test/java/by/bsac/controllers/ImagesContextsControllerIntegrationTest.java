@@ -36,7 +36,7 @@ public class ImagesContextsControllerIntegrationTest {
     @Test
     public void createImagesContext_newUser_shouldReturnCreatedContext() throws Exception {
 
-        final Integer ID = 2;
+        final Integer ID = 1;
         UserWithContextDto src_dto = new UserWithContextDto();
         src_dto.setUserId(ID);
         LOGGER.debug("Source DTO: " +src_dto);

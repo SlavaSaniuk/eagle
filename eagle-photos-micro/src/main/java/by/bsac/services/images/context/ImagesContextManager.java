@@ -3,6 +3,8 @@ package by.bsac.services.images.context;
 import by.bsac.annotations.debug.MethodCall;
 import by.bsac.annotations.debug.MethodExecutionTime;
 import by.bsac.annotations.logging.BeforeLog;
+import by.bsac.annotations.validation.ParameterValidation;
+import by.bsac.aspects.validators.UserIdParameterValidator;
 import by.bsac.domain.models.User;
 import by.bsac.domain.models.UserImagesContext;
 import by.bsac.repositories.UserCrudRepository;
@@ -31,6 +33,7 @@ public class ImagesContextManager implements ImagesContextService, InitializingB
     @MethodCall(withStartTime = true)
     @MethodExecutionTime(inMicros = true, inMillis = true)
     @BeforeLog(value = "Create new UserImagesContext entity for user[%s];", argsClasses = {User.class})
+    @ParameterValidation(value = UserIdParameterValidator.class, parametersClasses = User.class, errorMessage = "User Id[user_id] parameter is not valid.")
     @Transactional
     public UserImagesContext createUserImagesContext(User a_owner, UserImagesContext a_context) {
 
@@ -43,11 +46,6 @@ public class ImagesContextManager implements ImagesContextService, InitializingB
 
         return this.context_crud_service.create(a_context);
     }
-
-
-
-
-
 
     //Dependency management
     public void setUserImagesContextCrudService(UserImagesContextCrudService a_service) {
