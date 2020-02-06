@@ -1,6 +1,5 @@
 package by.bsac.webmvc;
 
-import by.bsac.webmvc.controllers.ImagesContextsController;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -16,7 +15,6 @@ import static by.bsac.core.logging.SpringCommonLogging.*;
 @Configuration("WebmvcConfiguration")
 @EnableWebMvc
 @Import({DtoConversionConfiguration.class})
-@ComponentScan(basePackageClasses = ImagesContextsController.class)
 public class WebmvcConfiguration implements WebMvcConfigurer, InitializingBean {
 
     //Logger

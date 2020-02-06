@@ -43,10 +43,9 @@ public class ImagesContextsController implements InitializingBean {
     @MethodCall(withStartTime = true)
     @MethodExecutionTime(inMicros = true, inMillis = true)
     @BeforeLog(value = "Create new UserImagesContext entity from DTO[%s]", argsClasses = {UserWithContextDto.class})
-    @RequestMapping(value = "/context_create", method = RequestMethod.GET, headers = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/context_create", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public UserWithContextDto createUserImagesContext(@RequestBody UserWithContextDto a_dto) {
-
         //Get entities from dto
         User user = this.context_dto_converter.toEntity(a_dto, new User());
 
