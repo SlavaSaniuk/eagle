@@ -41,4 +41,46 @@ public class ImagesContextServiceIntegrationTest {
 
         LOGGER.debug("Created context: " +test);
     }
+
+    @Test
+    @Transactional
+    void getUserImagesContextById_createdUser_shouldReturnUserImagesContextEntity() {
+
+        final Integer ID = 1;
+
+        User a_user = new User();
+        a_user.setUserId(ID);
+
+        this.TEST.createUserImagesContext(a_user, new UserImagesContext());
+
+        UserImagesContext FOUNDED = this.TEST.getUserImagesContextById(ID);
+
+        Assertions.assertNotNull(FOUNDED);
+        Assertions.assertEquals(ID, FOUNDED.getContextId());
+        Assertions.assertNotNull(FOUNDED.getImagesOwner());
+
+        LOGGER.debug("Founded context: " +FOUNDED);
+    }
+
+    @Test
+    @Transactional
+    void getUserImagesContext_createdUser_shouldReturnUserImagesContextEntity() {
+
+        final Integer ID = 1;
+
+        User a_user = new User();
+        a_user.setUserId(ID);
+
+        UserImagesContext CREATED = this.TEST.createUserImagesContext(a_user, new UserImagesContext());
+
+        UserImagesContext FOUNDED = this.TEST.getUserImagesContext(CREATED);
+
+        Assertions.assertNotNull(FOUNDED);
+        Assertions.assertEquals(ID, FOUNDED.getContextId());
+        Assertions.assertNotNull(FOUNDED.getImagesOwner());
+
+        LOGGER.debug("Founded context: " +FOUNDED);
+    }
+
+
 }

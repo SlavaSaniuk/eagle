@@ -4,6 +4,8 @@ import by.bsac.annotations.debug.MethodCall;
 import by.bsac.annotations.debug.MethodExecutionTime;
 import by.bsac.annotations.logging.BeforeLog;
 import by.bsac.annotations.validation.ParameterValidation;
+import by.bsac.aspects.validators.ContextIdParameterValidator;
+import by.bsac.aspects.validators.IntegerIdParameterValidator;
 import by.bsac.aspects.validators.UserIdParameterValidator;
 import by.bsac.domain.models.User;
 import by.bsac.domain.models.UserImagesContext;
@@ -45,6 +47,24 @@ public class ImagesContextManager implements ImagesContextService, InitializingB
         user.setImagesContext(a_context);
 
         return this.context_crud_service.create(a_context);
+    }
+
+    @Override
+    @MethodCall(withStartTime = true)
+    @MethodExecutionTime(inMicros = true, inMillis = true)
+    @BeforeLog(value = "Get UserImagesContext entity by ID[%d];", argsClasses = {Integer.class})
+    @ParameterValidation(value = IntegerIdParameterValidator.class, parametersClasses = Integer.class, errorMessage = " ID[context_id] parameter is not valid.")
+    public UserImagesContext getUserImagesContextById(Integer a_id) {
+        return this.context_crud_service.get(a_id);
+    }
+
+    @Override
+    @MethodCall(withStartTime = true)
+    @MethodExecutionTime(inMicros = true, inMillis = true)
+    @BeforeLog(value = "Get UserImagesContext entity by context[%s];", argsClasses = {UserImagesContext.class})
+    @ParameterValidation(value = ContextIdParameterValidator.class, parametersClasses = UserImagesContext.class, errorMessage = "UserImagesContext[context_id] parameter is not valid.")
+    public UserImagesContext getUserImagesContext(UserImagesContext a_context) {
+        return this.context_crud_service.get(a_context.getContextId());
     }
 
     //Dependency management
