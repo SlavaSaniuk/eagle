@@ -36,7 +36,7 @@ public class ImagesContextsController implements InitializingBean {
     }
 
     /**
-     * Http GET controller method user to create new {@link UserImagesContext} entity in database and application.
+     * Http POST controller method user to create new {@link UserImagesContext} entity in database and application.
      * You need to specify {@link UserWithContextDto#getUserId()} user_id parameter in given DTO object.
      * @param a_dto - {@link UserWithContextDto} dto object with defined "user_id" property.
      * @return - {@link UserWithContextDto} with 'user_id' and 'context_id' properties.
@@ -57,6 +57,12 @@ public class ImagesContextsController implements InitializingBean {
         return this.context_dto_converter.toDto(context, a_dto);
     }
 
+    /**
+     * Http POST controller method user to get {@link UserImagesContext} entity from persistence context.
+     * You need to specify {@link UserWithContextDto#getContextId()} context_id parameter in given DTO object.
+     * @param a_dto - {@link UserWithContextDto} dto object with defined "context_id" property.
+     * @return - {@link UserWithContextDto} with 'user_id' and 'context_id' properties.
+     */
     @MethodCall(withStartTime = true)
     @MethodExecutionTime(inMicros = true, inMillis = true)
     @BeforeLog(value = "Get UserImagesContext entity from DTO[%s]", argsClasses = {UserWithContextDto.class})
@@ -77,6 +83,11 @@ public class ImagesContextsController implements InitializingBean {
         return result;
     }
 
+    /**
+     * Http get controller method user to get {@link UserImagesContext} entity from database by it's ID.
+     * @param context_id - {@link Integer} property which related {@link UserImagesContext#getContextId()} context_id property.
+     * @return - {@link UserWithContextDto} with 'user_id' and 'context_id' properties.
+     */
     @MethodCall(withStartTime = true)
     @MethodExecutionTime(inMicros = true, inMillis = true)
     @BeforeLog(value = "Get UserImagesContext entity by Id[%s]", argsClasses = {Integer.class})
