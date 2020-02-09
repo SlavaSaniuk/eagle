@@ -57,6 +57,44 @@ public class ImagesContextsController implements InitializingBean {
         return this.context_dto_converter.toDto(context, a_dto);
     }
 
+    @MethodCall(withStartTime = true)
+    @MethodExecutionTime(inMicros = true, inMillis = true)
+    @BeforeLog(value = "Get UserImagesContext entity from DTO[%s]", argsClasses = {UserWithContextDto.class})
+    @PostMapping(value = "/context_get", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public UserWithContextDto getUserImagesContext(@RequestBody UserWithContextDto a_dto) {
+
+        //Get entities from dto
+        UserImagesContext context = this.context_dto_converter.toEntity(a_dto, new UserImagesContext());
+
+        //Get context by id
+        context = this.context_service.getUserImagesContext(context);
+
+        //Convert to entity
+        UserWithContextDto result = this.context_dto_converter.toDto(context, a_dto);
+        result = this.context_dto_converter.toDto(context.getImagesOwner(), result);
+
+        return result;
+    }
+
+    @MethodCall(withStartTime = true)
+    @MethodExecutionTime(inMicros = true, inMillis = true)
+    @BeforeLog(value = "Get UserImagesContext entity by Id[%s]", argsClasses = {Integer.class})
+    @GetMapping(value = "/context_getById", headers = {"content-type=application/json"}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public UserWithContextDto getUserImagesContextById(@RequestParam("context_id") Integer context_id) {
+
+
+        //Get context by id
+        UserImagesContext context = this.context_service.getUserImagesContextById(context_id);
+
+        //Convert to entity
+        UserWithContextDto result = this.context_dto_converter.toDto(context, new UserWithContextDto());
+        result = this.context_dto_converter.toDto(context.getImagesOwner(), result);
+
+        return result;
+    }
+
     //Dependency management
     @Autowired
     public void setImagesContextService(ImagesContextService a_service) {

@@ -1,5 +1,6 @@
 package by.bsac.webmvc;
 
+import by.bsac.webmvc.converters.StringToIntegerConverter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -7,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.*;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -42,5 +44,10 @@ public class WebmvcConfiguration implements WebMvcConfigurer, InitializingBean {
     @Override
     public void afterPropertiesSet() {
         LOGGER.info(INITIALIZATION.endInitializeConfiguration(WebmvcConfiguration.class));
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new StringToIntegerConverter());
     }
 }
