@@ -4,10 +4,9 @@ import by.bsac.aspects.debug.MethodCallAspect;
 import by.bsac.aspects.debug.MethodExecutionTimeAspect;
 import by.bsac.aspects.logging.BeforeLogAspect;
 import by.bsac.aspects.validation.ParameterValidationAspect;
-import by.bsac.aspects.validators.ContextIdParameterValidator;
-import by.bsac.aspects.validators.IntegerIdParameterValidator;
-import by.bsac.aspects.validators.UserIdParameterValidator;
+import by.bsac.aspects.validators.*;
 import by.bsac.core.debugging.LoggerLevel;
+import by.bsac.core.validation.ParameterValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -74,8 +73,10 @@ public class AspectsBeans implements InitializingBean {
 
         //Add validators
         aspect.addValidator(this.getIntegerIdParameterValidator());
+        aspect.addValidator(this.getLongIdParameterValidator());
         aspect.addValidator(this.getUserIdParameterValidator());
         aspect.addValidator(this.getContextIdParameterValidator());
+        aspect.addValidator(this.getImageFileIdParameterValidator());
 
         LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(ParameterValidationAspect.class)));
         return aspect;
@@ -89,6 +90,15 @@ public class AspectsBeans implements InitializingBean {
         IntegerIdParameterValidator validator = new IntegerIdParameterValidator();
 
         LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(IntegerIdParameterValidator.class)));
+        return validator;
+    }
+
+    @Bean("LongIdParameterValidator")
+    public LongIdParameterValidator getLongIdParameterValidator() {
+        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of(LongIdParameterValidator.class)));
+        LongIdParameterValidator validator = new LongIdParameterValidator();
+
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(LongIdParameterValidator.class)));
         return validator;
     }
 
@@ -111,6 +121,17 @@ public class AspectsBeans implements InitializingBean {
         validator.setIntegerIdParameterValidator(this.getIntegerIdParameterValidator());
 
         LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(ContextIdParameterValidator.class)));
+        return validator;
+    }
+
+    @Bean("ImageFileIdParameterValidator")
+    public ParameterValidator getImageFileIdParameterValidator() {
+        LOGGER.info(CREATION.startCreateBean(BeanDefinition.of(ImageFileIdParameterValidator.class)));
+        ImageFileIdParameterValidator validator = new ImageFileIdParameterValidator();
+
+        validator.setLongIdParameterValidator(this.getLongIdParameterValidator());
+
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(ImageFileIdParameterValidator.class)));
         return validator;
     }
 

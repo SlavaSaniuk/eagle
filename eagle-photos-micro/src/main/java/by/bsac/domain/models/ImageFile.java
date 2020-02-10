@@ -29,8 +29,6 @@ public class ImageFile {
     public String toString() {
         return "ImageFile{" +
                 "image_id=" + image_id +
-                ", images_context_id=" + images_context.getContextId() +
-                ", image_path='" + image_path + '\'' +
                 '}';
     }
 

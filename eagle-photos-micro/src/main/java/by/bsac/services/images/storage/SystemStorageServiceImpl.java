@@ -3,12 +3,18 @@ package by.bsac.services.images.storage;
 import by.bsac.annotations.debug.MethodCall;
 import by.bsac.annotations.debug.MethodExecutionTime;
 import by.bsac.annotations.logging.BeforeLog;
+import by.bsac.annotations.validation.ParameterValidation;
+import by.bsac.aspects.validators.ContextIdParameterValidator;
+import by.bsac.aspects.validators.ImageFileIdParameterValidator;
 import by.bsac.configuration.properties.SystemStorageProperties;
+import by.bsac.domain.ImageExtension;
 import by.bsac.domain.models.Image;
 import by.bsac.domain.models.ImageFile;
 import by.bsac.domain.models.UserImagesContext;
+import by.bsac.files.FileNameUtilities;
 import by.bsac.services.images.ImagesFilesCrudService;
 import by.bsac.services.images.context.UserImagesContextCrudService;
+import by.bsac.streams.InputStreamUtilities;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +22,8 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,6 +45,7 @@ public class SystemStorageServiceImpl implements StorageService, InitializingBea
     private String images_storage_path; //For tests purposes
     private String USED_STORAGE_PATH; //Used system storage path
 
+    //Constructor
     public SystemStorageServiceImpl() {
         LOGGER.debug(CREATION.startCreateBean(BeanDefinition.of(SystemStorageServiceImpl.class)));
     }
@@ -48,6 +57,7 @@ public class SystemStorageServiceImpl implements StorageService, InitializingBea
     @BeforeLog(value = "Save image file[%s] with UserImagesContext[%s] to filesystem;",
             argsClasses = {Image.class, ImageFile.class, UserImagesContext.class})
     @Transactional
+    @ParameterValidation(value = ContextIdParameterValidator.class, parametersClasses = UserImagesContext.class, errorMessage = "Integer ID of given user_image_context is in invalid value.")
     public ImageFile saveImage(UserImagesContext a_context, ImageFile a_image_file, Image a_image) throws IOException {
 
         //Get user images context service by ID
@@ -77,12 +87,55 @@ public class SystemStorageServiceImpl implements StorageService, InitializingBea
         return created;
     }
 
+    @Override
+    @MethodCall(withArgs = true, withStartTime = true, withReturnType = true)
+    @MethodExecutionTime(inMicros = true, inMillis = true)
+    @BeforeLog(value = "Load image file[%s] with Image property from filesystem;",
+            argsClasses = ImageFile.class)
+    @Transactional
+    @ParameterValidation(value = ImageFileIdParameterValidator.class, parametersClasses = ImageFile.class, errorMessage = "Long ID of given image file is in invalid value.")
+    public ImageFile loadImage(ImageFile a_image_file) throws IOException {
+
+        //Load image by ID
+        ImageFile image_file = this.files_crud_service.get(a_image_file.getImageId());
+
+        //Read image file from path property
+        Image image = this.loadImage(image_file.getImagePath());
+
+        image_file.setImage(image);
+
+        return image_file;
+    }
+
 
     public Path writeImage(String a_image_name, byte[] a_image_data) throws IOException {
 
         Path image_path = Paths.get(this.USED_STORAGE_PATH, a_image_name);
         return Files.write(image_path, a_image_data);
 
+    }
+
+    /**
+     * Method load {@link Image} object from file system.
+     * @param path - file path.
+     * @return - {@link Image} file.
+     * @throws IOException - Throws if read error occurs.
+     */
+    public Image loadImage(String path) throws IOException {
+
+        Image image = new Image();
+
+        File file = new File(path);
+
+        //Set property to image file
+        image.setImageName(FileNameUtilities.getFileNameWithoutExtension(file.getName()));
+        image.setImageExtension(ImageExtension.valueOf(FileNameUtilities.getFileExtension(file.getName()).toUpperCase()));
+
+        //Set image data
+        FileInputStream in = new FileInputStream(file);
+        image.setImageData(InputStreamUtilities.toByteArray(in));
+
+        return image;
     }
 
     public String getImagesStoragePath() {

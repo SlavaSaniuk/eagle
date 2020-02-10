@@ -10,6 +10,7 @@ import by.bsac.domain.models.UserImagesContext;
 import by.bsac.services.images.ImagesFilesCrudService;
 import by.bsac.services.images.context.UserImagesContextCrudService;
 import by.bsac.services.images.storage.SystemStorageServiceImpl;
+import by.bsac.streams.InputStreamUtilities;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 public class SystemStorageServiceImplTestCase {
 
@@ -64,7 +66,7 @@ public class SystemStorageServiceImplTestCase {
 
         //Get resource
         InputStream in = Main.class.getClassLoader().getResourceAsStream("files/mountains.jpg");
-        byte[] image_data = toByteArray(in);
+        byte[] image_data = InputStreamUtilities.toByteArray(in);
 
         final String image_name = "test.jpg";
 
@@ -85,7 +87,7 @@ public class SystemStorageServiceImplTestCase {
 
         //Get resource
         InputStream in = Main.class.getClassLoader().getResourceAsStream("files/mountains.jpg");
-        byte[] image_data = toByteArray(in);
+        byte[] image_data = InputStreamUtilities.toByteArray(in);
 
         Image image = new Image();
         image.setImageExtension(ImageExtension.JPG);
@@ -119,15 +121,20 @@ public class SystemStorageServiceImplTestCase {
 
     }
 
-    public static byte[] toByteArray(InputStream in) throws IOException {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
+    @Test
+    void loadImage_imageFromFS_shouldReturnImageObject() throws IOException {
 
-        byte[] buffer = new byte[1024];
-        int length;
 
-        while((length = in.read(buffer)) != -1)
-            os.write(buffer, 0 , length);
+        Image image = this.sss.loadImage("/home/slava/Pictures/image_14.jpg");
 
-        return os.toByteArray();
+        Assertions.assertNotNull(image);
+        Assertions.assertEquals("image_14", image.getImageName());
+        Assertions.assertEquals(ImageExtension.JPG, image.getImageExtension());
+        Assertions.assertNotNull(image.getImageData());
+
+        LOGGER.debug("Loaded image: " +image);
+        LOGGER.debug("Loaded image data: " + Arrays.toString(image.getImageData()));
+
     }
+
 }

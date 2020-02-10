@@ -3,6 +3,8 @@ package by.bsac.services.images;
 import by.bsac.annotations.debug.MethodCall;
 import by.bsac.annotations.debug.MethodExecutionTime;
 import by.bsac.annotations.logging.BeforeLog;
+import by.bsac.annotations.validation.ParameterValidation;
+import by.bsac.aspects.validators.LongIdParameterValidator;
 import by.bsac.domain.models.ImageFile;
 import by.bsac.repositories.ImagesFilesJpaRepository;
 import org.slf4j.Logger;
@@ -37,6 +39,7 @@ public class ImagesFilesCrudServiceImpl implements ImagesFilesCrudService, Initi
     @MethodCall(withArgs = true, withStartTime = true)
     @MethodExecutionTime(inMicros = true)
     @BeforeLog(value = "Get ImageFile entity by id[%d];", argsClasses = Long.class)
+    @ParameterValidation(value = LongIdParameterValidator.class, parametersClasses = Long.class, errorMessage = "Long ID is in invalid value.")
     public ImageFile get(Long entity_id) {
         return this.images_files_repository.getOne(entity_id);
     }

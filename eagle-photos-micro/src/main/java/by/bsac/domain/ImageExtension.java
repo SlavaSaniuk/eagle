@@ -4,4 +4,5 @@ public enum ImageExtension {
 
     JPG,
     PNG
+
 }

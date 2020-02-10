@@ -12,7 +12,7 @@ import java.io.IOException;
 public interface StorageService {
 
     /**
-     * Save new image to filesystem. Method get {@link UserImagesContext} entity from database by id.
+     *  Save new image to filesystem. Method get {@link UserImagesContext} entity from database by id.
      * Create new {@link ImageFile} entity, binds it to user images context and save it in database.
      * Next method save {@link Image#getImageData()} image in ... folder
      * with "image_{@link ImageFile#getImageId()}.{@link Image#getImageExtension()}" name.
@@ -24,5 +24,14 @@ public interface StorageService {
      */
     @Transactional
     ImageFile saveImage(UserImagesContext a_context, ImageFile a_image_file, Image a_image) throws IOException;
+
+    /**
+     * Load image file entity from database and images storage. Method set {@link ImageFile#setImage(Image)}
+     * transient property with {@link Image} value from images storage.
+     * @param a_image_file - {@link ImageFile} entity with ID.
+     * @return - {@link ImageFile} entity with {@link ImageFile#getImage()} property.
+     * @throws IOException - if read {@link IOException} occurs.
+     */
+    ImageFile loadImage(ImageFile a_image_file) throws IOException;
 
 }
