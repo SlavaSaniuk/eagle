@@ -3,6 +3,7 @@ package by.bsac.webmvc;
 import by.bsac.core.beans.BasicDtoEntityConverter;
 import by.bsac.core.beans.DtoEntityConverter;
 import by.bsac.core.exceptions.NoSupportedEntitiesException;
+import by.bsac.domain.dto.ContextWithImageDto;
 import by.bsac.domain.dto.UserWithContextDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,9 +47,32 @@ public class DtoConversionConfiguration implements InitializingBean {
         return converter;
     }
 
+    /**
+     * {@link DtoEntityConverter} for {@link ContextWithImageDto} dto object.
+     * Can convert to {@link by.bsac.domain.models.ImageFile}, {@link by.bsac.domain.models.UserImagesContext} and {@link by.bsac.domain.models.Image} entities.
+     * @return - {@link DtoEntityConverter} convert bean.
+     */
+    @Bean(name = "ContextWithImageDtoConverter")
+    public DtoEntityConverter<ContextWithImageDto> getContextWithImageDtoConverter() {
+
+        BasicDtoEntityConverter<ContextWithImageDto> converter;
+
+        try {
+            LOGGER.info(CREATION.startCreateBean(BeanDefinition.of(DtoEntityConverter.class).withName("ContextWithImageDtoConverter").forGenericType(ContextWithImageDto.class)));
+            converter = new BasicDtoEntityConverter<>(ContextWithImageDto.class);
+        } catch (NoSupportedEntitiesException e) {
+            throw new BeanCreationException(CREATION.creationThrowExceptionWithMessage(
+                    BeanDefinition.of(DtoEntityConverter.class).withName("ContextWithImageDtoConverter").forGenericType(ContextWithImageDto.class), e));
+        }
+
+        LOGGER.info(CREATION.endCreateBean(BeanDefinition.of(DtoEntityConverter.class).withName("ContextWithImageDtoConverter").forGenericType(ContextWithImageDto.class)));
+        return converter;
+
+    }
+
     //Dependency management
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         LOGGER.debug(CREATION.endCreateBean(BeanDefinition.of(DtoConversionConfiguration.class)));
     }
 }

@@ -1,5 +1,6 @@
 package by.bsac.domain.models;
 
+import by.bsac.domain.ImageExtension;
 import by.bsac.domain.dto.ContextWithImageDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,14 +10,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 
-
 @NoArgsConstructor
 @Getter @Setter
 public class Image {
 
     private String image_name;
 
-    private ContextWithImageDto.Extension image_extension;
+    private ImageExtension image_extension;
 
     private byte[] image_data;
 

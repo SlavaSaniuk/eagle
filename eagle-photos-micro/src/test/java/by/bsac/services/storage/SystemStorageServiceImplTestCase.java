@@ -2,6 +2,7 @@ package by.bsac.services.storage;
 
 import by.bsac.Main;
 import by.bsac.configuration.properties.SystemStorageProperties;
+import by.bsac.domain.ImageExtension;
 import by.bsac.domain.dto.ContextWithImageDto;
 import by.bsac.domain.models.Image;
 import by.bsac.domain.models.ImageFile;
@@ -87,7 +88,7 @@ public class SystemStorageServiceImplTestCase {
         byte[] image_data = toByteArray(in);
 
         Image image = new Image();
-        image.setImageExtension(ContextWithImageDto.Extension.JPG);
+        image.setImageExtension(ImageExtension.JPG);
         image.setImageData(image_data);
 
         final String PATH = "/home/slava/Pictures";

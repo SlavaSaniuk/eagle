@@ -3,10 +3,12 @@ package by.bsac.services.images.storage;
 import by.bsac.domain.models.Image;
 import by.bsac.domain.models.ImageFile;
 import by.bsac.domain.models.UserImagesContext;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
+@Component("StorageService")
 public interface StorageService {
 
     /**

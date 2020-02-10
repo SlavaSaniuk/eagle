@@ -3,6 +3,7 @@ package by.bsac.services.storage;
 import by.bsac.Main;
 import by.bsac.Tests;
 import by.bsac.configuration.RootConfiguration;
+import by.bsac.domain.ImageExtension;
 import by.bsac.domain.dto.ContextWithImageDto;
 import by.bsac.domain.models.Image;
 import by.bsac.domain.models.ImageFile;
@@ -55,7 +56,7 @@ public class SystemStorageIntegrationTest {
         InputStream in = Main.class.getClassLoader().getResourceAsStream("files/mountains.jpg");
         byte[] image_data = SystemStorageServiceImplTestCase.toByteArray(in);
         Image image = new Image();
-        image.setImageExtension(ContextWithImageDto.Extension.JPG);
+        image.setImageExtension(ImageExtension.JPG);
         image.setImageData(image_data);
 
         ImageFile CREATED = this.TEST.saveImage(context, new ImageFile(), image);
