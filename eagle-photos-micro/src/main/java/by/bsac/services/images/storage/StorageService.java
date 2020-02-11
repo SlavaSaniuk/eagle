@@ -34,4 +34,13 @@ public interface StorageService {
      */
     ImageFile loadImage(ImageFile a_image_file) throws IOException;
 
+    /**
+     * Load image file entity from database and images storage. Method set {@link ImageFile#setImage(Image)}
+     * transient property with {@link Image} value from images storage.
+     * @param a_image_id - request ImageFile ID;
+     * @return - {@link ImageFile} entity with {@link ImageFile#getImage()} property.
+     * @throws IOException - if read {@link IOException} occurs.
+     */
+    ImageFile loadImage(Long a_image_id) throws IOException;
+
 }

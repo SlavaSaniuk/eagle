@@ -42,12 +42,15 @@ public class WebmvcConfiguration implements WebMvcConfigurer, InitializingBean {
     }
 
     @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new StringToIntegerConverter());
+        registry.addConverter(new StringToIntegerConverter());
+    }
+
+    @Override
     public void afterPropertiesSet() {
         LOGGER.info(INITIALIZATION.endInitializeConfiguration(WebmvcConfiguration.class));
     }
 
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new StringToIntegerConverter());
-    }
+
 }

@@ -6,6 +6,7 @@ import by.bsac.annotations.logging.BeforeLog;
 import by.bsac.annotations.validation.ParameterValidation;
 import by.bsac.aspects.validators.ContextIdParameterValidator;
 import by.bsac.aspects.validators.ImageFileIdParameterValidator;
+import by.bsac.aspects.validators.LongIdParameterValidator;
 import by.bsac.configuration.properties.SystemStorageProperties;
 import by.bsac.domain.ImageExtension;
 import by.bsac.domain.models.Image;
@@ -50,7 +51,6 @@ public class SystemStorageServiceImpl implements StorageService, InitializingBea
         LOGGER.debug(CREATION.startCreateBean(BeanDefinition.of(SystemStorageServiceImpl.class)));
     }
 
-
     @Override
     @MethodCall(withArgs = true, withStartTime = true, withReturnType = true)
     @MethodExecutionTime(inMicros = true, inMillis = true)
@@ -93,11 +93,24 @@ public class SystemStorageServiceImpl implements StorageService, InitializingBea
     @BeforeLog(value = "Load image file[%s] with Image property from filesystem;",
             argsClasses = ImageFile.class)
     @Transactional
-    @ParameterValidation(value = ImageFileIdParameterValidator.class, parametersClasses = ImageFile.class, errorMessage = "Long ID of given image file is in invalid value.")
+    @ParameterValidation(value = ImageFileIdParameterValidator.class,
+            parametersClasses = ImageFile.class, errorMessage = "Long ID of given image file is in invalid value.")
     public ImageFile loadImage(ImageFile a_image_file) throws IOException {
+        return this.loadImage(a_image_file.getImageId());
+    }
+
+    @Override
+    @MethodCall(withArgs = true, withStartTime = true, withReturnType = true)
+    @MethodExecutionTime(inMicros = true, inMillis = true)
+    @BeforeLog(value = "Load image file with Image property from filesystem by ID[%s];",
+            argsClasses = Long.class)
+    @Transactional
+    @ParameterValidation(value = LongIdParameterValidator.class,
+            parametersClasses = Long.class, errorMessage = "Long ID of given image file is in invalid value.")
+    public ImageFile loadImage(Long a_image_id) throws IOException {
 
         //Load image by ID
-        ImageFile image_file = this.files_crud_service.get(a_image_file.getImageId());
+        ImageFile image_file = this.files_crud_service.get(a_image_id);
 
         //Read image file from path property
         Image image = this.loadImage(image_file.getImagePath());
